@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Летопись своих — страница пары «предок — герой СВО»</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.small{min-height:44px;padding:0 18px;font-size:15px}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.hback{display:inline-flex;align-items:center;min-height:44px;padding:0 20px 0 0;margin:0 20px;color:var(--ink-2);text-decoration:none;font-size:14px}
+.wrap{max-width:900px;margin:0 auto;padding:8px 20px 56px}
+
+.badge-verified{display:inline-flex;align-items:center;gap:8px;background:var(--ok-bg);color:var(--ok);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600;margin:0 0 20px}
+
+.pair-hero{display:grid;gap:20px;grid-template-columns:1fr;margin:0 0 8px}
+@media (min-width:640px){ .pair-hero{grid-template-columns:1fr 1fr} }
+.person-mini{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center}
+.person-mini .ph{width:84px;height:84px;border-radius:50%;background:var(--bg-3);border:1px solid var(--line);margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.person-mini h2{font-size:18px}
+.person-mini p{color:var(--ink-2);font-size:14px;margin:6px 0 0}
+.person-mini .role{color:var(--gold);font-size:13px;font-weight:600;margin:6px 0 0}
+
+.chain-box{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:20px;margin:24px 0}
+.chain-box svg{width:100%;height:auto;display:block}
+.chain-node text{fill:var(--ink);font:600 12px var(--font-h)}
+.chain-node .sub{fill:var(--ink-2);font:400 11px var(--font-b)}
+.chain-line{stroke:var(--gold);stroke-width:2;fill:none}
+.chain-cap{font-size:13px;color:var(--ink-2);margin:12px 0 0;text-align:center}
+
+h2.sec{font-size:20px;margin:32px 0 12px}
+.bio p{margin:0 0 12px}
+.attrib{font-size:13px;color:var(--ink-2)}
+
+.award-list{display:flex;flex-direction:column;gap:10px;margin:0}
+.award{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.award b{display:block;font-size:15px}
+.award span{color:var(--ink-2);font-size:13px}
+.award a{color:var(--gold);text-decoration:underline;text-underline-offset:3px;font-size:14px;white-space:nowrap}
+.empty-note{color:var(--ink-2);font-size:14px;padding:14px 16px;background:var(--bg-2);border:1px dashed var(--line);border-radius:12px}
+
+.story{position:relative;padding:18px 20px;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;font-size:17px}
+.story p{margin:0 0 10px}
+
+.decree{background:rgba(242,197,114,.06);border:1px solid var(--gold-d);border-radius:12px;padding:16px 18px}
+.decree p{margin:0 0 8px}
+.decree .attrib{margin:0}
+
+.hidden-wrap{max-width:640px;margin:60px auto;padding:0 20px;text-align:center}
+.hidden-wrap svg{margin-bottom:16px}
+.hidden-wrap h1{font-size:clamp(22px,4vw,28px);margin:0 0 12px}
+.hidden-wrap p{color:var(--ink-2);margin:0 0 22px}
+
+.sk{background:var(--bg-3);border-radius:8px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(234,241,255,.06),transparent)}
+@media (prefers-reduced-motion:no-preference){ .sk::after{animation:shine 1.6s ease-in-out infinite} }
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sk-line{height:14px;margin:8px 0;border-radius:6px}
+.sk-block{height:120px;border-radius:12px}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 08а Страница пары</b>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Пусто</button>
+  <button data-st="zagruzka" aria-pressed="false">Загрузка</button>
+  <button data-st="oshibka" aria-pressed="false">Ошибка</button>
+  <button data-st="mnogo" aria-pressed="false">Много данных</button>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо · вымышленные люди</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Летопись своих</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="02-karta-i-poisk.html">Карта героев</a>
+      <a href="../kabinety/01-vhod.html">Рассказать о герое</a>
+      <a href="08-svyaz-pokoleniy.html" class="cur">Связь поколений</a>
+      <a href="04-podderzhka.html">Поддержка семей</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <!-- ===== НОРМА: прадед — правнук, современный указ с согласием семьи ===== -->
+  <section class="state on" data-state="norma">
+    <a class="hback" href="08-svyaz-pokoleniy.html">← Связь поколений</a>
+    <div class="wrap">
+      <div class="badge-verified">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Родство подтверждено документами · проверено модератором 22.09.2026, по цепочке из 2 звеньев
+      </div>
+
+      <div class="pair-hero">
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Предок</p>
+          <h2>Колесников Иван Фёдорович</h2>
+          <p>1919–1944 · Наро-Фоминск, Московская область</p>
+          <p style="color:var(--ok);font-size:13px;margin-top:6px">Статус подтверждён модератором: участник Великой Отечественной войны</p>
+        </div>
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Герой СВО</p>
+          <h2>Колесников Сергей Викторович</h2>
+          <p>12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</p>
+          <a class="btn small" style="margin-top:10px" href="03-geroy.html">Открыть карточку героя</a>
+        </div>
+      </div>
+
+      <div class="chain-box">
+        <svg viewBox="0 0 560 140" role="img" aria-label="Цепочка родства: прадед Колесников Иван Фёдорович — дед Колесников Виктор Иванович — правнук, герой СВО Колесников Сергей Викторович">
+          <path class="chain-line" d="M70 100 C 180 100, 200 40, 280 40 S 420 100, 490 100"/>
+          <g class="chain-node"><circle cx="70" cy="100" r="8" fill="#F2C572"/><text x="70" y="122" text-anchor="middle">Прадед</text><text class="sub" x="70" y="135" text-anchor="middle">Иван Фёдорович</text></g>
+          <g class="chain-node"><circle cx="280" cy="40" r="7" fill="#8FA3C4"/><text x="280" y="24" text-anchor="middle">Дед</text><text class="sub" x="280" y="12" text-anchor="middle">Виктор Иванович</text></g>
+          <g class="chain-node"><circle cx="490" cy="100" r="8" fill="#6FD3A0"/><text x="490" y="122" text-anchor="middle">Правнук</text><text class="sub" x="490" y="135" text-anchor="middle">герой СВО</text></g>
+        </svg>
+        <p class="chain-cap">Цепочка родства: прадед → дед → правнук. Каждое звено проверено отдельным документом (модератор).</p>
+      </div>
+
+      <h2 class="sec">О жизни предка</h2>
+      <div class="bio">
+        <p>Родился в Наро-Фоминске, до войны работал на ткацкой фабрике. Ушёл на фронт в 1941 году,
+          служил связистом. По воспоминаниям семьи, до последнего письма в 1944 году писал, что скоро
+          вернётся домой — не дожил до Победы меньше года.</p>
+        <p><b>Боевой путь.</b> Погиб в 1944 году при форсировании реки, посмертно награждён медалью
+          «За отвагу» — запись найдена в открытой базе.</p>
+      </div>
+      <p class="attrib">Со слов правнука героя — семьи Колесниковых</p>
+
+      <h2 class="sec">Награды Великой Отечественной войны</h2>
+      <div class="award-list">
+        <div class="award">
+          <div><b>Медаль «За отвагу»</b><span> · наградной лист, 1944</span></div>
+          <a href="https://pamyat-naroda.ru/heroes/demo-123456" target="_blank" rel="noopener">Открыть запись на «Память народа» ↗</a>
+        </div>
+      </div>
+      <p style="color:var(--ink-2);font-size:13px;margin:8px 0 0">Ссылка ведёт на внешний открытый архив. Скан наградного листа на нашем сайте не хранится и не перезаливается.</p>
+
+      <h2 class="sec">Подвиг героя СВО</h2>
+      <article class="story">
+        <p>«Мы с Серёгой были в одном расчёте с весны 2023-го. Когда колонну накрыло, он вытаскивал
+          раненых к укрытию, пока не вынес последнего. Троих ребят, которые сегодня живы, он спас сам.»</p>
+        <p class="attrib">Полный текст — на карточке героя, здесь показан без изменений</p>
+      </article>
+
+      <h2 class="sec">Современная награда</h2>
+      <div class="decree">
+        <p><b>Орден Мужества (посмертно).</b> Формулировка указа — без номера части и без имён
+          сослуживцев, проверено модератором по чек-листу модерации.</p>
+        <p class="attrib">Показано с согласия семьи героя — тем же согласием, что дано при публикации его карточки</p>
+      </div>
+
+      <p style="color:var(--ink-2);font-size:13px;margin:24px 0 0">Отдельной страницы у предка вне этой пары пока нет.</p>
+    </div>
+  </section>
+
+  <!-- ===== ПУСТО: минимум данных — нет фото, нет записи в «Память народа», семья не дала согласие на указ ===== -->
+  <section class="state" data-state="pusto">
+    <a class="hback" href="08-svyaz-pokoleniy.html">← Связь поколений</a>
+    <div class="wrap">
+      <div class="badge-verified">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Родство подтверждено документами · проверено модератором 18.09.2026, по цепочке из 1 звена
+      </div>
+      <div class="pair-hero">
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Предок</p>
+          <h2>Ершов Николай Степанович</h2>
+          <p>1929–2011 · Апрелевка, Московская область</p>
+          <p style="color:var(--ok);font-size:13px;margin-top:6px">Статус подтверждён модератором: труженик тыла</p>
+        </div>
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Герой СВО</p>
+          <h2>Ершов Павел Андреевич</h2>
+          <p>1999 · Апрелевка, Московская область · жив</p>
+          <a class="btn small" style="margin-top:10px" href="03-geroy.html">Открыть карточку героя</a>
+        </div>
+      </div>
+
+      <div class="chain-box">
+        <svg viewBox="0 0 560 100" role="img" aria-label="Цепочка родства: дед Ершов Николай Степанович — внук, герой СВО Ершов Павел Андреевич">
+          <path class="chain-line" d="M80 60 L 480 60"/>
+          <g class="chain-node"><circle cx="80" cy="60" r="8" fill="#F2C572"/><text x="80" y="82" text-anchor="middle">Дед</text><text class="sub" x="80" y="95" text-anchor="middle">Николай Степанович</text></g>
+          <g class="chain-node"><circle cx="480" cy="60" r="8" fill="#6FD3A0"/><text x="480" y="82" text-anchor="middle">Внук</text><text class="sub" x="480" y="95" text-anchor="middle">герой СВО</text></g>
+        </svg>
+        <p class="chain-cap">Цепочка из одного звена: дед — внук.</p>
+      </div>
+
+      <h2 class="sec">О жизни предка</h2>
+      <div class="bio">
+        <p>В войну подростком работал на заводе, вытачивал детали для фронта. После войны выучился на
+          железнодорожника, всю жизнь проработал на станции Апрелевка.</p>
+      </div>
+      <p class="attrib">Со слов внука героя — семьи Ершовых</p>
+
+      <h2 class="sec">Награды Великой Отечественной войны</h2>
+      <p class="empty-note">Семья пока не нашла запись о предке в открытых базах — статус «труженик тыла»
+        подтверждён документом, который смотрел модератор, без ссылки на внешний архив.</p>
+
+      <h2 class="sec">Подвиг героя СВО</h2>
+      <article class="story">
+        <p>Учился в железнодорожном техникуме, играл на гитаре в школьной группе. После контузии
+          восстанавливается дома, вернулся к любимому делу — ремонту мотоциклов.</p>
+        <p class="attrib">Полный текст — на карточке героя, здесь показан без изменений</p>
+      </article>
+
+      <p style="color:var(--ink-2);font-size:13px;margin:24px 0 0">Современного указа о награждении на этой странице нет: семья героя не давала согласие на его публикацию в паре.</p>
+    </div>
+  </section>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <section class="state" data-state="zagruzka">
+    <div class="wrap">
+      <div class="sk" style="width:220px;height:28px;margin:8px 0 24px"></div>
+      <div style="display:grid;gap:20px;grid-template-columns:1fr 1fr">
+        <div class="sk sk-block"></div>
+        <div class="sk sk-block"></div>
+      </div>
+      <div class="sk sk-block" style="margin-top:24px"></div>
+      <div class="sk sk-line" style="width:60%"></div>
+      <div class="sk sk-line" style="width:80%"></div>
+      <div class="sk sk-line" style="width:40%"></div>
+    </div>
+  </section>
+
+  <!-- ===== ОШИБКА ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="hidden-wrap">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#8FA3C4" stroke-width="1.5"/><path d="M12 8v5M12 16h.01" stroke="#F2C572" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <h1>Не получилось загрузить страницу пары</h1>
+      <p>Проверьте соединение и попробуйте ещё раз. Если сохранялись открытые ранее данные — они не
+        пропали, просто не обновились.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn primary" type="button" onclick="location.reload()">Повторить</button>
+        <a class="btn" href="08-svyaz-pokoleniy.html">К списку пар</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== МНОГО ДАННЫХ: прапрадед, несколько наград, длинная биография ===== -->
+  <section class="state" data-state="mnogo">
+    <a class="hback" href="08-svyaz-pokoleniy.html">← Связь поколений</a>
+    <div class="wrap">
+      <div class="badge-verified">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Родство подтверждено документами · проверено модератором 15.09.2026, по цепочке из 4 звеньев
+      </div>
+      <div class="pair-hero">
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Предок</p>
+          <h2>Джанашвили Отар Гивиевич</h2>
+          <p>1908–1943 · Владикавказ, Республика Северная Осетия — Алания</p>
+          <p style="color:var(--ok);font-size:13px;margin-top:6px">Статус подтверждён модератором: участник Великой Отечественной войны</p>
+        </div>
+        <div class="person-mini">
+          <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          <p class="role">Герой СВО</p>
+          <h2>Джанашвили Отари Тенгизович</h2>
+          <p>04.11.1990 — 22.05.2023 · Владикавказ, Республика Северная Осетия — Алания</p>
+          <a class="btn small" style="margin-top:10px" href="03-geroy.html">Открыть карточку героя</a>
+        </div>
+      </div>
+
+      <div class="chain-box">
+        <svg viewBox="0 0 620 170" role="img" aria-label="Цепочка родства из четырёх звеньев: прапрадед, прадед, дед, отец — правнук, герой СВО">
+          <path class="chain-line" d="M50 130 C 120 130, 130 30, 220 30 S 320 150, 400 150 S 500 40, 570 40"/>
+          <g class="chain-node"><circle cx="50" cy="130" r="8" fill="#F2C572"/><text x="50" y="152" text-anchor="middle">Прапрадед</text><text class="sub" x="50" y="165" text-anchor="middle">Отар Гивиевич</text></g>
+          <g class="chain-node"><circle cx="220" cy="30" r="6" fill="#8FA3C4"/><text x="220" y="18" text-anchor="middle">Прадед</text><text class="sub" x="220" y="8" text-anchor="middle">Ное Отарович</text></g>
+          <g class="chain-node"><circle cx="400" cy="150" r="6" fill="#8FA3C4"/><text x="400" y="168" text-anchor="middle">Дед</text><text class="sub" x="400" y="180" text-anchor="middle" style="display:none"></text></g>
+          <g class="chain-node"><circle cx="570" cy="40" r="8" fill="#6FD3A0"/><text x="555" y="24" text-anchor="middle">Правнук</text><text class="sub" x="555" y="12" text-anchor="middle">герой СВО</text></g>
+        </svg>
+        <p class="chain-cap">Цепочка из четырёх звеньев: прапрадед → прадед → дед → отец → правнук. Глубину цепочки ограничивает не правило, а доступность архивных документов.</p>
+      </div>
+
+      <h2 class="sec">О жизни предка</h2>
+      <div class="bio">
+        <p>Родился в 1908 году в селе под Владикавказом, работал пастухом и кузнецом. Женился рано, к
+          началу войны воспитывал троих детей. Соседи вспоминали его как немногословного, но очень
+          сильного физически человека — мог один поднять телегу, застрявшую в грязи.</p>
+        <p><b>Боевой путь.</b> Призван в 1941 году, дошёл до звания сержанта. По записям военного архива и
+          воспоминаниям семьи, участвовал в обороне Кавказа. Погиб в 1943 году, похоронен в братской
+          могиле — точное место установлено по запросу в военкомат в 2019 году, когда семья восстанавливала
+          архив рода для этой заявки.</p>
+        <p>Дальше цепочку родства продолжает его сын — Джанашвили Ное Отарович (звено 3), который после
+          войны вернулся в родное село и всю жизнь проработал учителем истории в местной школе, рассказывая
+          ученикам в том числе и о своём отце.</p>
+      </div>
+      <p class="attrib">Со слов правнука героя — семьи Джанашвили</p>
+
+      <h2 class="sec">Награды Великой Отечественной войны</h2>
+      <div class="award-list">
+        <div class="award">
+          <div><b>Медаль «За боевые заслуги»</b><span> · наградной лист, 1942</span></div>
+          <a href="https://pamyat-naroda.ru/heroes/demo-654321" target="_blank" rel="noopener">Открыть запись на «Память народа» ↗</a>
+        </div>
+        <div class="award">
+          <div><b>Орден Красной Звезды (посмертно)</b><span> · приказ подразделения, 1943</span></div>
+          <a href="https://pamyat-naroda.ru/heroes/demo-654322" target="_blank" rel="noopener">Открыть запись на «Память народа» ↗</a>
+        </div>
+      </div>
+      <p style="color:var(--ink-2);font-size:13px;margin:8px 0 0">Обе ссылки ведут на внешний открытый архив. Сканы наградных листов на нашем сайте не хранятся.</p>
+
+      <h2 class="sec">Подвиг героя СВО</h2>
+      <article class="story">
+        <p>«Отари вытащил из-под обстрела двоих раненых сослуживцев, хотя сам был контужен. Мы
+          обязаны ему жизнью.»</p>
+        <p class="attrib">Полный текст — на карточке героя, здесь показан без изменений</p>
+      </article>
+
+      <h2 class="sec">Современная награда</h2>
+      <div class="decree">
+        <p><b>Орден Мужества.</b> Формулировка указа — без номера части и без имён сослуживцев,
+          проверено модератором по чек-листу модерации.</p>
+        <p class="attrib">Показано с согласия семьи героя — тем же согласием, что дано при публикации его карточки</p>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>Летопись своих · демо-макет МС-17 · все люди на макете вымышлены.</p></footer>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

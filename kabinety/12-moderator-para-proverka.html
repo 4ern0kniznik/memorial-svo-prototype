@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка заявки на пару — Летопись своих</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:16px;font-size:14px;align-items:center}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.top nav a.cur{color:var(--gold)}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:14px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.danger{border-color:var(--error);color:var(--error)}
+.btn.warnbtn{border-color:var(--warn);color:var(--warn)}
+.btn[disabled]{opacity:.5;cursor:default}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none} }
+
+main{padding:24px 0 60px}
+.layout{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:980px){ .layout{grid-template-columns:2fr 1fr;align-items:start} }
+
+.hero-mini{display:flex;gap:14px;align-items:center;margin:0 0 18px;flex-wrap:wrap}
+.hero-mini .ph{flex:none;width:64px;height:64px;border-radius:10px;background:var(--bg-3);display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:11px;text-align:center}
+.hero-mini h1{font-size:20px;overflow-wrap:anywhere}
+.hero-mini p{color:var(--ink-2);font-size:13px;margin:4px 0 0}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.chip.wait{background:var(--warn-bg);color:var(--warn)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.alive{background:rgba(242,197,114,.12);color:var(--gold)}
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:22px;margin:0 0 18px}
+.card h2{font-size:16px;color:var(--gold);margin:0 0 14px}
+
+.checklist{display:flex;flex-direction:column;gap:10px}
+.check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check-item input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--ok)}
+.check-item.fail input{accent-color:var(--error)}
+.check-item span{color:var(--ink)}
+.check-item small{display:block;color:var(--ink-2);font-size:12px;margin-top:2px}
+
+.link-card{border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 14px;background:var(--bg-3);position:relative}
+.link-card.fail{border-color:var(--error)}
+.link-card .num{position:absolute;top:-10px;left:14px;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;border-radius:20px;padding:2px 10px}
+.link-card.fail .num{background:var(--error);color:#2A1414}
+.link-card h3{font-size:14px;margin:0 0 8px}
+.doc-block{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px}
+.doc-block .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.doc-note{font-size:12px;color:var(--ink-2);margin-top:8px}
+.link-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-left:8px}
+.link-status.ok{background:var(--ok-bg);color:var(--ok)}
+.link-status.fail{background:var(--error-bg);color:var(--error)}
+.link-status.wait{background:var(--warn-bg);color:var(--warn)}
+
+.sidebar .card{position:sticky;top:66px}
+.decision-list{display:flex;flex-direction:column;gap:10px}
+.decision-list .btn{justify-content:flex-start;padding:0 16px;text-align:left}
+
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;color:var(--ink-2);margin:0 0 6px}
+.field textarea{width:100%;min-height:90px;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:10px 12px;font-size:15px;resize:vertical;font-family:inherit}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 18px}
+.notice.info{background:rgba(242,197,114,.1);color:var(--gold)}
+.notice b{display:block;margin-bottom:2px}
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
+.back{font-size:13px;color:var(--ink-2);text-decoration:none;display:inline-block;margin:16px 0}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 12 Проверка заявки на пару (МС-7)</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Норма — цепочка из 2 звеньев, оба подтверждены. Много данных — цепочка из 4 звеньев, одно звено не подтверждается + живой герой ждёт согласия.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Летопись своих</b><small>Валиахметова Регина · модератор</small></span>
+  </a>
+  <nav><a href="08-moderator-obrashcheniya.html">Обращения</a><a href="06-moderator-ochered.html">Очередь историй</a><a href="09-zhurnal.html">Журнал</a><a href="01-vhod.html">Выйти</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+  <a class="back" href="08-moderator-obrashcheniya.html">← К очереди заявок на пары</a>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="sk" style="height:64px;width:64px;border-radius:10px;float:left;margin-right:14px"></div>
+    <div class="sk" style="height:20px;width:40%;margin-bottom:10px"></div>
+    <div class="sk" style="height:14px;width:25%"></div>
+    <div style="clear:both;margin-top:20px"><div class="sk" style="height:260px;border-radius:16px"></div></div>
+  </div>
+
+  <!-- ===== ОШИБКА: документ звена не открылся ===== -->
+  <div class="when error" hidden>
+    <div class="hero-mini"><div class="ph">фото</div><div><h1>Пара: Колесников Иван Фёдорович — Колесников Сергей Викторович</h1><p>Заявитель — Колесникова Анна Сергеевна, жена героя</p></div></div>
+    <div class="state-box err" role="alert">
+      <h3>Документ звена не открылся</h3>
+      <p>Файл «svidetelstvo_o_rozhdenii_deda.jpg» не загрузился с сервера. Попробуйте открыть ещё раз — если не получится, попросите заявителя прислать документ повторно.</p>
+      <button class="btn primary" type="button" onclick="location.reload()">Открыть ещё раз</button>
+    </div>
+  </div>
+
+  <!-- ===== ПУСТО: карточка всегда открывается по конкретной заявке ===== -->
+  <div class="when empty" hidden>
+    <div class="state-box" style="margin-top:40px">
+      <h3>У проверки заявки нет состояния «Пусто»</h3>
+      <p>Карточка всегда открывается по конкретной заявке из очереди обращений — если заявок нет, экран остаётся списком «Обращения».</p>
+      <a class="btn primary" href="08-moderator-obrashcheniya.html">К очереди</a>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: цепочка из 2 звеньев, оба подтверждены ===== -->
+  <div class="when normal">
+    <div class="hero-mini">
+      <div class="ph">фото пары</div>
+      <div>
+        <h1>Пара: Колесников Иван Фёдорович — Колесников Сергей Викторович</h1>
+        <p>Заявитель — Колесникова Анна Сергеевна, жена героя, вход через Сбер ID · герой погиб, отдельное согласие героя не требуется</p>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Данные предка (со слов заявителя)</h2>
+          <p style="margin:0 0 4px"><b>Колесников Иван Фёдорович</b>, 1919–1944, Наро-Фоминск, Московская область</p>
+          <p style="margin:0 0 4px;color:var(--ink-2);font-size:14px">Заявленный статус: участник Великой Отечественной войны — подтверждается ниже документом, не проставляется со слов.</p>
+          <p style="margin:0;color:var(--ink-2);font-size:14px">Ссылка на «Память народа», указанная заявителем: <a href="#" style="color:var(--gold)">pamyat-naroda.ru/heroes/demo-123456</a> — модератор проверяет, что запись действительно относится к этому человеку.</p>
+        </div>
+
+        <div class="card">
+          <h2>Цепочка родства — сверка звеньев</h2>
+          <p style="color:var(--ink-2);margin:0 0 14px;font-size:14px">Проверьте каждое звено отдельно: соответствует ли документ заявленному факту. Если хотя бы одно звено не подтверждается — пара целиком не публикуется.</p>
+
+          <div class="link-card">
+            <span class="num">Звено 1</span>
+            <h3>Колесников Виктор Иванович — дед героя <span class="link-status ok" data-link-status>Подтверждено</span></h3>
+            <p style="margin:0;color:var(--ink-2);font-size:14px">Заявлено: сын предка, отец отца героя. 1937–2009.</p>
+            <div class="doc-block">
+              <div class="row"><span>svidetelstvo_o_rozhdenii_otca.jpg · загружен 22.09.2026</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div>
+              <p class="doc-note">В документе — Колесников Виктор Иванович, отец: Колесников Иван Фёдорович. Совпадает с заявленным.</p>
+            </div>
+            <label class="check-item" style="margin-top:10px"><input type="checkbox" checked data-link-check><span>Документ подтверждает это звено цепочки</span></label>
+          </div>
+
+          <div class="link-card">
+            <span class="num">Звено 2 · предок</span>
+            <h3>Колесников Иван Фёдорович — прадед героя <span class="link-status ok" data-link-status>Подтверждено</span></h3>
+            <p style="margin:0;color:var(--ink-2);font-size:14px">Заявлено: отец Колесникова Виктора Ивановича. 1919–1944, участник ВОВ.</p>
+            <div class="doc-block">
+              <div class="row"><span>svidetelstvo_o_rozhdenii_deda.jpg · загружен 22.09.2026</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div>
+              <p class="doc-note">В документе — Колесников Виктор Иванович, отец: Колесников Иван Фёдорович, 1919 г.р. Совпадает.</p>
+            </div>
+            <label class="check-item" style="margin-top:10px"><input type="checkbox" checked data-link-check><span>Документ подтверждает это звено цепочки</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Статус предка</h2>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Статус подтверждён документом, а не проставлен со слов заявителя<small>Архивная справка о призыве, приложена отдельно от звеньев родства</small></span></label>
+          </div>
+          <div class="field">
+            <label for="status-select">Итоговый статус на странице</label>
+            <select id="status-select" style="width:100%;min-height:44px;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:0 12px">
+              <option selected>Участник Великой Отечественной войны</option>
+              <option>Труженик тыла</option>
+              <option>Ветеран другой войны за Отечество</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Текст истории героя в паре</h2>
+          <p style="color:var(--ink-2);font-size:14px;margin:0">На странице пары дублируется уже опубликованный и промодерированный текст подвига героя — заново проверять его не нужно.</p>
+        </div>
+
+        <div class="card">
+          <h2>Современный указ о награждении героя в паре</h2>
+          <p style="color:var(--ink-2);font-size:14px;margin:0 0 12px">Семья дала согласие на публикацию текста указа в паре при заполнении карточки героя (то же согласие, повторно не запрашивается).</p>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>В тексте указа нет номера части и ФИО сослуживцев (МС-6)</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="card">
+          <h2>Решение</h2>
+          <div class="decision-list">
+            <button class="btn primary" type="button" data-decision="publish">Подтвердить родство и опубликовать</button>
+            <button class="btn ghost" type="button" data-decision="return">Вернуть — не хватает документа</button>
+            <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+          </div>
+          <div id="tpl-block" hidden>
+            <div class="field"><label for="reason">Комментарий заявителю</label><textarea id="reason" placeholder="Например: звено 2 не подтверждается — приложите архивную справку ЗАГС вместо утерянного свидетельства"></textarea></div>
+            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+          </div>
+          <p class="doc-note" style="margin-top:14px">Отметка «проверено, кем, когда, по какой цепочке документов» фиксируется в журнале модерации. Копии документов после решения не хранятся.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: цепочка из 4 звеньев, одно не подтверждается, живой герой ===== -->
+  <div class="when many" hidden>
+    <div class="hero-mini">
+      <div class="ph">фото пары</div>
+      <div>
+        <h1>Пара: Джанашвили Отар Гивиевич — Джанашвили Отари Тенгизович</h1>
+        <p>Заявитель — Джанашвили Мадина Ахсаровна, мать героя, вход через VK ID · <span class="chip alive">Герой жив, уволен со службы</span></p>
+      </div>
+    </div>
+
+    <div class="notice info"><b>Герой жив — нужно его отдельное согласие</b>Даже если все 4 звена подтвердятся, пара не публикуется без собственного согласия героя — только согласия матери недостаточно. Пока согласие героя не получено, статус останется «Ждём согласия героя».</div>
+
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Цепочка родства — сверка звеньев (4)</h2>
+          <div class="link-card">
+            <span class="num">Звено 1</span>
+            <h3>Джанашвили Тенгиз Ахсарович — отец героя <span class="link-status ok" data-link-status>Подтверждено</span></h3>
+            <div class="doc-block"><div class="row"><span>svidetelstvo_o_rozhdenii_geroya.jpg</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div></div>
+            <label class="check-item" style="margin-top:10px"><input type="checkbox" checked data-link-check><span>Документ подтверждает это звено</span></label>
+          </div>
+          <div class="link-card">
+            <span class="num">Звено 2</span>
+            <h3>Джанашвили Ахсар Ноевич — дед героя <span class="link-status ok" data-link-status>Подтверждено</span></h3>
+            <div class="doc-block"><div class="row"><span>svidetelstvo_o_rozhdenii_ottsa.jpg</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div></div>
+            <label class="check-item" style="margin-top:10px"><input type="checkbox" checked data-link-check><span>Документ подтверждает это звено</span></label>
+          </div>
+          <div class="link-card fail">
+            <span class="num">Звено 3</span>
+            <h3>Джанашвили Ное Отарович — прадед героя <span class="link-status fail" data-link-status>Не подтверждается</span></h3>
+            <div class="doc-block"><div class="row"><span>arhivnaya_spravka_zags.jpg</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div>
+              <p class="doc-note">В справке указано другое отчество отца — расхождение с заявленным родством. Без уточнения звено не подтвердить.</p>
+            </div>
+            <label class="check-item fail" style="margin-top:10px"><input type="checkbox" data-link-check><span>Документ подтверждает это звено</span></label>
+          </div>
+          <div class="link-card">
+            <span class="num">Звено 4 · предок</span>
+            <h3>Джанашвили Отар Гивиевич — прапрадед героя <span class="link-status wait" data-link-status>Не проверить без звена 3</span></h3>
+            <div class="doc-block"><div class="row"><span>arhivnaya_spravka_1908.jpg</span><button class="btn ghost" type="button" data-log-pii>Открыть документ</button></div></div>
+            <label class="check-item" style="margin-top:10px"><input type="checkbox" checked data-link-check disabled><span>Документ подтверждает это звено (проверка бессмысленна, пока не подтверждено звено 3)</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Статус предка</h2>
+          <p style="color:var(--ink-2);font-size:14px;margin:0">Статус не подтверждается, пока не подтверждена вся цепочка до предка — решение по статусу откладывается.</p>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="card">
+          <h2>Решение</h2>
+          <div class="decision-list">
+            <button class="btn primary" type="button" disabled title="Пока звено 3 не подтверждено — публиковать нельзя">Подтвердить родство и опубликовать</button>
+            <button class="btn ghost" type="button" data-decision="return">Вернуть — уточнить звено 3</button>
+            <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+          </div>
+          <div id="tpl-block-many" hidden>
+            <div class="field"><label for="reasonm">Комментарий заявителю</label><textarea id="reasonm" placeholder="Звено 3 (Джанашвили Ное Отарович) не подтверждается — в справке другое отчество отца. Приложите другой документ или уточните."></textarea></div>
+            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Решение и отметка «проверено, кем, когда, по какой цепочке документов» фиксируются в журнале модерации без возможности правки задним числом. Копии документов не хранятся дольше времени проверки.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='normal';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+
+  let toastEl;
+  function toast(t){
+    if(!toastEl){ toastEl=document.createElement('div'); toastEl.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:90;max-width:90vw'; document.body.appendChild(toastEl); }
+    toastEl.textContent=t; toastEl.style.display='block';
+    clearTimeout(toast.t); toast.t=setTimeout(()=>toastEl.style.display='none',2600);
+  }
+  document.querySelectorAll('[data-log-pii]').forEach(b=>b.addEventListener('click',()=>toast('Открытие документа зафиксировано в журнале доступа к персональным данным')));
+
+  document.querySelectorAll('[data-link-check]').forEach(cb=>cb.addEventListener('change',()=>{
+    const card = cb.closest('.link-card');
+    const status = card.querySelector('[data-link-status]');
+    if(cb.checked){ status.textContent='Подтверждено'; status.className='link-status ok'; card.classList.remove('fail'); }
+    else { status.textContent='Не подтверждается'; status.className='link-status fail'; card.classList.add('fail'); }
+  }));
+
+  document.querySelectorAll('[data-decision]').forEach(b=>b.addEventListener('click',()=>{
+    const d=b.dataset.decision;
+    if(d==='publish'){ toast('Родство подтверждено, пара опубликована. Переход к очереди…'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
+    const block = b.closest('.card').querySelector('#tpl-block, #tpl-block-many');
+    if(block){ block.hidden=false; }
+  }));
+  document.querySelectorAll('[data-confirm-decision]').forEach(b=>b.addEventListener('click',()=>{
+    toast('Решение отправлено и записано в журнал модерации'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700);
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

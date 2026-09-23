@@ -35,6 +35,8 @@ h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
 .proto button[aria-pressed=true]{background:#eee;color:#111}
 
 #frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
 
 .top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
@@ -46,33 +48,54 @@ h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
 .btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.small{min-height:44px;padding:0 18px;font-size:15px}
 @media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
 .btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
 
 .starfield{position:absolute;inset:0;z-index:0;pointer-events:none}
-.hero{position:relative;padding:56px 20px 40px;overflow:hidden;text-align:center}
-.hero-in{max-width:640px;margin:0 auto;position:relative;z-index:1}
+.hero{position:relative;padding:44px 20px 8px;overflow:hidden;text-align:center}
+.hero-in{max-width:680px;margin:0 auto;position:relative;z-index:1}
 .eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 14px}
-.hero h1{font-size:clamp(26px,4.6vw,38px);line-height:1.16;margin:0 0 18px}
+.hero h1{font-size:clamp(24px,4.2vw,34px);line-height:1.16;margin:0 0 14px}
 .hero .lead{color:var(--ink-2);margin:0 0 8px}
 
-.schema{max-width:560px;margin:32px auto 0;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:20px}
-.schema svg{width:100%;height:auto;display:block}
-.dynode text{fill:var(--ink);font:600 12px var(--font-h)}
-.dynode .sub{fill:var(--ink-2);font:400 11px var(--font-b)}
-.dyline{stroke:var(--gold);stroke-width:2;fill:none}
+.wrap{max-width:1160px;margin:0 auto;padding:24px 20px 56px}
 
-.formbox{max-width:460px;margin:36px auto 0;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:left}
-.formbox h2{font-size:18px;margin:0 0 6px}
-.formbox p{color:var(--ink-2);font-size:14px;margin:0 0 16px}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-.field label{font-size:13px;color:var(--ink-2)}
-.field input{background:var(--bg);border:1px solid var(--border-ctrl);color:var(--ink);border-radius:8px;padding:0 12px;min-height:44px;font-size:16px}
-.checkline{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);margin-bottom:16px}
-.checkline input{margin-top:3px}
-.thanks{display:none;text-align:center;padding:16px;background:var(--ok-bg);color:var(--ok);border-radius:12px;font-size:14px}
-.thanks.on{display:block}
+.pair-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:720px){ .pair-grid{grid-template-columns:1fr 1fr} }
+
+.pair-card{display:block;text-decoration:none;color:var(--ink);background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:18px;transition:border-color .15s ease,transform .15s ease}
+.pair-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+@media (prefers-reduced-motion:reduce){ .pair-card:hover{transform:none} }
+.pair-people{display:flex;align-items:center;gap:10px}
+.pair-ph{flex:none;width:52px;height:52px;border-radius:50%;background:var(--bg-3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.pair-link{flex:1;text-align:center;color:var(--ink-2);font-size:18px}
+.pair-names{margin-top:10px}
+.pair-names b{display:block;font-size:16px}
+.pair-names .anc{color:var(--ink-2);font-size:14px}
+.pair-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.chip.rel{background:var(--bg-3);color:var(--ink-2)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+
+.more-wrap{text-align:center;margin-top:28px}
+.hint{color:var(--ink-2);font-size:13px;text-align:center;margin-top:14px}
+
+.empty-box{max-width:560px;margin:24px auto 0;text-align:center;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:32px 24px}
+.empty-box svg{margin-bottom:14px}
+.empty-box p{color:var(--ink-2);margin:0 0 22px}
+.empty-guest{margin-top:16px;font-size:14px;color:var(--ink-2)}
+.empty-guest a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+
+.state-box{border-radius:14px;padding:22px;margin:0 0 20px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 8px}
+.state-box p{margin:0 0 16px;color:var(--ink-2)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+.sk-card{height:140px;border-radius:16px}
 
 footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
 </style>
@@ -80,11 +103,16 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
 <body>
 <div class="proto" role="region" aria-label="Служебная панель макета">
   <b>МС-17 · 08 Связь поколений</b>
-  <span>Единственное состояние по сценарию С6 — раздела с карточками нет (экраны.md)</span>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Пусто</button>
+  <button data-st="zagruzka" aria-pressed="false">Загрузка</button>
+  <button data-st="oshibka" aria-pressed="false">Ошибка</button>
+  <button data-st="mnogo" aria-pressed="false">Много данных</button>
   <span>Ширина:</span>
   <button data-w="desktop" aria-pressed="true">Десктоп</button>
   <button data-w="360" aria-pressed="false">360</button>
-  <div class="demo-tag">демо</div>
+  <div class="demo-tag">демо · вымышленные люди</div>
 </div>
 
 <div id="frame">
@@ -106,41 +134,165 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
   <div class="hero">
     <canvas class="starfield" id="stars-d" aria-hidden="true"></canvas>
     <div class="hero-in">
-      <p class="eyebrow">Скоро</p>
-      <h1>Связь поколений — от прадеда на войне 1941–1945 до правнука в СВО</h1>
-      <p class="lead">Мы собираем подтверждённые истории, где родство между героем Великой Отечественной
-        и героем СВО документально подтвердила семья. Пока таких подтверждённых пар недостаточно —
-        раздел ещё не открыт для просмотра.</p>
-
-      <div class="schema" aria-label="Схема идеи раздела, демо">
-        <svg viewBox="0 0 560 160" role="img" aria-label="Схема: прадед — Великая Отечественная, правнук — участник СВО">
-          <path class="dyline" d="M70 120 C 180 120, 220 40, 330 40 S 470 120, 500 120"/>
-          <g class="dynode"><circle cx="70" cy="120" r="7" fill="#8FA3C4"/><text x="70" y="145" text-anchor="middle">Прадед</text><text class="sub" x="70" y="158" text-anchor="middle">1941–1945</text></g>
-          <g class="dynode"><circle cx="330" cy="40" r="7" fill="#8FA3C4"/><text x="330" y="24" text-anchor="middle">Дед</text><text class="sub" x="330" y="12" text-anchor="middle">мирные годы</text></g>
-          <g class="dynode"><circle cx="500" cy="120" r="8" fill="#F2C572"/><text x="500" y="145" text-anchor="middle">Правнук</text><text class="sub" x="500" y="158" text-anchor="middle">участник СВО</text></g>
-        </svg>
-      </div>
-
-      <div class="formbox">
-        <h2>Рассказать, когда запустим</h2>
-        <p>Оставьте e-mail — напишем, когда раздел откроется. Подписка не связана с публикацией
-          истории героя.</p>
-        <form onsubmit="event.preventDefault(); document.getElementById('thanks').classList.add('on'); this.querySelector('button').disabled=true;">
-          <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="you@example.ru" required></div>
-          <label class="checkline"><input type="checkbox" required> Согласен(на) на обработку персональных данных для уведомления о запуске раздела</label>
-          <button class="btn primary" type="submit" style="width:100%">Рассказать, когда запустим</button>
-        </form>
-        <div class="thanks" id="thanks">Спасибо! Мы напишем, когда раздел «Связь поколений» откроется.</div>
-      </div>
+      <p class="eyebrow">Связь поколений</p>
+      <h1>От прадеда на Великой Отечественной до правнука в СВО</h1>
+      <p class="lead">Здесь — пары «предок — герой СВО» с документально подтверждённым кровным родством.
+        Родство и статус предка (участник ВОВ, труженик тыла или ветеран другой войны) проверяет
+        модератор по документам, звено за звеном; сами документы на сайте не публикуются.</p>
     </div>
   </div>
 
-  <footer><p>Летопись своих · демо-макет МС-17 · раздел — витрина-заглушка MVP (сценарий С6).</p></footer>
+  <!-- ===== НОРМА: две опубликованные пары ===== -->
+  <section class="state on" data-state="norma">
+    <div class="wrap">
+      <div class="pair-grid">
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people">
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+            <span class="pair-link">→</span>
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          </div>
+          <div class="pair-names">
+            <b>Колесников Сергей Викторович</b>
+            <span class="anc">и его прадед Колесников Иван Фёдорович, 1919–1944</span>
+          </div>
+          <div class="pair-meta">
+            <span class="chip rel">Прадед — правнук</span>
+            <span class="chip ok">Родство подтверждено документами</span>
+          </div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Наро-Фоминск, Московская область</p>
+        </a>
+
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people">
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+            <span class="pair-link">→</span>
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          </div>
+          <div class="pair-names">
+            <b>Ершов Павел Андреевич</b>
+            <span class="anc">и его дед Ершов Николай Степанович, труженик тыла, 1929–2011</span>
+          </div>
+          <div class="pair-meta">
+            <span class="chip rel">Дед — внук</span>
+            <span class="chip ok">Родство подтверждено документами</span>
+          </div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Апрелевка, Московская область</p>
+        </a>
+      </div>
+      <p class="hint">Показаны 2 пары. Списки на сайте не показывают счётчиков и агрегатов по месту подвига героя.</p>
+      <div class="more-wrap"><a class="btn" href="../kabinety/01-vhod.html">Рассказать о своём предке</a></div>
+    </div>
+  </section>
+
+  <!-- ===== ПУСТО: пар ещё нет ===== -->
+  <section class="state" data-state="pusto">
+    <div class="wrap">
+      <div class="empty-box">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#8FA3C4" stroke-width="1.5"/><path d="M8 12h8M12 8v8" stroke="#F2C572" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h2 style="font-size:19px;margin:0 0 10px">Пока нет опубликованных пар</h2>
+        <p>Мы собираем истории, где родство между героем Великой Отечественной и героем СВО документально
+          подтвердила семья. Как только модератор проверит первую цепочку родства — пара появится здесь.</p>
+        <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о предке</a>
+        <p class="empty-guest">Не вошли? <a href="../kabinety/01-vhod.html">Войдите</a>, чтобы предложить пару — понадобится Сбер ID или VK ID.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <section class="state" data-state="zagruzka">
+    <div class="wrap">
+      <div class="pair-grid">
+        <div class="sk sk-card"></div>
+        <div class="sk sk-card"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ОШИБКА: обновление не удалось, старые данные остаются ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="wrap">
+      <div class="state-box err" role="alert">
+        <h3>Не получилось обновить список</h3>
+        <p>Проверьте соединение и попробуйте ещё раз. Пара, которая уже была показана, никуда не пропала.</p>
+        <button class="btn primary" type="button" onclick="location.reload()">Повторить</button>
+      </div>
+      <div class="pair-grid">
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people">
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+            <span class="pair-link">→</span>
+            <div class="pair-ph"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#1B2740"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#1B2740"/></svg></div>
+          </div>
+          <div class="pair-names">
+            <b>Колесников Сергей Викторович</b>
+            <span class="anc">и его прадед Колесников Иван Фёдорович, 1919–1944</span>
+          </div>
+          <div class="pair-meta"><span class="chip rel">Прадед — правнук</span><span class="chip ok">Родство подтверждено документами</span></div>
+        </a>
+      </div>
+      <p class="hint">Показана ранее загруженная пара — список не обновлён до повторной попытки.</p>
+    </div>
+  </section>
+
+  <!-- ===== МНОГО ДАННЫХ: список с постраничной подгрузкой ===== -->
+  <section class="state" data-state="mnogo">
+    <div class="wrap">
+      <div class="pair-grid">
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Колесников Сергей Викторович</b><span class="anc">и прадед Колесников Иван Фёдорович, 1919–1944</span></div>
+          <div class="pair-meta"><span class="chip rel">Прадед — правнук</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Наро-Фоминск, Московская область</p>
+        </a>
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Джанашвили Отари Тенгизович</b><span class="anc">и прапрадед Джанашвили Отар Гивиевич, 1908–1943</span></div>
+          <div class="pair-meta"><span class="chip rel">Прапрадед — правнук</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Владикавказ, Республика Северная Осетия — Алания</p>
+        </a>
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Ершов Павел Андреевич</b><span class="anc">и дед Ершов Николай Степанович, 1929–2011</span></div>
+          <div class="pair-meta"><span class="chip rel">Дед — внук</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Апрелевка, Московская область</p>
+        </a>
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Юрченко Владислав Романович</b><span class="anc">и прадед Юрченко Степан Ильич, труженик тыла, 1926–2003</span></div>
+          <div class="pair-meta"><span class="chip rel">Прадед — правнук</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Курск</p>
+        </a>
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Сорокин Дмитрий Андреевич</b><span class="anc">и дед Сорокин Андрей Матвеевич, 1924–1998</span></div>
+          <div class="pair-meta"><span class="chip rel">Дед — внук</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Белгород</p>
+        </a>
+        <a class="pair-card" href="08a-para.html">
+          <div class="pair-people"><div class="pair-ph"></div><span class="pair-link">→</span><div class="pair-ph"></div></div>
+          <div class="pair-names"><b>Черноголовкина Александра Владиславовна</b><span class="anc">и прадед Черноголовкин Владислав Егорович, 1917–1945</span></div>
+          <div class="pair-meta"><span class="chip rel">Прадед — правнучка</span><span class="chip ok">Подтверждено</span></div>
+          <p style="color:var(--ink-2);font-size:13px;margin:10px 0 0">Северо-Курильск</p>
+        </a>
+      </div>
+      <p class="hint">Показаны 6 пар. Дальнейшие пары подгружаются страницами, а не единой выгрузкой всех данных.</p>
+      <div class="more-wrap"><button class="btn small" type="button" onclick="alert('Демо: подгружает следующую страницу пар, без единой выгрузки всех данных.')">Показать ещё</button></div>
+    </div>
+  </section>
+
+  <footer><p>Летопись своих · демо-макет МС-17 · все люди на макете вымышлены.</p></footer>
 </div>
 
 <script>
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
   document.querySelectorAll('.proto [data-w]').forEach(function(b){
     b.addEventListener('click', function(){
       document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');

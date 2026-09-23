@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заявка на пару «предок — герой СВО» — Летопись своих</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:14px;font-size:14px}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.wide{width:100%}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px;margin:0 0 18px}
+.field{margin:0 0 18px}
+.field label{display:block;font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.field .req{color:var(--gold)}
+.field input,.field select,.field textarea{width:100%;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:12px 14px;font-size:16px}
+.field input,.field select{min-height:48px}
+.field textarea{min-height:100px;resize:vertical;font-family:inherit;line-height:1.5}
+.field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+.two-col{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:560px){ .two-col{grid-template-columns:1fr 1fr} }
+
+.steps{display:flex;gap:6px;margin:0 0 24px;flex-wrap:wrap}
+.step-dot{flex:1;min-width:24px;height:6px;border-radius:3px;background:var(--line)}
+.step-dot.done{background:var(--gold)}
+.step-dot.cur{background:var(--gold-d)}
+.step-label{font-size:13px;color:var(--ink-2);margin:0 0 20px}
+.step-label b{color:var(--gold)}
+
+.state-box{border-radius:14px;padding:18px;margin:0 0 20px}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 6px;font-size:16px}
+.state-box.warn{background:var(--warn-bg)} .state-box.warn h3{color:var(--warn);margin:0 0 6px;font-size:16px}
+.state-box p{margin:0;color:var(--ink-2)}
+
+.hero-search{position:relative}
+.hero-result{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px}
+.hero-result button{width:100%;text-align:left;background:var(--bg-3);border:0;border-bottom:1px solid var(--line);padding:12px 14px;color:var(--ink);cursor:pointer}
+.hero-result button:last-child{border-bottom:0}
+.hero-result button:hover{background:#152645}
+.hero-result small{display:block;color:var(--ink-2);margin-top:2px}
+.hero-picked{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-3);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;margin-top:8px}
+.hero-picked b{font-size:15px}
+.hero-picked span{color:var(--ink-2);font-size:13px}
+
+.chain{display:flex;flex-direction:column;gap:0;margin:0 0 8px}
+.link-card{position:relative;border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--bg-3);margin:0 0 14px}
+.link-card .num{position:absolute;top:-10px;left:14px;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;border-radius:20px;padding:2px 10px}
+.link-card h3{font-size:14px;color:var(--gold);margin:0 0 10px}
+.upload-zone{border:1px dashed var(--border-ctrl);border-radius:10px;padding:16px;text-align:center;color:var(--ink-2);cursor:pointer;font-size:14px}
+.upload-zone:hover{border-color:var(--gold)}
+.doc-note{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--ink-2);margin:8px 0 0}
+.doc-attached{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--ok);border-radius:8px;padding:10px 12px;font-size:13px}
+.link-card.missing{border-color:var(--error)}
+.link-card.missing .doc-note{color:var(--error)}
+.add-link{width:100%;border:1px dashed var(--border-ctrl);background:transparent;color:var(--ink-2);border-radius:12px;padding:12px;font-size:14px;cursor:pointer;margin:0 0 18px}
+.add-link:hover{border-color:var(--gold);color:var(--gold)}
+
+.check-row{display:flex;gap:10px;align-items:flex-start;margin:0 0 14px}
+.check-row input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--gold)}
+.check-row label{font-size:14px;color:var(--ink)}
+
+.notice{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);margin:0 0 18px}
+.notice b{color:var(--ink)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.ok-wrap{max-width:520px;margin:40px auto;padding:0 20px;text-align:center}
+.ok-wrap svg{margin-bottom:16px}
+.ok-wrap h1{font-size:clamp(22px,4vw,26px);margin:0 0 12px}
+.ok-wrap p{color:var(--ink-2);margin:0 0 22px}
+.ok-wrap .timer{display:inline-block;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:15px;margin:0 0 22px}
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
+.nav-buttons{display:flex;gap:10px;justify-content:space-between;margin-top:24px;flex-wrap:wrap}
+main{padding:28px 0 60px}
+</style>
+</head>
+<body data-state="empty">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 11 Заявка на пару «предок — герой СВО»</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="empty" aria-pressed="true">Пусто</button>
+    <button data-st="normal" aria-pressed="false">Норма</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Пусто — шаг 1, герой ещё не выбран. Норма — цепочка из 2 звеньев заполнена, все документы приложены. Ошибка — отправка без документа по звену. Много данных — цепочка из 4 звеньев (до прапрадеда).</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Летопись своих</b><small>Колесникова Анна Сергеевна · жена героя, вошла через Сбер ID</small></span>
+  </a>
+  <nav><a href="03-kabinet-avtora.html">Кабинет</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ===== ПУСТО: шаг 1, герой ещё не выбран ===== -->
+  <div class="when empty">
+    <div class="steps" aria-hidden="true"><div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>1 из 4</b> · Герой СВО</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Рассказать о предке героя</h1>
+      <p style="color:var(--ink-2);margin:0 0 20px">Страница пары свяжет уже опубликованную карточку героя СВО с историей его предка — участника Великой Отечественной войны, труженика тыла или ветерана другой войны. Родство подтверждает модератор по документам, звено за звеном.</p>
+
+      <div class="field hero-search">
+        <label for="hero-find">Найдите героя, чей предок это будет <span class="req">*</span></label>
+        <input id="hero-find" placeholder="Фамилия и имя героя">
+        <div class="hero-result">
+          <button type="button" data-hero>Колесников Сергей Викторович<small>12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</small></button>
+          <button type="button" data-hero>Джанашвили Отари Тенгизович<small>04.11.1990 — 22.05.2023 · Владикавказ, Республика Северная Осетия — Алания</small></button>
+        </div>
+        <p class="hint">Карточку героя «с нуля» здесь не создать — пара строится только от уже опубликованной страницы. Если героя нет в списке, сначала расскажите о нём отдельно.</p>
+      </div>
+
+      <div class="notice"><b>Кто может подать эту заявку.</b> Тот же круг родственников, что вправе согласовывать публикацию карточки героя — не обязательно тот, кто её создавал.</div>
+
+      <div class="nav-buttons"><span></span><button class="btn primary" type="button" disabled title="Сначала выберите героя">Далее</button></div>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: цепочка заполнена, документы приложены ===== -->
+  <div class="when normal" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot cur"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>3 из 4</b> · Цепочка родства</p>
+
+    <div class="hero-picked" style="margin-bottom:18px">
+      <div><b>Колесников Сергей Викторович</b><br><span>Герой СВО · Наро-Фоминск, Московская область</span></div>
+      <button class="btn ghost" type="button" style="min-height:34px;padding:0 10px;font-size:12px">Изменить</button>
+    </div>
+
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Цепочка родства к предку</h1>
+      <p style="color:var(--ink-2);margin:0 0 18px">Заполните звено за звеном — от героя к предку. К каждому звену приложите документ (свидетельство о рождении/браке или архивную справку). Документ видит только модератор, на сайте он не публикуется и после проверки не хранится.</p>
+
+      <div class="chain">
+        <div class="link-card">
+          <span class="num">Звено 1</span>
+          <h3>Кем это лицо приходится герою</h3>
+          <div class="two-col">
+            <div class="field" style="margin-bottom:0"><label>Степень родства к герою</label><select><option selected>Дед</option><option>Родитель</option><option>Прадед / прабабушка</option><option>Прапрадед / прапрабабушка</option></select></div>
+            <div class="field" style="margin-bottom:0"><label>ФИО</label><input value="Колесников Виктор Иванович"></div>
+          </div>
+          <div class="field" style="margin:14px 0 0"><label>Годы жизни</label><input value="1937–2009"></div>
+          <div class="field" style="margin-bottom:0">
+            <label>Документ, подтверждающий это звено (свидетельство о рождении отца героя) <span class="req">*</span></label>
+            <div class="doc-attached"><span>svidetelstvo_o_rozhdenii_otca.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div>
+            <div class="doc-note">Модератор сверит документ и не будет хранить копию дольше срока проверки.</div>
+          </div>
+        </div>
+
+        <div class="link-card">
+          <span class="num">Звено 2 · предок</span>
+          <h3>Данные предка — участника войны</h3>
+          <div class="two-col">
+            <div class="field" style="margin-bottom:0"><label>Степень родства к герою</label><select><option>Дед</option><option selected>Прадед / прабабушка</option><option>Прапрадед / прапрабабушка</option></select></div>
+            <div class="field" style="margin-bottom:0"><label>ФИО</label><input value="Колесников Иван Фёдорович"></div>
+          </div>
+          <div class="two-col" style="margin-top:14px">
+            <div class="field" style="margin-bottom:0"><label>Годы жизни</label><input value="1919–1944"></div>
+            <div class="field" style="margin-bottom:0"><label>Статус</label><select><option selected>Участник Великой Отечественной войны</option><option>Труженик тыла</option><option>Ветеран другой войны за Отечество</option></select></div>
+          </div>
+          <p class="hint" style="margin:8px 0 0">Статус на опубликованной странице подтвердит модератор по документу — выбор здесь предварительный, со слов семьи.</p>
+          <div class="field" style="margin:14px 0 0"><label>Родной город предка</label><input value="Наро-Фоминск, Московская область"></div>
+          <div class="field" style="margin:0 0 0"><label>Ссылка на запись в «Память народа» (если нашли)</label><input value="https://pamyat-naroda.ru/heroes/demo-123456"></div>
+          <div class="field" style="margin:14px 0 0"><label>О жизни предка</label><textarea>Родился в Наро-Фоминске, до войны работал на ткацкой фабрике. Ушёл на фронт в 1941 году, служил связистом.</textarea></div>
+          <div class="field" style="margin:14px 0 0"><label>О боевом пути (если известно)</label><textarea>Погиб в 1944 году при форсировании реки, посмертно награждён медалью «За отвагу» — запись найдена в открытой базе.</textarea></div>
+          <div class="field" style="margin-bottom:0">
+            <label>Документ, подтверждающий это звено (свидетельство о рождении деда героя) <span class="req">*</span></label>
+            <div class="doc-attached"><span>svidetelstvo_o_rozhdenii_deda.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div>
+            <div class="doc-note">Это последнее звено — предок в заявке дальше по цепочке не уходит.</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="add-link" type="button">+ Добавить ещё одно звено (если предок дальше в цепочке)</button>
+
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button">Назад</button>
+        <button class="btn primary" type="button" data-next>Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА: отправляем заявку ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="card">
+      <div class="sk" style="height:24px;width:60%;margin-bottom:18px"></div>
+      <div class="sk" style="height:90px;margin-bottom:14px"></div>
+      <div class="sk" style="height:120px;margin-bottom:14px"></div>
+      <div class="sk" style="height:90px;margin-bottom:18px"></div>
+      <button class="btn primary wide" disabled>Отправляем…</button>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА: отправка без документа по звену ===== -->
+  <div class="when error" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot cur"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>3 из 4</b> · Цепочка родства</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Цепочка родства к предку</h1>
+      <div class="state-box err" role="alert">
+        <h3>Не хватает документа по звену 2</h3>
+        <p>Без документа хотя бы на одно звено заявку не отправить — вся цепочка проверяется целиком. Приложите документ или уточните, что делать, если архивной записи нет.</p>
+      </div>
+      <div class="chain">
+        <div class="link-card">
+          <span class="num">Звено 1</span>
+          <h3>Кем это лицо приходится герою</h3>
+          <div class="two-col">
+            <div class="field" style="margin-bottom:0"><label>Степень родства к герою</label><select><option selected>Дед</option></select></div>
+            <div class="field" style="margin-bottom:0"><label>ФИО</label><input value="Колесников Виктор Иванович"></div>
+          </div>
+          <div class="field" style="margin:14px 0 0"><label>Документ <span class="req">*</span></label>
+            <div class="doc-attached"><span>svidetelstvo_o_rozhdenii_otca.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div>
+          </div>
+        </div>
+        <div class="link-card missing">
+          <span class="num">Звено 2 · предок</span>
+          <h3>Данные предка — участника войны</h3>
+          <div class="field" style="margin-bottom:0"><label>ФИО</label><input value="Колесников Иван Фёдорович"></div>
+          <div class="field" style="margin:14px 0 0">
+            <label>Документ, подтверждающий это звено (свидетельство о рождении деда героя) <span class="req">*</span></label>
+            <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
+            <div class="doc-note">Без документа это звено не подтвердится, и заявка не отправится.</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button">Назад</button>
+        <button class="btn primary" type="button" data-submit>Отправить на проверку</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: цепочка из 4 звеньев ===== -->
+  <div class="when many" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot cur"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>3 из 4</b> · Цепочка родства</p>
+    <div class="hero-picked" style="margin-bottom:18px">
+      <div><b>Джанашвили Отари Тенгизович</b><br><span>Герой СВО · Владикавказ, Республика Северная Осетия — Алания</span></div>
+    </div>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Цепочка родства к предку</h1>
+      <p style="color:var(--ink-2);margin:0 0 18px">Глубина цепочки формально не ограничена — чем длиннее, тем больше звеньев проверит модератор. У этой заявки — 4 звена, до прапрадеда.</p>
+      <div class="chain">
+        <div class="link-card"><span class="num">Звено 1</span><h3>Отец героя</h3><p style="margin:0">Джанашвили Тенгиз Ахсарович, 1962 г.р.</p><div class="doc-attached" style="margin-top:10px"><span>svidetelstvo_o_rozhdenii_gerdoya.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div></div>
+        <div class="link-card"><span class="num">Звено 2</span><h3>Дед героя</h3><p style="margin:0">Джанашвили Ахсар Ноевич, 1938–2015</p><div class="doc-attached" style="margin-top:10px"><span>svidetelstvo_o_rozhdenii_ottsa.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div></div>
+        <div class="link-card"><span class="num">Звено 3</span><h3>Прадед героя</h3><p style="margin:0">Джанашвили Ное Отарович, 1912–1979</p><div class="doc-attached" style="margin-top:10px"><span>arhivnaya_spravka_zags.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div></div>
+        <div class="link-card"><span class="num">Звено 4 · предок</span><h3>Прапрадед героя — участник ВОВ</h3>
+          <div class="two-col"><div class="field" style="margin-bottom:0"><label>ФИО</label><input value="Джанашвили Отар Гивиевич"></div><div class="field" style="margin-bottom:0"><label>Годы жизни</label><input value="1908–1943"></div></div>
+          <div class="field" style="margin:14px 0 0"><label>Статус</label><select><option selected>Участник Великой Отечественной войны</option></select></div>
+          <div class="field" style="margin:14px 0 0"><label>Ссылка на «Память народа»</label><input value="https://pamyat-naroda.ru/heroes/demo-654321"></div>
+          <div class="field" style="margin:14px 0 0"><label>Документ <span class="req">*</span></label><div class="doc-attached"><span>arhivnaya_spravka_1908.jpg · приложено</span><button class="btn ghost" type="button" style="min-height:32px;padding:0 10px;font-size:12px">Заменить</button></div>
+            <div class="doc-note">Архивной записи о рождении не нашлось — приложена архивная справка ЗАГС, как допускается при отсутствии довоенных документов.</div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button">Назад</button>
+        <button class="btn primary" type="button" data-next>Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Шаг 4 (показан внутри нормы после «Далее» — согласия) ===== -->
+  <div class="when consent" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot cur"></div></div>
+    <p class="step-label">Шаг <b>4 из 4</b> · Согласия</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Согласия на публикацию</h1>
+      <div class="check-row"><input type="checkbox" id="c1" checked><label for="c1">Я — наследник(ца) предка (Колесников Иван Фёдорович) и даю согласие на публикацию и обработку его персональных данных (ч. 7 ст. 9 152-ФЗ)</label></div>
+      <div class="check-row"><input type="checkbox" id="c2" checked><label for="c2">Данные предка указаны с моих слов и подтверждаются приложенными документами</label></div>
+      <div class="notice"><b>Современный указ о награждении героя в паре.</b> Отдельное согласие не требуется — используется то же согласие на публикацию наград героя, которое уже дано при заполнении его карточки. Если такого согласия нет, блок с текстом указа на странице пары просто не появится.</div>
+      <div class="notice"><b>Если герой жив.</b> Публикация пары потребует ещё и его собственного согласия — без него страница останется в статусе «Ждём согласия героя», даже если родство подтверждено.</div>
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button">Назад</button>
+        <button class="btn primary" type="button" data-submit>Отправить на проверку родства</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Квитанция после отправки ===== -->
+  <div class="when done" hidden>
+    <div class="ok-wrap">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Заявка отправлена</h1>
+      <p>Модератор проверит цепочку родства звено за звеном и статус предка по документам. Ни карточка предка, ни страница пары не публикуются до решения.</p>
+      <div class="timer">Статус: <b>на проверке родства</b> · подана 23.09.2026</div>
+      <a class="btn primary" href="03-kabinet-avtora.html">В кабинет</a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Документы каждого звена видит только модератор при проверке и не хранит дольше срока проверки — на сайте они не публикуются.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='empty';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-hero]').forEach(b=>b.addEventListener('click',()=>{ state='normal'; document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed', x.dataset.st==='normal')); apply(); }));
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{ state='consent'; apply(); }));
+  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{ state='done'; apply(); }));
+  apply();
+})();
+</script>
+</body>
+</html>
