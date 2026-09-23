@@ -96,21 +96,16 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .method-tabs button{flex:1;min-width:104px;background:transparent;border:1px solid var(--line);color:var(--ink-2);border-radius:10px;min-height:44px;padding:0 10px;font-size:14px}
 .method-tabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold);background:rgba(242,197,114,.08)}
 
-.otp{display:flex;gap:8px}
-.otp input{width:44px;min-height:52px;text-align:center;font-size:20px;padding:0}
-
 .provider-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;border-radius:12px;border:1px solid var(--line);background:var(--bg-3);color:var(--ink);padding:0 16px;font-size:16px;font-weight:600;text-align:left;margin:0 0 12px}
 .provider-btn .ico{flex:none;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
 .provider-btn.sber .ico{background:#1A9F29;color:#fff}
 .provider-btn.vk .ico{background:#0077FF;color:#fff}
 @media (hover:hover) and (pointer:fine){ .provider-btn:hover{border-color:var(--gold)} }
 
-details.nedostavleno{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:2px 16px}
-details.nedostavleno summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--gold)}
-details.nedostavleno ol{margin:0 0 14px;padding-left:20px;color:var(--ink-2)}
-details.nedostavleno li{margin:0 0 8px}
+.alt-support{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.alt-support p{margin:0;color:var(--ink-2);font-size:14px}
+.alt-support a{color:var(--gold);font-weight:600}
 
-.timer{color:var(--ink-2);font-size:14px}
 .legal{font-size:13px;color:var(--ink-2);margin-top:20px}
 .legal a{color:var(--gold)}
 </style>
@@ -130,7 +125,7 @@ details.nedostavleno li{margin:0 0 8px}
     <button data-w="360" aria-pressed="false">360</button>
     <button data-w="full" aria-pressed="true">Десктоп</button>
   </div>
-  <span class="note">Экран входа: норма, загрузка, ошибка. Остальные состояния сюда не относятся.</span>
+  <span class="note">Экран входа статичен: Сбер ID, VK ID и блок для тех, кому оба способа не подходят (С9в). Отдельных состояний загрузка/ошибка у самого экрана нет — ошибку входа показывает провайдер.</span>
 </div>
 
 <div class="frame" id="frame">
@@ -158,7 +153,6 @@ details.nedostavleno li{margin:0 0 8px}
       <div class="method-tabs" role="tablist" aria-label="Способ входа">
         <button role="tab" id="tab-sber" aria-pressed="true" data-method="sber">Сбер ID</button>
         <button role="tab" id="tab-vk" aria-pressed="false" data-method="vk">VK ID</button>
-        <button role="tab" id="tab-phone" aria-pressed="false" data-method="phone">Телефон</button>
       </div>
 
       <!-- ===== Сбер ID / VK ID ===== -->
@@ -181,69 +175,9 @@ details.nedostavleno li{margin:0 0 8px}
         </div>
       </div>
 
-      <!-- ===== Телефон ===== -->
-      <div id="pane-phone" class="pane" hidden>
-        <div class="when normal">
-          <div class="field">
-            <label for="phone">Номер телефона</label>
-            <input id="phone" type="tel" inputmode="tel" value="+7 912 345-67-89" placeholder="+7 900 000-00-00" autocomplete="tel">
-            <p class="hint">Пришлём код в СМС на этот номер.</p>
-          </div>
-          <button class="btn primary wide" type="button" data-send-code>Получить код</button>
-        </div>
-
-        <div class="when normal" style="margin-top:24px" id="code-block" hidden>
-          <div class="field">
-            <label for="c1">Код из СМС</label>
-            <div class="otp" role="group" aria-label="Код подтверждения, 6 цифр">
-              <input id="c1" maxlength="1" inputmode="numeric" aria-label="Цифра 1">
-              <input maxlength="1" inputmode="numeric" aria-label="Цифра 2">
-              <input maxlength="1" inputmode="numeric" aria-label="Цифра 3">
-              <input maxlength="1" inputmode="numeric" aria-label="Цифра 4">
-              <input maxlength="1" inputmode="numeric" aria-label="Цифра 5">
-              <input maxlength="1" inputmode="numeric" aria-label="Цифра 6">
-            </div>
-            <p class="timer">Прислать код ещё раз можно через 00:47</p>
-          </div>
-          <button class="btn primary wide" type="button" data-confirm-code>Войти</button>
-        </div>
-
-        <div class="when error" hidden>
-          <div class="field has-err">
-            <label for="c1e">Код из СМС</label>
-            <div class="otp" role="group" aria-label="Код подтверждения, 6 цифр">
-              <input id="c1e" maxlength="1" inputmode="numeric" value="4" aria-invalid="true">
-              <input maxlength="1" inputmode="numeric" value="1" aria-invalid="true">
-              <input maxlength="1" inputmode="numeric" value="9" aria-invalid="true">
-              <input maxlength="1" inputmode="numeric" value="0" aria-invalid="true">
-              <input maxlength="1" inputmode="numeric" value="2" aria-invalid="true">
-              <input maxlength="1" inputmode="numeric" value="7" aria-invalid="true">
-            </div>
-            <p class="err-msg" role="alert">⚠ Код неверный, попробуйте ещё раз. Осталось попыток: 3 из 5.</p>
-          </div>
-          <button class="btn primary wide" type="button">Войти</button>
-        </div>
-
-        <div class="when loading" hidden aria-busy="true">
-          <div class="field">
-            <label>Код из СМС</label>
-            <div class="sk" style="height:52px;max-width:320px"></div>
-          </div>
-          <button class="btn primary wide" disabled>Проверяем код…</button>
-        </div>
-
-        <details class="nedostavleno">
-          <summary>Код не приходит</summary>
-          <ol>
-            <li>Проверьте, что номер введён верно: <b>+7 912 345-67-89</b>.</li>
-            <li>Подождите до конца таймера — иногда СМС задерживается оператором на 1–2 минуты.</li>
-            <li>Попробуйте войти через Сбер ID или VK ID — это быстрее и без СМС.</li>
-          </ol>
-          <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
-            <button class="btn" type="button" data-method="sber">Войти через Сбер ID</button>
-            <a class="btn ghost" href="mailto:support@example.ru">Написать в поддержку</a>
-          </div>
-        </details>
+      <!-- ===== Блок для тех, кому не подходит ни Сбер ID, ни VK ID (сценарий С9в) ===== -->
+      <div class="alt-support">
+        <p>Нет ни Сбербанка, ни VK? Это не помеха: <a href="#">напишите в поддержку</a>, и модератор подтвердит вашу личность и родство лично — по документу на видеозвонке, очно или через защищённый канал.</p>
       </div>
 
       <p class="legal">Продолжая, вы соглашаетесь с <a href="#">политикой обработки персональных данных</a> и <a href="#">правилами публикации</a>. Отдельное согласие на обработку данных запрашивается на шаге формы истории.</p>
@@ -252,7 +186,7 @@ details.nedostavleno li{margin:0 0 8px}
 </main>
 
 <footer class="foot">
-  <div class="wrap" style="padding:0">Вход только российскими способами: Сбер ID, VK ID, код на телефон +7. Google, Apple, Facebook и вход по e-mail с паролем в проекте не используются.</div>
+  <div class="wrap" style="padding:0">Вход только российскими способами: Сбер ID, VK ID. Google, Apple, Facebook и вход по e-mail с паролем в проекте не используются. Нет ни Сбер ID, ни VK ID — обращайтесь в поддержку, личность и родство подтвердит модератор вручную.</div>
 </footer>
 </div>
 
@@ -260,21 +194,14 @@ details.nedostavleno li{margin:0 0 8px}
 (function(){
   const body=document.body, frame=document.getElementById('frame');
   let state='normal';
-  const supported=['normal','loading','error'];
+  const supported=['normal'];
   function label(k){return {normal:'Норма',empty:'Пусто',loading:'Загрузка',error:'Ошибка',many:'Много данных'}[k]}
-  function apply(){
-    let st=supported.includes(state)?state:'normal';
-    document.querySelectorAll('#pane-phone .when').forEach(el=>{
-      const on=el.classList.contains(st);
-      el.hidden=!on;
-    });
-    if(st!=='error'){ document.querySelector('#pane-phone .when.error') } // noop, kept explicit
-  }
+  function apply(){}
   document.getElementById('stateBtns').addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b) return;
     state=b.dataset.st;
     document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
-    if(!supported.includes(state)) toast('У этого экрана нет состояния «'+label(state)+'» — показана норма');
+    if(!supported.includes(state)) toast('У этого экрана нет состояния «'+label(state)+'» — экран статичен, показана норма');
     apply();
   });
   document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
@@ -285,20 +212,9 @@ details.nedostavleno li{margin:0 0 8px}
   // вкладки способа входа
   document.querySelectorAll('[data-method]').forEach(b=>b.addEventListener('click',()=>{
     const m=b.dataset.method;
-    document.querySelectorAll('#tab-sber,#tab-vk,#tab-phone').forEach(t=>t.setAttribute('aria-pressed', t.id==='tab-'+m));
+    document.querySelectorAll('#tab-sber,#tab-vk').forEach(t=>t.setAttribute('aria-pressed', t.id==='tab-'+m));
     document.querySelectorAll('.pane').forEach(p=>p.hidden = p.id!=='pane-'+m);
   }));
-
-  // отправка кода
-  document.querySelectorAll('[data-send-code]').forEach(b=>b.addEventListener('click',()=>{
-    document.getElementById('code-block').hidden=false;
-    document.getElementById('c1').focus();
-  }));
-
-  // простое перемещение фокуса между ячейками кода
-  document.querySelectorAll('.otp input').forEach((inp,i,arr)=>{
-    inp.addEventListener('input',()=>{ if(inp.value && arr[i+1]) arr[i+1].focus(); });
-  });
 
   // тост
   let toastEl;
@@ -312,10 +228,6 @@ details.nedostavleno li{margin:0 0 8px}
     b.disabled=true; const old=b.innerHTML; b.innerHTML='<span class="ico">…</span><span>Переходим к провайдеру…</span>';
     setTimeout(()=>{ toast('Демо: в бою здесь редирект на провайдера и возврат на 02-rasskazat.html'); b.disabled=false; b.innerHTML=old; },900);
   }));
-  document.querySelectorAll('[data-confirm-code]').forEach(b=>b.addEventListener('click',()=>{
-    toast('Демо: в бою здесь переход на 02-rasskazat.html или на сайт, если роль — читатель/семья');
-  }));
-
   // тихое мерцание звёзд, функциональный фон, без «эффекта»
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cv=document.getElementById('stars'); const ctx=cv.getContext('2d');
