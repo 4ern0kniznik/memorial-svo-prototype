@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — правила публикации</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.wrap{max-width:760px;margin:0 auto;padding:40px 20px 56px}
+.wrap h1{font-size:clamp(24px,4.4vw,32px);margin:0 0 10px}
+.wrap .lead{color:var(--ink-2);margin:0 0 28px}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tabs a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:8px 16px;min-height:40px;display:inline-flex;align-items:center;text-decoration:none;font-size:14px}
+.tabs a.cur{border-color:var(--gold);color:var(--gold)}
+
+.blk{margin:0 0 26px}
+.blk h2{font-size:18px;margin:0 0 12px}
+.blk ul{margin:0;padding-left:20px}
+.blk li{margin-bottom:8px}
+.blk p{color:var(--ink-2)}
+.ok-list li::marker{color:var(--ok)}
+.no-list li::marker{color:var(--error)}
+
+.legalnote{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px;color:var(--ink-2);margin-bottom:26px}
+
+.contact{margin-top:32px;padding:20px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;text-align:center}
+.contact h2{font-size:17px;margin:0 0 6px}
+.contact p{color:var(--ink-2);font-size:14px;margin:0 0 14px}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 09 Правила и политика</b>
+  <span>Статичный юридический текст — одно состояние (экраны.md)</span>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Герои вокруг нас</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="01-glavnaya.html">Главная</a>
+      <a href="09-pravila-i-politika.html" class="cur">Правила</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <h1>Правила публикации историй</h1>
+    <p class="lead">Текст ниже определяет, что мы публикуем и что не публикуем, и как проверяем
+      истории до выхода на сайт. Утверждается вместе с политикой обработки персональных данных и
+      пользовательским соглашением.</p>
+
+    <div class="tabs">
+      <a class="cur" href="#pravila">Правила публикации</a>
+      <a href="#politika">Политика ПДн (кратко)</a>
+      <a href="#soglasie">Согласия</a>
+    </div>
+
+    <div class="blk" id="pravila">
+      <h2>Мы публикуем</h2>
+      <ul class="ok-list">
+        <li>рассказ о конкретном человеке: каким он был, чем занимался, как выглядел — и, если
+          хотите, о его подвиге;</li>
+        <li>фотографии героя: портреты, семейные снимки, довоенные и мирные фото;</li>
+        <li>факты подвига, если они подтверждены документом: наградным листом, извещением о гибели,
+          записью региональной книги памяти.</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>Мы не публикуем и удаляем при модерации</h2>
+      <ul class="no-list">
+        <li>цифры потерь, номера и названия воинских частей, точные места и даты боёв, маршруты и
+          позиции — это государственная тайна; место события мы указываем только регионом;</li>
+        <li>позывные живых людей, имена и фото действующих военнослужащих — закон запрещает им
+          самим рассказывать о себе и сослуживцах, а нам — раскрывать это без их согласия;</li>
+        <li>оценки решений командования, обсуждение снабжения, дисциплины и политики, недостоверные
+          утверждения и слухи — это личная память о человеке, а не спор о войне;</li>
+        <li>сведения о здоровье, ранениях, диагнозах, национальности и религии — без отдельного
+          письменного согласия семьи или самого героя;</li>
+        <li>фото военной техники, позиций, объектов, лиц живых сослуживцев без их согласия — мы
+          снимаем геометки и служебные данные с каждого фото автоматически;</li>
+        <li>истории о человеке, который сейчас служит, — их может опубликовать он сам, когда будет
+          вправе, или родственник без указания места и подробностей службы.</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>Как проверяем</h2>
+      <ul>
+        <li>каждую историю до публикации смотрит модератор, для погибших — дополнительно редактор;</li>
+        <li>для погибшего нужно согласие семьи — без него страница не выходит;</li>
+        <li>если что-то не соответствует правилам, мы не публикуем историю целиком, а пишем автору,
+          что поправить, — без пересказа военных подробностей.</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <h2>Почему так</h2>
+      <p>Сведения о частях, местах и потерях защищены законом о государственной тайне, недостоверные
+        и оценочные утверждения об армии — статьями об ответственности за «фейки» и дискредитацию,
+        а персональные данные людей — 152-ФЗ.</p>
+    </div>
+
+    <div class="legalnote" id="politika">
+      Полный текст политики обработки персональных данных и пользовательского соглашения готовит
+      юрист проекта — здесь в макете приведена только редакционная политика публикации (раздел 1
+      документа МС-6). Полный текст появится на сайте до открытия формы сбора историй.
+    </div>
+
+    <div class="blk" id="soglasie">
+      <h2>Согласия</h2>
+      <p>При отправке истории автор и, если герой погиб, семья отдельно подтверждают согласие на
+        обработку персональных данных, на распространение имени и на публикацию фотографий —
+        каждое отдельным чекбоксом, не предустановленным и не спрятанным в общий текст соглашения.</p>
+    </div>
+
+    <div class="contact">
+      <h2>Остались вопросы о модерации?</h2>
+      <p>Напишите нам, если что-то в правилах непонятно или вы не согласны с решением модератора.</p>
+      <a class="btn primary" href="mailto:moderaciya@geroi-vokrug.ru">Написать нам</a>
+    </div>
+  </div>
+
+  <footer><p>Герои вокруг нас · демо-макет МС-17 · текст правил — дословно из МС-6, раздел 1.</p></footer>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

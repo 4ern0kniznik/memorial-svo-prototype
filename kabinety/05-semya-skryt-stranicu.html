@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скрыть страницу героя — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.demo-tag{margin-left:auto;flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.wide{width:100%}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px;margin:20px 0}
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 20px}
+.notice b{display:block;margin-bottom:2px}
+
+.hero-mini{display:flex;gap:12px;align-items:center;margin:0 0 20px;padding:12px;border:1px solid var(--line);border-radius:12px}
+.hero-mini .ph{flex:none;width:52px;height:52px;border-radius:8px;background:var(--bg-3);display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:10px;text-align:center}
+.hero-mini h2{font-size:16px;overflow-wrap:anywhere}
+.hero-mini p{color:var(--ink-2);font-size:13px;margin:2px 0 0}
+
+.field{margin:0 0 16px}
+.field label{display:block;font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.field input,.field select,.field textarea{width:100%;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:12px 14px;font-size:16px}
+.field input,.field select{min-height:48px}
+.field textarea{min-height:90px;resize:vertical;font-family:inherit}
+.field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+.field .err-msg{font-size:13px;color:var(--error);margin-top:6px}
+.field.has-err input,.field.has-err select{border-color:var(--error)}
+.three-col{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:560px){ .three-col{grid-template-columns:1fr 1fr 1fr} }
+
+.check-row{display:flex;gap:10px;align-items:flex-start;margin:0 0 14px}
+.check-row input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--gold)}
+.check-row label{font-size:14px;color:var(--ink)}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.status-card{text-align:center;padding:32px 20px}
+.status-card .ico{width:64px;height:64px;border-radius:50%;background:var(--warn-bg);color:var(--warn);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px}
+.timeline{text-align:left;margin:24px auto 0;max-width:340px;border-top:1px solid var(--line);padding-top:16px}
+.timeline .step{display:flex;gap:10px;margin-bottom:12px;font-size:14px}
+.timeline .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none;margin-top:5px}
+.timeline .dot.pending{background:var(--line)}
+.timeline .t{color:var(--ink-2)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+main{padding-bottom:60px}
+</style>
+</head>
+<body data-state="empty">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 05 Скрыть страницу</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="empty" aria-pressed="true">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="normal" aria-pressed="false">Норма (после отправки)</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">«Пусто» — форма не заполнена (стартовое состояние). «Норма» — после отправки, статус с таймером.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/03-geroy.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>обращение по странице героя</small></span>
+  </a>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="card">
+      <div class="sk" style="height:22px;width:60%;margin-bottom:16px"></div>
+      <div class="sk" style="height:48px;margin-bottom:14px"></div>
+      <div class="sk" style="height:48px;margin-bottom:14px"></div>
+      <div class="sk" style="height:90px"></div>
+      <button class="btn primary wide" style="margin-top:16px" disabled>Отправляем…</button>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА: не удалось подтвердить личность ===== -->
+  <div class="when error" hidden>
+    <div class="state-box err" role="alert" style="margin-top:32px">
+      <h3>Не удалось подтвердить вход</h3>
+      <p>Для обращения нужно войти одним из российских способов: по коду на телефон, через Сбер ID или VK ID. Попробуйте снова — если проблема повторится, напишите нам напрямую.</p>
+      <a class="btn primary" href="01-vhod.html">Войти заново</a>
+    </div>
+  </div>
+
+  <!-- ===== ПУСТО: форма не заполнена ===== -->
+  <div class="when empty">
+    <div class="hero-mini">
+      <div class="ph">фото героя</div>
+      <div><h2>Сердюков Константин Викторович</h2><p>1994–2023 · Тула · страница опубликована</p></div>
+    </div>
+
+    <div class="notice"><b>Прежде чем отправить</b>Страница скроется сегодня же, ещё до проверки родства — так требует закон. Модератор свяжется с вами и проверит документ о родстве в течение 3 рабочих дней.</div>
+
+    <div class="card">
+      <h1 style="font-size:20px;margin:0 0 16px">Я родственник — скрыть страницу</h1>
+
+      <div class="three-col">
+        <div class="field"><label for="ln">Фамилия <span style="color:var(--gold)">*</span></label><input id="ln" placeholder="Сердюкова"></div>
+        <div class="field"><label for="fn">Имя <span style="color:var(--gold)">*</span></label><input id="fn" placeholder="Наталья"></div>
+        <div class="field"><label for="mn">Отчество</label><input id="mn" placeholder="Викторовна"></div>
+      </div>
+
+      <div class="field">
+        <label for="rel">Степень родства <span style="color:var(--gold)">*</span></label>
+        <select id="rel"><option value="">Выберите</option><option>Мать</option><option>Отец</option><option>Супруга / супруг</option><option>Сестра / брат</option><option>Дочь / сын</option><option>Другое</option></select>
+      </div>
+
+      <div class="field">
+        <label for="phone">Ваш телефон для связи <span style="color:var(--gold)">*</span></label>
+        <input id="phone" type="tel" placeholder="+7 900 000-00-00">
+        <p class="hint">Понадобится, чтобы модератор мог уточнить детали при проверке.</p>
+      </div>
+
+      <div class="field">
+        <label for="reason">Причина (по желанию)</label>
+        <textarea id="reason" placeholder="Расскажите, что вас не устраивает — это поможет быстрее разобраться"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Документ о родстве (по желанию, ускорит проверку)</label>
+        <div style="border:1px dashed var(--border-ctrl);border-radius:12px;padding:16px;text-align:center;color:var(--ink-2)">Прикрепить свидетельство о рождении или браке</div>
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="confirm">
+        <label for="confirm">Подтверждаю, что я родственник героя, и согласен(на) на обработку моих персональных данных для рассмотрения обращения</label>
+      </div>
+
+      <button class="btn primary wide" type="button" data-submit>Скрыть страницу</button>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: после отправки — статус с таймером ===== -->
+  <div class="when normal" hidden>
+    <div class="card status-card">
+      <div class="ico">◐</div>
+      <h2 style="font-size:20px;margin:0 0 8px">Страница скрыта</h2>
+      <p style="color:var(--ink-2);max-width:420px;margin:0 auto">Страница Сердюкова Константина Викторовича больше не видна читателям. Модератор проверит документ о родстве и свяжется с вами по телефону +7 900 000-00-00.</p>
+      <div class="timeline">
+        <div class="step"><div class="dot"></div><div><div>Скрыта сегодня, 23.09.2026</div><div class="t">в течение рабочего дня</div></div></div>
+        <div class="step"><div class="dot pending"></div><div><div>Решение модератора</div><div class="t">ожидаем не позднее 26.09.2026 (3 рабочих дня)</div></div></div>
+      </div>
+      <a class="btn ghost" href="../publichnye/01-glavnaya.html" style="margin-top:24px">Вернуться на сайт</a>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: демонстрация с длинными реальными данными ===== -->
+  <div class="when many" hidden>
+    <div class="hero-mini">
+      <div class="ph">фото героя</div>
+      <div><h2>Верхнепышминский-Одоевский Константин Александрович</h2><p>1979–2024 · Северо-Курильск · страница опубликована</p></div>
+    </div>
+    <div class="card status-card">
+      <div class="ico">◐</div>
+      <h2 style="font-size:20px;margin:0 0 8px">Страница скрыта</h2>
+      <p style="color:var(--ink-2)">Заявитель: Черноголовкина Александра Владиславовна, степень родства — другое (двоюродная сестра). Причина: «В истории указаны неверные сведения о месте службы, прошу проверить источник». Контакт: +7 912 345-67-89.</p>
+      <div class="timeline">
+        <div class="step"><div class="dot"></div><div><div>Скрыта 20.09.2026</div><div class="t">в течение рабочего дня</div></div></div>
+        <div class="step"><div class="dot"></div><div><div>Решение модератора</div><div class="t">срок истёк 23.09.2026 — рассмотрение продлено, спор наследников</div></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Право родственника на снятие публикации установлено законом (152-ФЗ). Родство проверяет модератор, копия документа не хранится.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='empty';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelector('#stateBtns [data-st=normal]').click();
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

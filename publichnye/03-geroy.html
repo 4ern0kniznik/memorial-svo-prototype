@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — карточка героя</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.small{min-height:44px;padding:0 18px;font-size:15px}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.starfield{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hback{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;color:var(--ink-2);text-decoration:none;font-size:14px;position:relative;z-index:1}
+.person{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:8px 20px 56px;display:grid;gap:28px;grid-template-columns:1fr}
+@media (min-width:860px){ .person{grid-template-columns:280px 1fr} }
+.portrait{position:relative;aspect-ratio:3/4;background:var(--bg-3);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.portrait svg{width:100%;height:100%;display:block}
+.portrait .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(6,11,24,.7);color:var(--ink-2);font-size:12px;padding:8px 10px}
+.name{font-weight:700;font-size:clamp(24px,4.6vw,32px);line-height:1.14;margin:0 0 6px}
+.years{color:var(--ink-2);margin:0 0 18px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:0 0 22px;padding:16px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px}
+.facts dt{color:var(--ink-2)} .facts dd{margin:0;overflow-wrap:anywhere}
+.row{display:flex;gap:14px;flex-wrap:wrap}
+
+h2.sec{font-size:21px;margin:32px 0 12px}
+.story{position:relative;padding:18px 20px;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;font-size:17px}
+.story p{margin:0 0 10px}
+.author{font-size:14px;color:var(--ink-2)}
+
+.gallery{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@media (min-width:600px){ .gallery{grid-template-columns:repeat(4,1fr)} }
+.gph{aspect-ratio:4/3;background:var(--bg-3);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.gph svg{width:100%;height:100%}
+.gcap{font-size:13px;color:var(--ink-2);margin-top:4px}
+
+.memory{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.memory p{margin:0 0 8px}
+.memory .author{margin:0}
+
+.empty-note{color:var(--ink-2);font-size:14px;padding:14px 16px;background:var(--bg-2);border:1px dashed var(--line);border-radius:12px}
+
+.sk{background:var(--bg-3);border-radius:8px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(234,241,255,.06),transparent)}
+@media (prefers-reduced-motion:no-preference){ .sk::after{animation:shine 1.6s ease-in-out infinite} }
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sk-line{height:14px;margin:8px 0;border-radius:6px}
+.sk-block{height:120px;border-radius:12px}
+
+.hidden-wrap{max-width:640px;margin:60px auto;padding:0 20px;text-align:center}
+.hidden-wrap svg{margin-bottom:16px}
+.hidden-wrap h1{font-size:clamp(22px,4vw,28px);margin:0 0 12px}
+.hidden-wrap p{color:var(--ink-2);margin:0 0 22px}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 03 Карточка героя</b>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Пусто</button>
+  <button data-st="zagruzka" aria-pressed="false">Загрузка</button>
+  <button data-st="oshibka" aria-pressed="false">Ошибка</button>
+  <button data-st="mnogo" aria-pressed="false">Много данных</button>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо · вымышленные люди</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Герои вокруг нас</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="01-glavnaya.html">Главная</a>
+      <a href="02-karta-i-poisk.html" class="cur">Карта</a>
+      <a href="04-podderzhka.html">Поддержка семей</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <!-- ===== НОРМА ===== -->
+  <section class="state on" data-state="norma">
+    <div style="position:relative">
+      <canvas class="starfield" id="stars-g" aria-hidden="true"></canvas>
+      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <div class="person">
+        <div>
+          <div class="portrait">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="300" height="400" fill="#0F1D33"/><circle cx="150" cy="150" r="70" fill="#1B2740"/>
+              <path d="M60 400 C60 280 240 280 240 400 Z" fill="#1B2740"/>
+              <circle cx="150" cy="150" r="92" fill="none" stroke="#F2C572" stroke-width="1.5" opacity=".5"/>
+            </svg>
+            <div class="cap">Фото предоставляет семья, с согласия на публикацию</div>
+          </div>
+          <p style="font-size:13px;color:var(--ink-2);margin-top:8px">Силуэт-заглушка · демо, человек вымышлен</p>
+        </div>
+        <div>
+          <h1 class="name">Колесников Сергей Викторович</h1>
+          <p class="years">12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</p>
+          <dl class="facts">
+            <dt>Где был подвиг</dt><dd>Регион указан в истории; точные координаты не публикуются</dd>
+            <dt>Награды</dt><dd>Орден Мужества (посмертно) — со слов семьи, документ у модератора</dd>
+          </dl>
+          <div class="row">
+            <a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a>
+            <a class="btn" href="08-svyaz-pokoleniy.html">Связь поколений</a>
+          </div>
+
+          <h2 class="sec">Каким он был</h2>
+          <p>Вырос в Наро-Фоминске, окончил колледж по специальности «автомеханик», десять лет чинил машины
+            в мастерской на Московской улице. Женат, двое детей — Маша и Тёма. Высокий, светловолосый,
+            всегда с улыбкой. По выходным возил сына на хоккей, летом с друзьями сплавлялся по Протве.</p>
+          <p class="author">Рассказала Колесникова Анна Сергеевна, жена</p>
+
+          <h2 class="sec">Фотографии из жизни</h2>
+          <div class="gallery">
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="50" cy="30" r="14" fill="#1B2740"/><path d="M20 75 C20 45 80 45 80 75 Z" fill="#1B2740"/></svg></div><figcaption class="gcap">Выпускной, 2012</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="40" cy="30" r="12" fill="#1B2740"/><path d="M16 75 C16 50 64 50 64 75 Z" fill="#1B2740"/><circle cx="72" cy="42" r="8" fill="#1B2740"/><path d="M56 75 C56 58 88 58 88 75 Z" fill="#1B2740"/></svg></div><figcaption class="gcap">С сыном на катке</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><rect x="10" y="40" width="80" height="6" fill="#F2C572" opacity=".7"/><circle cx="50" cy="28" r="12" fill="#1B2740"/></svg></div><figcaption class="gcap">Мастерская, 2019</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><path d="M0 55 Q25 40 50 55 T100 55 V75 H0 Z" fill="#1B2740"/></svg></div><figcaption class="gcap">Сплав по Протве</figcaption></figure>
+          </div>
+          <p style="font-size:13px;color:var(--ink-2)">Фото публикуются с согласия семьи.</p>
+
+          <h2 class="sec">Подвиг</h2>
+          <article class="story">
+            <p>«Мы с Серёгой были в одном расчёте с весны 2023-го. Когда колонну накрыло, он вытаскивал
+              раненых к укрытию, пока не вынес последнего. Троих ребят, которые сегодня живы, он спас сам.»</p>
+            <p class="author">Андрей Л., сослуживец, уволен со службы <span style="color:var(--ok)">✓ статус проверен</span></p>
+          </article>
+
+          <h2 class="sec">От семьи</h2>
+          <p style="color:var(--ink-2)">Семья может добавить фото и письма, а также в любой момент попросить скрыть страницу.</p>
+
+          <h2 class="sec">Воспоминания других авторов</h2>
+          <div class="memory">
+            <p>«Серёга всегда первым бежал помогать, если у кого-то из наших глохла машина по дороге на точку.»</p>
+            <p class="author">Дмитрий К., сослуживец</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ПУСТО (нет фото из жизни — просто нет блока, не ошибка) ===== -->
+  <section class="state" data-state="pusto">
+    <div style="position:relative">
+      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <div class="person">
+        <div>
+          <div class="portrait">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="300" height="400" fill="#0F1D33"/><circle cx="150" cy="150" r="70" fill="#1B2740"/>
+              <path d="M60 400 C60 280 240 280 240 400 Z" fill="#1B2740"/>
+            </svg>
+            <div class="cap">Портрет пока не загружен</div>
+          </div>
+        </div>
+        <div>
+          <h1 class="name">Ершов Павел Андреевич</h1>
+          <p class="years">1999 · Апрелевка, Московская область · жив, награждён</p>
+          <dl class="facts">
+            <dt>Награды</dt><dd>Медаль «За отвагу» — документ на проверке</dd>
+          </dl>
+          <div class="row">
+            <a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a>
+          </div>
+          <h2 class="sec">Каким он был</h2>
+          <p>Учился в железнодорожном техникуме, играл на гитаре в школьной группе. После контузии
+            восстанавливается дома, вернулся к любимому делу — ремонту мотоциклов.</p>
+          <p class="author">Рассказал Ершов Андрей Павлович, отец</p>
+          <h2 class="sec">Фотографии из жизни</h2>
+          <p class="empty-note">Семья пока не добавила фотографий — автор может дополнить историю
+            в личном кабинете позже.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <section class="state" data-state="zagruzka">
+    <div style="position:relative">
+      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <div class="person">
+        <div><div class="portrait sk"></div></div>
+        <div>
+          <div class="sk sk-line" style="width:70%;height:30px"></div>
+          <div class="sk sk-line" style="width:50%"></div>
+          <div class="sk sk-block" style="margin-top:20px"></div>
+          <div class="sk sk-block" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ОШИБКА: скрыта по просьбе семьи (С3) ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="hidden-wrap">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z" stroke="#8FA3C4" stroke-width="1.5"/><circle cx="12" cy="12" r="3" stroke="#8FA3C4" stroke-width="1.5"/><path d="M4 4l16 16" stroke="#F2C572" stroke-width="1.6"/></svg>
+      <h1>Страница скрыта по просьбе семьи</h1>
+      <p>Семья героя попросила временно убрать страницу из открытого доступа. Текст истории и фотографии
+        сейчас недоступны. Это не ошибка и не удаление — решение принимает родственник, страница может
+        вернуться позже.</p>
+      <a class="btn primary" href="02-karta-i-poisk.html">К карте историй</a>
+    </div>
+  </section>
+
+  <!-- ===== МНОГО ДАННЫХ ===== -->
+  <section class="state" data-state="mnogo">
+    <div style="position:relative">
+      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <div class="person">
+        <div>
+          <div class="portrait">
+            <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="300" height="400" fill="#0F1D33"/><circle cx="150" cy="150" r="70" fill="#1B2740"/>
+              <path d="M60 400 C60 280 240 280 240 400 Z" fill="#1B2740"/>
+              <circle cx="150" cy="150" r="92" fill="none" stroke="#F2C572" stroke-width="1.5" opacity=".5"/>
+            </svg>
+            <div class="cap">Фото предоставляет семья, с согласия на публикацию</div>
+          </div>
+        </div>
+        <div>
+          <h1 class="name">Джанашвили Отари Тенгизович</h1>
+          <p class="years">04.11.1990 — 22.05.2023 · Владикавказ, Республика Северная Осетия — Алания</p>
+          <dl class="facts">
+            <dt>Где был подвиг</dt><dd>Регион указан в истории; точные координаты не публикуются</dd>
+            <dt>Награды</dt><dd>Орден Мужества (посмертно); медаль «За отвагу» — со слов семьи</dd>
+          </dl>
+          <div class="row"><a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a></div>
+          <h2 class="sec">Каким он был</h2>
+          <p>Работал инструктором в секции вольной борьбы, воспитал двух чемпионов района. Готовил
+            осетинские пироги по субботам для всей команды, был человеком, к которому шли за советом.</p>
+          <p class="author">Рассказала Джанашвили Мадина Ахсаровна, мать</p>
+          <h2 class="sec">Фотографии из жизни</h2>
+          <div class="gallery">
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="50" cy="30" r="14" fill="#1B2740"/></svg></div><figcaption class="gcap">На соревнованиях, 2015</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="40" cy="30" r="12" fill="#1B2740"/></svg></div><figcaption class="gcap">С учениками зала</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><rect x="10" y="40" width="80" height="6" fill="#F2C572" opacity=".7"/></svg></div><figcaption class="gcap">Семейный стол</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><path d="M0 55 Q25 40 50 55 T100 55 V75 H0 Z" fill="#1B2740"/></svg></div><figcaption class="gcap">Горы под Владикавказом</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="30" cy="35" r="10" fill="#1B2740"/></svg></div><figcaption class="gcap">Свадьба брата, 2019</figcaption></figure>
+            <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="60" cy="35" r="10" fill="#1B2740"/></svg></div><figcaption class="gcap">Со сборной района</figcaption></figure>
+          </div>
+          <h2 class="sec">Подвиг</h2>
+          <article class="story">
+            <p>«Отари вытащил из-под обстрела двоих раненых сослуживцев, хотя сам был контужен. Мы
+              обязаны ему жизнью.»</p>
+            <p class="author">Георгий М., сослуживец, уволен со службы <span style="color:var(--ok)">✓ статус проверен</span></p>
+          </article>
+          <h2 class="sec">Воспоминания других авторов</h2>
+          <div class="memory"><p>«Он тренировал моего сына два года — терпеливый, никогда не кричал.»</p><p class="author">Алан Т., отец ученика</p></div>
+          <div class="memory"><p>«На свадьбе моего брата Отари танцевал до утра, всех смешил.»</p><p class="author">Заур Д., друг семьи</p></div>
+          <div class="memory"><p>«Помню, как он подвозил соседей на своей старой «Ниве» без разговоров о деньгах.»</p><p class="author">Марина С., соседка</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>Герои вокруг нас · демо-макет МС-17 · все люди на макете вымышлены.</p></footer>
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  function stars(id){
+    var c = document.getElementById(id); if(!c) return;
+    var ctx = c.getContext('2d'); var pts = [];
+    function size(){
+      var r = c.parentElement.getBoundingClientRect();
+      c.width = r.width; c.height = r.height; pts = [];
+      var n = Math.round((r.width*r.height)/9000);
+      for(var i=0;i<n;i++) pts.push({x:Math.random()*r.width,y:Math.random()*r.height,r:Math.random()*1.3+.3,p:Math.random()*Math.PI*2,s:.4+Math.random()*.5});
+    }
+    size(); window.addEventListener('resize', size);
+    if(reduce){ ctx.fillStyle='rgba(234,241,255,.5)'; pts.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}); return; }
+    var t=0;
+    function frame(){
+      t+=0.006; ctx.clearRect(0,0,c.width,c.height);
+      pts.forEach(function(p){ var a=.25+.35*(0.5+0.5*Math.sin(t*p.s+p.p)); ctx.fillStyle='rgba(234,241,255,'+a.toFixed(3)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  stars('stars-g');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вход — Герои вокруг нас</title>
+<style>
+/* Боевые шрифты не подключены (без CDN): заголовки Montserrat 600/700, текст Golos Text 400/500 — оба OFL,
+   кириллица полная. Ниже системные близкие замены. Токены — макеты/токены.md, направление 3 «Созвездие». */
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+/* ===== панель прототипа ===== */
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+/* ===== общие компоненты ===== */
+.when{}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.demo-tag{margin-left:auto;flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.wide{width:100%}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px}
+.field{margin:0 0 16px}
+.field label{display:block;font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.field input,.field select{width:100%;min-height:48px;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:0 14px;font-size:16px}
+.field input::placeholder{color:var(--ink-2)}
+.field input:focus-visible,.field select:focus-visible{border-color:var(--gold)}
+.field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+.field .err-msg{font-size:13px;color:var(--error);margin-top:6px;display:flex;gap:6px;align-items:flex-start}
+.field.has-err input{border-color:var(--error)}
+
+.state-box{border-radius:14px;padding:20px}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 6px;font-size:17px}
+.state-box p{margin:0 0 14px;color:var(--ink-2)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 12px;border-radius:20px}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+.foot a{color:var(--ink-2);text-decoration:underline}
+
+/* ===== экран входа ===== */
+.vhod{display:grid;gap:0;min-height:calc(100vh - 100px)}
+@media (min-width:860px){ .vhod{grid-template-columns:1fr 1fr} }
+.vhod-hero{position:relative;background:radial-gradient(120% 100% at 20% 0%,#0F1D33 0%,#060B18 70%);padding:48px 32px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid var(--line)}
+@media (min-width:860px){ .vhod-hero{border-bottom:none;border-right:1px solid var(--line)} }
+.vhod-hero .eyebrow{color:var(--gold);font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin:0 0 14px}
+.vhod-hero h1{font-size:clamp(24px,4vw,32px);line-height:1.2;max-width:420px;margin:0 0 14px}
+.vhod-hero p{color:var(--ink-2);max-width:400px}
+.starfield{position:absolute;inset:0;z-index:0}
+.vhod-hero>*{position:relative;z-index:1}
+
+.vhod-form{padding:32px 20px 48px;display:flex;align-items:flex-start;justify-content:center}
+.vhod-form-in{width:100%;max-width:420px}
+
+.method-tabs{display:flex;gap:8px;margin:0 0 20px;flex-wrap:wrap}
+.method-tabs button{flex:1;min-width:104px;background:transparent;border:1px solid var(--line);color:var(--ink-2);border-radius:10px;min-height:44px;padding:0 10px;font-size:14px}
+.method-tabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold);background:rgba(242,197,114,.08)}
+
+.otp{display:flex;gap:8px}
+.otp input{width:44px;min-height:52px;text-align:center;font-size:20px;padding:0}
+
+.provider-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;border-radius:12px;border:1px solid var(--line);background:var(--bg-3);color:var(--ink);padding:0 16px;font-size:16px;font-weight:600;text-align:left;margin:0 0 12px}
+.provider-btn .ico{flex:none;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.provider-btn.sber .ico{background:#1A9F29;color:#fff}
+.provider-btn.vk .ico{background:#0077FF;color:#fff}
+@media (hover:hover) and (pointer:fine){ .provider-btn:hover{border-color:var(--gold)} }
+
+details.nedostavleno{margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:2px 16px}
+details.nedostavleno summary{cursor:pointer;padding:14px 0;font-weight:600;color:var(--gold)}
+details.nedostavleno ol{margin:0 0 14px;padding-left:20px;color:var(--ink-2)}
+details.nedostavleno li{margin:0 0 8px}
+
+.timer{color:var(--ink-2);font-size:14px}
+.legal{font-size:13px;color:var(--ink-2);margin-top:20px}
+.legal a{color:var(--gold)}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 01 Вход</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Экран входа: норма, загрузка, ошибка. Остальные состояния сюда не относятся.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>вход в личный кабинет</small></span>
+  </a>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main class="vhod">
+  <div class="vhod-hero">
+    <canvas class="starfield" id="stars" aria-hidden="true"></canvas>
+    <p class="eyebrow">Личность подтверждена</p>
+    <h1>Историю рассказывает тот, кто знал человека лично</h1>
+    <p>Вход нужен, чтобы вести черновик истории, согласовать публикацию как член семьи или проверять истории как модератор. Читать сайт можно и без входа.</p>
+  </div>
+
+  <div class="vhod-form">
+    <div class="vhod-form-in">
+      <h2 style="font-size:20px;margin:0 0 4px">Войти</h2>
+      <p style="color:var(--ink-2);margin:0 0 20px">Выберите способ. Данные передают только сами сервисы — мы не видим ваш пароль от Сбербанка или VK.</p>
+
+      <div class="method-tabs" role="tablist" aria-label="Способ входа">
+        <button role="tab" id="tab-sber" aria-pressed="true" data-method="sber">Сбер ID</button>
+        <button role="tab" id="tab-vk" aria-pressed="false" data-method="vk">VK ID</button>
+        <button role="tab" id="tab-phone" aria-pressed="false" data-method="phone">Телефон</button>
+      </div>
+
+      <!-- ===== Сбер ID / VK ID ===== -->
+      <div id="pane-sber" class="pane">
+        <button class="provider-btn sber" type="button" data-go-loading>
+          <span class="ico">СБ</span>
+          <span>Войти через Сбер ID<br><small style="color:var(--ink-2);font-weight:400">ФИО подтверждает банк, вводить вручную не нужно</small></span>
+        </button>
+        <p class="hint">Основной способ для авторов и модераторов — Сбер ID подтверждает ФИО без дополнительных документов.</p>
+      </div>
+
+      <div id="pane-vk" class="pane" hidden>
+        <button class="provider-btn vk" type="button" data-go-loading>
+          <span class="ico">VK</span>
+          <span>Войти через VK ID<br><small style="color:var(--ink-2);font-weight:400">нужна отметка верификации аккаунта</small></span>
+        </button>
+        <div class="state-box err" role="note" style="margin-top:4px">
+          <h3 style="font-size:14px">Если VK ID не верифицирован</h3>
+          <p style="margin:0">Вход как читатель пройдёт, но роль автора будет недоступна — понадобится Сбер ID или верификация VK ID через Госуслуги, Т-Банк ID или Сбер ID.</p>
+        </div>
+      </div>
+
+      <!-- ===== Телефон ===== -->
+      <div id="pane-phone" class="pane" hidden>
+        <div class="when normal">
+          <div class="field">
+            <label for="phone">Номер телефона</label>
+            <input id="phone" type="tel" inputmode="tel" value="+7 912 345-67-89" placeholder="+7 900 000-00-00" autocomplete="tel">
+            <p class="hint">Пришлём код в СМС на этот номер.</p>
+          </div>
+          <button class="btn primary wide" type="button" data-send-code>Получить код</button>
+        </div>
+
+        <div class="when normal" style="margin-top:24px" id="code-block" hidden>
+          <div class="field">
+            <label for="c1">Код из СМС</label>
+            <div class="otp" role="group" aria-label="Код подтверждения, 6 цифр">
+              <input id="c1" maxlength="1" inputmode="numeric" aria-label="Цифра 1">
+              <input maxlength="1" inputmode="numeric" aria-label="Цифра 2">
+              <input maxlength="1" inputmode="numeric" aria-label="Цифра 3">
+              <input maxlength="1" inputmode="numeric" aria-label="Цифра 4">
+              <input maxlength="1" inputmode="numeric" aria-label="Цифра 5">
+              <input maxlength="1" inputmode="numeric" aria-label="Цифра 6">
+            </div>
+            <p class="timer">Прислать код ещё раз можно через 00:47</p>
+          </div>
+          <button class="btn primary wide" type="button" data-confirm-code>Войти</button>
+        </div>
+
+        <div class="when error" hidden>
+          <div class="field has-err">
+            <label for="c1e">Код из СМС</label>
+            <div class="otp" role="group" aria-label="Код подтверждения, 6 цифр">
+              <input id="c1e" maxlength="1" inputmode="numeric" value="4" aria-invalid="true">
+              <input maxlength="1" inputmode="numeric" value="1" aria-invalid="true">
+              <input maxlength="1" inputmode="numeric" value="9" aria-invalid="true">
+              <input maxlength="1" inputmode="numeric" value="0" aria-invalid="true">
+              <input maxlength="1" inputmode="numeric" value="2" aria-invalid="true">
+              <input maxlength="1" inputmode="numeric" value="7" aria-invalid="true">
+            </div>
+            <p class="err-msg" role="alert">⚠ Код неверный, попробуйте ещё раз. Осталось попыток: 3 из 5.</p>
+          </div>
+          <button class="btn primary wide" type="button">Войти</button>
+        </div>
+
+        <div class="when loading" hidden aria-busy="true">
+          <div class="field">
+            <label>Код из СМС</label>
+            <div class="sk" style="height:52px;max-width:320px"></div>
+          </div>
+          <button class="btn primary wide" disabled>Проверяем код…</button>
+        </div>
+
+        <details class="nedostavleno">
+          <summary>Код не приходит</summary>
+          <ol>
+            <li>Проверьте, что номер введён верно: <b>+7 912 345-67-89</b>.</li>
+            <li>Подождите до конца таймера — иногда СМС задерживается оператором на 1–2 минуты.</li>
+            <li>Попробуйте войти через Сбер ID или VK ID — это быстрее и без СМС.</li>
+          </ol>
+          <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" type="button" data-method="sber">Войти через Сбер ID</button>
+            <a class="btn ghost" href="mailto:support@example.ru">Написать в поддержку</a>
+          </div>
+        </details>
+      </div>
+
+      <p class="legal">Продолжая, вы соглашаетесь с <a href="#">политикой обработки персональных данных</a> и <a href="#">правилами публикации</a>. Отдельное согласие на обработку данных запрашивается на шаге формы истории.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap" style="padding:0">Вход только российскими способами: Сбер ID, VK ID, код на телефон +7. Google, Apple, Facebook и вход по e-mail с паролем в проекте не используются.</div>
+</footer>
+</div>
+
+<script>
+(function(){
+  const body=document.body, frame=document.getElementById('frame');
+  let state='normal';
+  const supported=['normal','loading','error'];
+  function label(k){return {normal:'Норма',empty:'Пусто',loading:'Загрузка',error:'Ошибка',many:'Много данных'}[k]}
+  function apply(){
+    let st=supported.includes(state)?state:'normal';
+    document.querySelectorAll('#pane-phone .when').forEach(el=>{
+      const on=el.classList.contains(st);
+      el.hidden=!on;
+    });
+    if(st!=='error'){ document.querySelector('#pane-phone .when.error') } // noop, kept explicit
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    if(!supported.includes(state)) toast('У этого экрана нет состояния «'+label(state)+'» — показана норма');
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+
+  // вкладки способа входа
+  document.querySelectorAll('[data-method]').forEach(b=>b.addEventListener('click',()=>{
+    const m=b.dataset.method;
+    document.querySelectorAll('#tab-sber,#tab-vk,#tab-phone').forEach(t=>t.setAttribute('aria-pressed', t.id==='tab-'+m));
+    document.querySelectorAll('.pane').forEach(p=>p.hidden = p.id!=='pane-'+m);
+  }));
+
+  // отправка кода
+  document.querySelectorAll('[data-send-code]').forEach(b=>b.addEventListener('click',()=>{
+    document.getElementById('code-block').hidden=false;
+    document.getElementById('c1').focus();
+  }));
+
+  // простое перемещение фокуса между ячейками кода
+  document.querySelectorAll('.otp input').forEach((inp,i,arr)=>{
+    inp.addEventListener('input',()=>{ if(inp.value && arr[i+1]) arr[i+1].focus(); });
+  });
+
+  // тост
+  let toastEl;
+  function toast(t){
+    if(!toastEl){ toastEl=document.createElement('div'); toastEl.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:90;max-width:90vw'; document.body.appendChild(toastEl); }
+    toastEl.textContent=t; toastEl.style.display='block';
+    clearTimeout(toast.t); toast.t=setTimeout(()=>toastEl.style.display='none',2600);
+  }
+
+  document.querySelectorAll('[data-go-loading]').forEach(b=>b.addEventListener('click',()=>{
+    b.disabled=true; const old=b.innerHTML; b.innerHTML='<span class="ico">…</span><span>Переходим к провайдеру…</span>';
+    setTimeout(()=>{ toast('Демо: в бою здесь редирект на провайдера и возврат на 02-rasskazat.html'); b.disabled=false; b.innerHTML=old; },900);
+  }));
+  document.querySelectorAll('[data-confirm-code]').forEach(b=>b.addEventListener('click',()=>{
+    toast('Демо: в бою здесь переход на 02-rasskazat.html или на сайт, если роль — читатель/семья');
+  }));
+
+  // тихое мерцание звёзд, функциональный фон, без «эффекта»
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cv=document.getElementById('stars'); const ctx=cv.getContext('2d');
+  let pts=[]; function size(){ cv.width=cv.clientWidth; cv.height=cv.clientHeight;
+    pts=Array.from({length:60},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.3+.4,p:Math.random()*Math.PI*2,speed:.002+Math.random()*.002})); }
+  function draw(t){ ctx.clearRect(0,0,cv.width,cv.height);
+    pts.forEach(p=>{ const a=.25+.35*(Math.sin(p.p+t*p.speed)+1)/2; ctx.beginPath(); ctx.fillStyle='rgba(234,241,255,'+a.toFixed(3)+')'; ctx.arc(p.x,p.y,p.r,0,7); ctx.fill(); });
+    if(!reduce) requestAnimationFrame(draw); }
+  window.addEventListener('resize',size); size();
+  if(reduce){ draw(0); } else { requestAnimationFrame(draw); }
+
+  apply();
+})();
+</script>
+</body>
+</html>

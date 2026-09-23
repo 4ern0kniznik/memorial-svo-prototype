@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — карточка меры поддержки</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.small{min-height:44px;padding:0 18px;font-size:15px}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.wrap{max-width:760px;margin:0 auto;padding:8px 20px 56px}
+.back{display:inline-flex;align-items:center;min-height:44px;color:var(--ink-2);text-decoration:none;font-size:14px}
+.cardhead{margin:14px 0 22px}
+.cardhead h1{font-size:clamp(22px,4vw,28px);margin:0 0 10px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink-2)}
+.tag{background:var(--bg-3);border-radius:20px;padding:3px 10px;color:var(--gold)}
+.stamp{display:inline-flex;align-items:center;gap:6px;background:var(--ok-bg);color:var(--ok);border-radius:20px;padding:3px 10px}
+.stamp.warn{background:var(--warn-bg);color:var(--warn)}
+
+.blk{margin:0 0 26px}
+.blk h2{font-size:16px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2);margin:0 0 10px}
+.blk ul{margin:0;padding-left:20px}
+.blk li{margin-bottom:6px}
+.blk p{margin:0 0 10px}
+.amount-box{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.amount-note{font-size:13px;color:var(--ink-2);margin-top:8px}
+.steps ol{margin:0;padding-left:20px}
+.steps li{margin-bottom:8px}
+.docbox{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.srcs{font-size:14px;color:var(--ink-2)}
+.srcs a{color:var(--gold);text-decoration:underline}
+
+.report{margin-top:32px;padding:20px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px}
+.report h2{font-size:17px;margin:0 0 6px}
+.report p{color:var(--ink-2);font-size:14px;margin:0 0 14px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field label{font-size:13px;color:var(--ink-2)}
+.field textarea,.field input{background:var(--bg);border:1px solid var(--border-ctrl);color:var(--ink);border-radius:8px;padding:10px 12px;font:16px/1.5 var(--font-b)}
+.field textarea{min-height:88px;resize:vertical}
+
+.empty-box,.err-box{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:16px}
+.err-box{background:var(--error-bg);border-color:#4a2222}
+.empty-box h3{font-size:18px;margin:0 0 8px}
+.err-box h3{color:var(--error);font-size:18px;margin:0 0 8px}
+.empty-box p,.err-box p{color:var(--ink-2);margin:0 0 16px}
+
+.sk{background:var(--bg-3);border-radius:8px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(234,241,255,.06),transparent)}
+@media (prefers-reduced-motion:no-preference){ .sk::after{animation:shine 1.6s ease-in-out infinite} }
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sk-line{height:14px;margin:8px 0;border-radius:6px}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 05 Карточка меры</b>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Устарела</button>
+  <button data-st="zagruzka" aria-pressed="false">Загрузка</button>
+  <button data-st="oshibka" aria-pressed="false">Ошибка</button>
+  <button data-st="mnogo" aria-pressed="false">Много данных</button>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Герои вокруг нас</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="01-glavnaya.html">Главная</a>
+      <a href="04-podderzhka.html" class="cur">Поддержка семей</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <!-- ===== НОРМА: карточка 09-vyplata-ukaz-98-5mln ===== -->
+  <section class="state on" data-state="norma">
+    <div class="wrap">
+      <a class="back" href="04-podderzhka.html">← Все меры поддержки</a>
+      <div class="cardhead">
+        <h1>Единовременная выплата семье погибшего (Указ № 98)</h1>
+        <div class="meta-row">
+          <span class="tag">Федеральная</span>
+          <span class="stamp">✓ Проверено 23.09.2026</span>
+          <span>Отвечает: редакция</span>
+        </div>
+      </div>
+
+      <div class="blk"><h2>Кому положено</h2>
+        <ul>
+          <li>Члены семьи военнослужащего, мобилизованного или добровольца, погибшего в СВО или
+            умершего в течение года после увольнения.</li>
+          <li>Круг «членов семьи» разный в разных актах — уточняйте свою ситуацию у соцкоординатора.</li>
+          <li>Если членов семьи нет — братья и сёстры.</li>
+        </ul>
+      </div>
+
+      <div class="blk"><h2>Что вы получите</h2>
+        <div class="amount-box">
+          <p>Единовременная выплата, которая делится поровну между членами семьи. Деньги перечисляет
+            АО «СОГАЗ».</p>
+          <p class="amount-note">Размер — уточняйте у воинской части: суммы в открытых источниках
+            расходятся (см. карточку «Если отказали»).</p>
+        </div>
+      </div>
+
+      <div class="blk steps"><h2>Шаги</h2>
+        <ol>
+          <li>Обратитесь в воинскую часть или военкомат по месту жительства военнослужащего.</li>
+          <li>Подайте заявление — каждый член семьи отдельно (несовершеннолетних вписывают в заявление
+            законного представителя).</li>
+          <li>Дождитесь перечисления от АО «СОГАЗ».</li>
+        </ol>
+        <p style="color:var(--ink-2);font-size:14px;margin-top:10px">Если участнику раньше выплачивали
+          деньги за ранение, семье доплачивают разницу.</p>
+      </div>
+
+      <div class="blk"><h2>Документы</h2>
+        <div class="docbox">
+          <ul>
+            <li>Заявление каждого члена семьи</li>
+            <li>Свидетельство о смерти</li>
+            <li>Паспорта</li>
+            <li>Документы о родстве</li>
+            <li>Справка МСЭ — для детей-инвалидов старше 18 лет</li>
+            <li>Справка об очной учёбе — для детей 18–23 лет</li>
+            <li>Решение органа опеки — для опекуна</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="blk"><h2>Сроки</h2><p style="color:var(--ink-2)">Уточняется.</p></div>
+
+      <div class="blk"><h2>Если отказали</h2>
+        <p><a href="05-podderzhka-kartochka.html" style="color:var(--gold);text-decoration:underline">Карточка «Если отказали или не платят»</a></p>
+      </div>
+
+      <div class="blk"><h2>Основание (НПА)</h2>
+        <ul><li>Указ Президента РФ от 05.03.2022 № 98</li><li>Приказ Минобороны от 22.04.2022 № 236</li></ul>
+      </div>
+
+      <div class="blk"><h2>Источник</h2>
+        <p class="srcs">Каталог мер поддержки ФЗО на Госуслугах, меры № 3751 и 3756;
+          <a href="#" onclick="return false">gosuslugi.ru/fzo</a></p>
+      </div>
+
+      <div class="report">
+        <h2>Сообщить о неточности</h2>
+        <p>Ответим в течение 5 рабочих дней. Контакт оставлять не обязательно.</p>
+        <form onsubmit="return false">
+          <div class="field"><label for="rep-text">Что не так</label><textarea id="rep-text" placeholder="Например: сумма изменилась с 1 апреля 2026"></textarea></div>
+          <div class="field"><label for="rep-contact">Контакт для ответа (по желанию)</label><input id="rep-contact" type="text" placeholder="Телефон +7 или e-mail"></div>
+          <button class="btn primary small" type="submit">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== УСТАРЕЛА (>180 дней) ===== -->
+  <section class="state" data-state="pusto">
+    <div class="wrap">
+      <a class="back" href="04-podderzhka.html">← Все меры поддержки</a>
+      <div class="cardhead">
+        <h1>Региональная выплата семье погибшего (Московская область)</h1>
+        <div class="meta-row"><span class="tag">Московская область</span><span class="stamp warn">⚠ Проверено 12.01.2026 — устарело</span></div>
+      </div>
+      <div class="empty-box">
+        <h3>Эту карточку не проверяли больше 180 дней</h3>
+        <p>Мы скрыли подробный текст, чтобы не вводить в заблуждение цифрами, которые могли
+          измениться. Пока показываем только официальный источник и телефон.</p>
+        <p style="color:var(--ink-2);margin-bottom:0">Источник: uslugi.mosreg.ru/svo · Горячая линия
+          Московской области: <b>122-6</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <section class="state" data-state="zagruzka">
+    <div class="wrap">
+      <a class="back" href="04-podderzhka.html">← Все меры поддержки</a>
+      <div class="sk sk-line" style="width:80%;height:30px;margin-top:14px"></div>
+      <div class="sk sk-line" style="width:40%"></div>
+      <div class="sk sk-line" style="width:95%;margin-top:20px"></div>
+      <div class="sk sk-line" style="width:90%"></div>
+      <div class="sk sk-line" style="width:70%"></div>
+    </div>
+  </section>
+
+  <!-- ===== ОШИБКА ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="wrap">
+      <a class="back" href="04-podderzhka.html">← Все меры поддержки</a>
+      <div class="err-box">
+        <h3>Не получилось загрузить карточку</h3>
+        <p>Сервер не ответил дольше 8 секунд. Попробуйте ещё раз или вернитесь к списку мер.</p>
+        <button class="btn primary small" type="button" onclick="location.reload()">Повторить</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== МНОГО ДАННЫХ: карточка 11-strahovka-sogaz (длинные списки) ===== -->
+  <section class="state" data-state="mnogo">
+    <div class="wrap">
+      <a class="back" href="04-podderzhka.html">← Все меры поддержки</a>
+      <div class="cardhead">
+        <h1>Страховая выплата по 52-ФЗ (через АО «СОГАЗ»)</h1>
+        <div class="meta-row"><span class="tag">Федеральная</span><span class="stamp">✓ Проверено 23.09.2026</span><span>Статус: частично</span></div>
+      </div>
+      <div class="blk"><h2>Кому положено</h2>
+        <p>Выгодоприобретатели: супруг, родители, усыновители; бабушка и дедушка, если воспитывали
+          не меньше 3 лет; отчим и мачеха — не меньше 5 лет; дети.</p>
+      </div>
+      <div class="blk"><h2>Что вы получите</h2>
+        <div class="amount-box">
+          <p>Страховая сумма. Деньги приходят на счёт, несовершеннолетним — на номинальный счёт ребёнка.</p>
+          <p class="amount-note">Размер — на сайте СОГАЗ: в открытых источниках цифры расходятся
+            (в каталоге Госуслуг — 3 439 562,92 ₽, на портале Московской области — «3,7 млн ₽»).</p>
+        </div>
+      </div>
+      <div class="blk steps"><h2>Шаги</h2>
+        <ol>
+          <li>Воинская часть или военкомат оформляет документы и направляет их в АО «СОГАЗ».</li>
+          <li>При вопросах звоните напрямую в СОГАЗ: 8 800 333-23-63 или 8 800 333-08-88
+            (круглосуточно), либо пишите на minoborony@sogaz.ru.</li>
+          <li>Дождитесь перечисления — срок 15 дней.</li>
+        </ol>
+      </div>
+      <div class="blk"><h2>Документы</h2><p style="color:var(--ink-2)">Уточняется.</p></div>
+      <div class="blk"><h2>Сроки</h2><p>Срок выплаты — 15 дней (каталог ФЗО № 3749).</p></div>
+      <div class="blk"><h2>Если отказали</h2><p><a href="05-podderzhka-kartochka.html" style="color:var(--gold);text-decoration:underline">Карточка «Если отказали или не платят»</a></p></div>
+      <div class="blk"><h2>Основание (НПА)</h2>
+        <ul>
+          <li>52-ФЗ от 28.03.1998</li>
+          <li>Постановление Правительства РФ № 855</li>
+          <li>Приказ Минобороны № 755 от 08.12.2022</li>
+        </ul>
+      </div>
+      <div class="blk"><h2>Источники</h2>
+        <p class="srcs">Каталог мер поддержки ФЗО на Госуслугах, мера № 3749; контакты СОГАЗ на Госуслугах</p>
+      </div>
+      <div class="report">
+        <h2>Сообщить о неточности</h2>
+        <p>Ответим в течение 5 рабочих дней.</p>
+        <button class="btn primary small" type="button" onclick="alert('Демо: форма не отправляет данные')">Открыть форму</button>
+      </div>
+    </div>
+  </section>
+
+  <footer><p>Герои вокруг нас · демо-макет МС-17 · текст карточки — дословно из «контент/поддержка».</p></footer>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

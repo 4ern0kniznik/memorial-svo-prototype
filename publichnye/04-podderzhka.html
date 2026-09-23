@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — поддержка семей</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.small{min-height:44px;padding:0 18px;font-size:15px}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.head{padding:36px 20px 8px}
+.head-in{max-width:1160px;margin:0 auto}
+.head h1{font-size:clamp(24px,4.4vw,32px);margin:0 0 8px}
+.head p{color:var(--ink-2);margin:0;max-width:640px}
+
+.steps{padding:20px 20px 8px}
+.steps-in{max-width:1160px;margin:0 auto;display:grid;gap:16px}
+.step{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.step h2{font-size:15px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;margin:0 0 12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--border-ctrl);background:transparent;color:var(--ink);border-radius:20px;padding:10px 16px;min-height:44px;font-size:15px}
+.chip[aria-pressed=true]{border-color:var(--gold);color:var(--gold);background:rgba(242,197,114,.08)}
+.select{min-height:44px;border-radius:8px;border:1px solid var(--border-ctrl);background:var(--bg);color:var(--ink);padding:0 12px;font-size:16px}
+
+.section{padding:16px 20px 12px}
+.section-in{max-width:1160px;margin:0 auto}
+.section h2{font-size:20px;margin:0 0 4px}
+.section .sub{color:var(--ink-2);font-size:14px;margin:0 0 16px}
+
+.starter{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+.starter a{flex:1;min-width:240px;background:var(--ok-bg);border:1px solid #1c4d33;border-radius:12px;padding:16px;text-decoration:none;color:var(--ink)}
+.starter a b{display:block;color:var(--ok);font-size:15px;margin-bottom:4px}
+.starter a span{color:var(--ink-2);font-size:13px}
+
+.cards{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:640px){ .cards{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:960px){ .cards{grid-template-columns:repeat(3,1fr)} }
+.card{display:block;text-decoration:none;color:inherit;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px;transition:border-color .15s ease}
+@media (hover:hover){ .card:hover{border-color:var(--gold)} }
+.card h3{font-size:16px;font-family:var(--font-b);font-weight:600;margin:0 0 6px}
+.card p{color:var(--ink-2);font-size:14px;margin:0 0 10px}
+.card .meta{font-size:12px;color:var(--ink-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{background:var(--bg-3);border-radius:20px;padding:2px 8px}
+.tag.fed{color:var(--gold)}
+
+.phones{margin-top:28px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:18px}
+.phones h2{font-size:16px;margin:0 0 8px}
+.phones p{color:var(--ink-2);font-size:14px;margin:0}
+.phones b{color:var(--ink)}
+
+.empty-box,.err-box{max-width:560px;background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px}
+.err-box{background:var(--error-bg);border-color:#4a2222}
+.empty-box h3{font-size:18px;margin:0 0 8px}
+.err-box h3{color:var(--error);font-size:18px;margin:0 0 8px}
+.empty-box p,.err-box p{color:var(--ink-2);margin:0 0 16px}
+
+.sk{background:var(--bg-3);border-radius:8px;position:relative;overflow:hidden}
+.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(234,241,255,.06),transparent)}
+@media (prefers-reduced-motion:no-preference){ .sk::after{animation:shine 1.6s ease-in-out infinite} }
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.sk-card{height:120px;border-radius:14px}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 04 Поддержка семей</b>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Пусто</button>
+  <button data-st="zagruzka" aria-pressed="false">Загрузка</button>
+  <button data-st="oshibka" aria-pressed="false">Ошибка</button>
+  <button data-st="mnogo" aria-pressed="false">Много данных</button>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Герои вокруг нас</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="01-glavnaya.html">Главная</a>
+      <a href="02-karta-i-poisk.html">Карта</a>
+      <a href="04-podderzhka.html" class="cur">Поддержка семей</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <div class="head"><div class="head-in">
+    <h1>Поддержка семьям участников СВО</h1>
+    <p>Выплаты, льготы и помощь — по всей стране. Каждая карточка проверена и подписана датой
+      последней сверки. Москва и Московская область — с региональными мерами, для остальных
+      регионов подскажем нужный фильтр на Госуслугах.</p>
+  </div></div>
+
+  <div class="steps"><div class="steps-in">
+    <div class="step">
+      <h2>Шаг 1 · Кто вы</h2>
+      <div class="chips" role="group" aria-label="Кто вы">
+        <button class="chip" type="button">Участник СВО или ветеран</button>
+        <button class="chip" type="button">Ранен или инвалидность</button>
+        <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
+        <button class="chip" type="button">Семья пропавшего без вести</button>
+        <button class="chip" type="button">Родитель ребёнка участника</button>
+        <button class="chip" type="button">Показать всё</button>
+      </div>
+    </div>
+    <div class="step" style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end">
+      <div>
+        <h2>Шаг 2 · Регион</h2>
+        <select class="select" aria-label="Регион">
+          <option selected>Москва</option>
+          <option>Московская область</option>
+          <option>Другой регион</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <h2>Шаг 3 · Что нужно</h2>
+        <select class="select" aria-label="Рубрика" style="width:100%">
+          <option>Все рубрики</option>
+          <option selected>Деньги: выплаты и пенсии</option>
+          <option>Похороны и память</option>
+          <option>Юрист и защита прав</option>
+        </select>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- ===== НОРМА ===== -->
+  <section class="state on" data-state="norma">
+    <div class="section"><div class="section-in">
+      <div class="starter">
+        <a href="06-pervye-30-dney.html"><b>С чего начать: первые 30 дней</b><span>Порядок действий для семьи погибшего, шаг за шагом</span></a>
+        <a href="05-podderzhka-kartochka.html"><b>Справка об участии в СВО</b><span>Без неё не оформить почти ничего дальше</span></a>
+      </div>
+      <h2>Деньги: выплаты и пенсии</h2>
+      <p class="sub">Показано для роли «Семья погибшего», регион «Москва». Сначала — общероссийские меры,
+        региональных для Москвы в этой рубрике нет.</p>
+      <div class="cards">
+        <a class="card" href="05-podderzhka-kartochka.html">
+          <h3>Единовременная выплата семье погибшего (Указ № 98)</h3>
+          <p>Единовременная выплата, которая делится поровну между членами семьи. Размер уточняйте
+            у воинской части — суммы в открытых источниках расходятся.</p>
+          <div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div>
+        </a>
+        <a class="card" href="05-podderzhka-kartochka.html">
+          <h3>Единовременное пособие по 306-ФЗ</h3>
+          <p>Единовременное пособие семье погибшего военнослужащего — оформляется через воинскую
+            часть или военкомат.</p>
+          <div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div>
+        </a>
+        <a class="card" href="05-podderzhka-kartochka.html">
+          <h3>Страховая выплата по 52-ФЗ (АО «СОГАЗ»)</h3>
+          <p>Обязательная государственная страховка — перечисляет АО «СОГАЗ» на основании
+            заявления и документов о гибели.</p>
+          <div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div>
+        </a>
+        <a class="card" href="05-podderzhka-kartochka.html">
+          <h3>Ежемесячная денежная компенсация семье погибшего</h3>
+          <p>25 782,85 ₽ на семью с 01.01.2026, включая долю погибшего — сумма делится поровну между
+            членами семьи, по памятке СФР.</p>
+          <div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div>
+        </a>
+      </div>
+      <div class="phones">
+        <h2>Не нашли ответ?</h2>
+        <p>Горячая линия фонда «Защитники Отечества»: <b>117, добавочный 1</b> (круглосуточно) ·
+          Единый контакт-центр СФР: <b>8-800-10-000-01</b> · Москва, Единый центр поддержки:
+          <b>+7 (495) 870-55-45</b> · Московская область: <b>122-6</b></p>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ===== ПУСТО ===== -->
+  <section class="state" data-state="pusto">
+    <div class="section"><div class="section-in">
+      <div class="empty-box">
+        <h3>Для этого региона пока нет материалов</h3>
+        <p>Мы ещё не подготовили региональные карточки по рубрике «Здоровье: реабилитация» для
+          Республики Алтай. Посмотрите общероссийские меры этой рубрики — часть из них подходит
+          в любом регионе.</p>
+        <a class="btn primary small" href="04-podderzhka.html">Показать общероссийские меры</a>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <section class="state" data-state="zagruzka">
+    <div class="section"><div class="section-in">
+      <h2>Ищем меры поддержки…</h2>
+      <div class="cards">
+        <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ===== ОШИБКА ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="section"><div class="section-in">
+      <div class="err-box">
+        <h3>Не получилось загрузить меры поддержки</h3>
+        <p>Сервер не ответил дольше 8 секунд. Выбранные «кто вы», регион и рубрика сохранены —
+          попробуйте ещё раз.</p>
+        <button class="btn primary small" type="button" onclick="location.reload()">Повторить</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ===== МНОГО ДАННЫХ (все рубрики) ===== -->
+  <section class="state" data-state="mnogo">
+    <div class="section"><div class="section-in">
+      <h2>Все рубрики · Семья погибшего · Москва</h2>
+      <p class="sub">13 рубрик, 54 карточки — список прокручивается.</p>
+      <div class="cards">
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Справка об участии в СВО</h3><p>Базовый документ для оформления остальных мер.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Единовременная выплата (Указ № 98)</h3><p>Делится поровну между членами семьи.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Пособие по 306-ФЗ</h3><p>Через воинскую часть или военкомат.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Страховая выплата 52-ФЗ</h3><p>Перечисляет АО «СОГАЗ».</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Ежемесячная компенсация семье</h3><p>25 782,85 ₽ на семью с 01.01.2026.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Пенсия по потере кормильца</h3><p>Уточняется по вашей ситуации.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Похороны и компенсация расходов</h3><p>Перевозку тела оплачивает Минобороны.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Памятник за счёт государства</h3><p>Изготовление и установка надгробия.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Жильё: выплата вдовам</h3><p>Региональная мера, уточняйте условия.</p><div class="meta">Московская область<span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Льготная ипотека</h3><p>Пониженная ставка для семей погибших.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Юридическая помощь</h3><p>Бесплатная консультация юриста фонда.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+        <a class="card" href="05-podderzhka-kartochka.html"><h3>Психологическая помощь</h3><p>Бесплатные консультации психолога.</p><div class="meta"><span class="tag fed">Федеральная</span><span>Проверено 23.09.2026</span></div></a>
+      </div>
+      <div class="row" style="text-align:center;margin-top:16px"><a class="btn small" href="04-podderzhka.html">Свернуть до 4 рубрик</a></div>
+    </div></div>
+  </section>
+
+  <footer><p>Герои вокруг нас · демо-макет МС-17 · содержание карточек — из «контент/поддержка», проверено 23.09.2026.</p></footer>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.chips .chip').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.chips .chip').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      b.setAttribute('aria-pressed','true');
+    });
+  });
+})();
+</script>
+</body>
+</html>

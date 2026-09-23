@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Журнал действий — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:16px;font-size:14px;align-items:center}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.top nav a.cur{color:var(--gold)}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:14px}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn:active{transform:none} }
+
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:24px 0 16px;flex-wrap:wrap}
+.page-head h1{font-size:22px}
+.page-head p{color:var(--ink-2);margin:6px 0 0;font-size:14px}
+
+.filters{display:grid;gap:12px;grid-template-columns:1fr;margin:0 0 18px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+@media (min-width:720px){ .filters{grid-template-columns:2fr 1fr 1fr 1fr auto} }
+.filters .field label{display:block;font-size:12px;color:var(--ink-2);margin:0 0 4px}
+.filters input,.filters select{width:100%;min-height:42px;border-radius:8px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:0 10px;font-size:14px}
+.filters .apply{align-self:end}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;min-width:820px}
+thead th{position:sticky;top:0;text-align:left;font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--bg-2);white-space:nowrap}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.hero{max-width:220px;overflow-wrap:anywhere;font-weight:600}
+td.hero a{color:var(--ink);text-decoration:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.chip.publish{background:var(--ok-bg);color:var(--ok)}
+.chip.return{background:var(--warn-bg);color:var(--warn)}
+.chip.reject{background:var(--error-bg);color:var(--error)}
+.chip.hide{background:var(--bg-3);color:var(--ink-2)}
+.chip.escalate{background:rgba(242,197,114,.12);color:var(--gold)}
+.who{color:var(--ink-2)}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+main{padding-bottom:60px}
+.count-note{font-size:13px;color:var(--ink-2);margin:0 0 12px}
+.pager{display:flex;justify-content:center;gap:8px;margin-top:16px}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 09 Журнал</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">«Пусто» — по фильтру ничего не найдено (не «журнал вообще пуст»).</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>Валиахметова Регина · редактор</small></span>
+  </a>
+  <nav><a href="06-moderator-ochered.html">Очередь</a><a href="08-moderator-obrashcheniya.html">Обращения</a><a class="cur" href="09-zhurnal.html">Журнал</a><a href="01-vhod.html">Выйти</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+  <div class="page-head"><div><h1>Журнал действий</h1><p>Кто, когда и что сделал с историей или обращением. Записи нельзя изменить или удалить.</p></div></div>
+
+  <div class="filters">
+    <div class="field"><label for="fh">Герой</label><input id="fh" placeholder="ФИО героя"></div>
+    <div class="field"><label for="fw">Исполнитель</label><select id="fw"><option>Все</option><option>Валиахметова Регина</option><option>Сорокин Дмитрий</option></select></div>
+    <div class="field"><label for="fd1">С</label><input id="fd1" type="text" value="01.09.2026" placeholder="ДД.ММ.ГГГГ"></div>
+    <div class="field"><label for="fd2">По</label><input id="fd2" type="text" value="23.09.2026" placeholder="ДД.ММ.ГГГГ"></div>
+    <button class="btn primary apply" type="button">Найти</button>
+  </div>
+
+  <!-- ===== ПУСТО: по фильтру ничего ===== -->
+  <div class="when empty">
+    <div class="state-box">
+      <h3>По этому фильтру ничего не нашлось</h3>
+      <p>Проверьте написание ФИО или расширьте период дат.</p>
+      <button class="btn primary" type="button" data-reset>Сбросить фильтры</button>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="sk" style="height:44px;margin-bottom:10px"></div>
+    <div class="sk" style="height:280px;border-radius:14px"></div>
+  </div>
+
+  <!-- ===== ОШИБКА ===== -->
+  <div class="when error" hidden>
+    <div class="state-box err" role="alert">
+      <h3>Не удалось загрузить журнал</h3>
+      <p>Нет связи с сервером. Записи сохранены — попробуйте обновить страницу.</p>
+      <button class="btn primary" type="button" onclick="location.reload()">Повторить</button>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА ===== -->
+  <div class="when normal" hidden>
+    <p class="count-note">Найдено 12 записей.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Когда</th><th>Герой</th><th>Действие</th><th>Исполнитель</th><th>Причина / примечание</th></tr></thead>
+      <tbody>
+        <tr><td>23.09.2026 14:20</td><td class="hero"><a href="07-moderator-proverka.html">Юрченко Владислав Романович</a></td><td><span class="chip publish">Опубликована</span></td><td class="who">Валиахметова Регина</td><td>—</td></tr>
+        <tr><td>23.09.2026 11:05</td><td class="hero"><a href="07-moderator-proverka.html">Романовский Фёдор Ильич</a></td><td><span class="chip escalate">Эскалирована</span></td><td class="who">Сорокин Дмитрий</td><td>Жалоба читателя на упоминание части</td></tr>
+        <tr><td>22.09.2026 16:40</td><td class="hero">Черноголовкина Александра Владиславовна</td><td><span class="chip hide">Скрыта по просьбе семьи</span></td><td class="who">система</td><td>Обращение №2026-118, автору отправлено уведомление без данных заявителя</td></tr>
+        <tr><td>22.09.2026 09:12</td><td class="hero">Ковальчук Игорь Николаевич</td><td><span class="chip return">Возвращена</span></td><td class="who">Сорокин Дмитрий</td><td>Не подтверждён факт подвига документом</td></tr>
+        <tr><td>21.09.2026 18:02</td><td class="hero">Сердюков Константин Викторович</td><td><span class="chip publish">Опубликована</span></td><td class="who">Валиахметова Регина</td><td>Вторая подпись, погибший</td></tr>
+        <tr><td>21.09.2026 10:47</td><td class="hero">Прокопьев-Задорожный Валентин Геннадьевич</td><td><span class="chip reject">Отклонена</span></td><td class="who">Сорокин Дмитрий</td><td>Автор не подтвердил статус уволенного</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ ===== -->
+  <div class="when many" hidden>
+    <p class="count-note">Найдено 214 записей за период 01.01.2026–23.09.2026. Таблица шире экрана — прокрутка внутри блока.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Когда</th><th>Герой</th><th>Действие</th><th>Исполнитель</th><th>Причина / примечание</th></tr></thead>
+      <tbody id="many-body">
+        <tr><td>23.09.2026 14:20</td><td class="hero">Верхнепышминский-Одоевский Константин Александрович</td><td><span class="chip escalate">Эскалирована</span></td><td class="who">Валиахметова Регина</td><td>Спор наследников — держим скрытой до решения суда</td></tr>
+        <tr><td>23.09.2026 09:30</td><td class="hero">Юрченко Владислав Романович</td><td><span class="chip publish">Опубликована</span></td><td class="who">Валиахметова Регина</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="pager"><button class="btn ghost" type="button">← Раньше</button><button class="btn ghost" type="button">Позже →</button></div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Журнал хранит записи без возможности редактирования и удаления — это техническое ограничение базы, а не настройка интерфейса.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='normal';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-reset]').forEach(b=>b.addEventListener('click',()=>{
+    document.getElementById('fh').value=''; document.querySelector('#stateBtns [data-st=normal]').click();
+  }));
+  // заполнить «много данных» до 30 демо-строк для наглядности прокрутки
+  const many=document.getElementById('many-body');
+  const names=['Морозов Виталий Сергеевич','Дегтярёв Максим Олегович','Синицын Артём Валерьевич','Никонов Пётр Александрович','Романовский Фёдор Ильич','Сердюков Константин Викторович'];
+  const acts=[['publish','Опубликована'],['return','Возвращена'],['hide','Скрыта по просьбе семьи'],['reject','Отклонена']];
+  for(let i=0;i<28;i++){
+    const n=names[i%names.length], a=acts[i%acts.length];
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td>'+(20-Math.floor(i/3))+'.09.2026 '+(String(9+(i%10)).padStart(2,'0'))+':00</td><td class="hero">'+n+'</td><td><span class="chip '+a[0]+'">'+a[1]+'</span></td><td class="who">Сорокин Дмитрий</td><td>—</td>';
+    many.appendChild(tr);
+  }
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — найти предка</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+img,svg{max-width:100%}
+h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
+.demo-tag{background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;align-items:center}
+.proto button,.proto span,.proto b{flex:none}
+.proto b{color:#fff}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 12px;min-height:36px}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto span{color:#aaa}
+.proto .demo-tag{margin-left:auto}
+
+#frame.w360{max-width:360px;margin:0 auto;border-left:1px solid #333;border-right:1px solid #333}
+.state{display:none}
+.state.on{display:block}
+
+.top{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:19px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:9px 16px;min-height:40px;text-decoration:none;display:inline-flex;align-items:center;font-size:14px}
+.top nav a.cur{border-color:var(--gold);color:var(--gold)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,background .15s ease,color .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+@media (hover:hover){ .btn:hover{transform:translateY(-2px)} .btn.primary:hover{box-shadow:0 6px 24px rgba(242,197,114,.25)} .btn:not(.primary):hover{background:rgba(242,197,114,.1)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.wrap{max-width:720px;margin:0 auto;padding:44px 20px 56px}
+.eyebrow{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 14px}
+.wrap h1{font-size:clamp(24px,4.4vw,34px);margin:0 0 14px}
+.wrap .lead{color:var(--ink-2);margin:0 0 26px}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.field label{font-size:15px;font-weight:600}
+.field input{background:var(--bg-2);border:1px solid var(--border-ctrl);color:var(--ink);border-radius:8px;padding:0 14px;min-height:48px;font-size:16px}
+.hint{font-size:13px;color:var(--ink-2);margin:6px 0 22px}
+.err-text{font-size:13px;color:var(--error);margin:6px 0 22px}
+
+.results{display:grid;gap:14px;grid-template-columns:1fr;margin-top:24px}
+@media (min-width:640px){ .results{grid-template-columns:repeat(3,1fr)} }
+.rcard{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:inherit;transition:border-color .15s ease}
+@media (hover:hover){ .rcard:hover{border-color:var(--gold)} }
+.rcard h3{font-size:16px;margin:0 0 6px}
+.rcard p{color:var(--ink-2);font-size:13px;margin:0}
+.rcard .ext{color:var(--gold);font-size:13px;margin-top:10px;display:block}
+
+.note{margin-top:32px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px;color:var(--ink-2)}
+
+footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
+</style>
+</head>
+<body>
+<div class="proto" role="region" aria-label="Служебная панель макета">
+  <b>МС-17 · 07 Найти предка</b>
+  <span>Состояние:</span>
+  <button data-st="norma" aria-pressed="true">Норма</button>
+  <button data-st="pusto" aria-pressed="false">Короткий запрос</button>
+  <button data-st="oshibka" aria-pressed="false">Пустое поле</button>
+  <span style="margin-left:6px">«Загрузка» и «много данных» не применимы — переход сразу на внешний архив (экраны.md)</span>
+  <span>Ширина:</span>
+  <button data-w="desktop" aria-pressed="true">Десктоп</button>
+  <button data-w="360" aria-pressed="false">360</button>
+  <div class="demo-tag">демо</div>
+</div>
+
+<div id="frame">
+  <header class="top">
+    <a class="brand" href="01-glavnaya.html">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="3" fill="#F2C572"/><circle cx="6" cy="8" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="24" cy="6" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="25" cy="22" r="1.6" fill="#F2C572" opacity=".7"/><circle cx="5" cy="23" r="1.6" fill="#F2C572" opacity=".7"/><path d="M15 15L6 8M15 15L24 6M15 15L25 22M15 15L5 23" stroke="#F2C572" stroke-width="1" opacity=".5"/></svg>
+      <span><b>Герои вокруг нас</b><small>народные истории участников СВО</small></span>
+    </a>
+    <nav aria-label="Разделы">
+      <a href="01-glavnaya.html">Главная</a>
+      <a href="02-karta-i-poisk.html">Карта</a>
+      <a href="07-nayti-predka.html" class="cur">Найти предка</a>
+      <a href="08-svyaz-pokoleniy.html">Связь поколений</a>
+      <a href="../kabinety/01-vhod.html">Войти</a>
+    </nav>
+  </header>
+
+  <!-- ===== НОРМА ===== -->
+  <section class="state on" data-state="norma">
+    <div class="wrap">
+      <p class="eyebrow">Архивы Великой Отечественной</p>
+      <h1>Найдите своего предка в государственных архивах</h1>
+      <p class="lead">Свой поиск по архивам мы не ведём — сайт подставляет ФИО в форму
+        государственных архивов и открывает их в новой вкладке.</p>
+      <form onsubmit="return false">
+        <div class="field">
+          <label for="fio">ФИО предка</label>
+          <input id="fio" type="text" value="Колесников Иван Степанович">
+        </div>
+        <p class="hint">Введите не менее 2 символов. Чем точнее ФИО, тем точнее результат в архиве.</p>
+        <button class="btn primary" type="submit">Искать</button>
+      </form>
+      <div class="results">
+        <a class="rcard" href="#" onclick="return false" rel="noopener" target="_blank">
+          <h3>«Память народа»</h3>
+          <p>Наградные документы, донесения о потерях, карты боевых действий.</p>
+          <span class="ext">pamyat-naroda.ru ↗</span>
+        </a>
+        <a class="rcard" href="#" onclick="return false" rel="noopener" target="_blank">
+          <h3>ОБД «Мемориал»</h3>
+          <p>Донесения о безвозвратных потерях, госпитальные документы, захоронения.</p>
+          <span class="ext">obd-memorial.ru ↗</span>
+        </a>
+        <a class="rcard" href="#" onclick="return false" rel="noopener" target="_blank">
+          <h3>«Подвиг народа»</h3>
+          <p>Наградные листы и приказы о награждении.</p>
+          <span class="ext">podvignaroda.ru ↗</span>
+        </a>
+      </div>
+      <div class="note">Ссылки открываются в новой вкладке на сайте архива — Минобороны России и
+        профильных ведомств. Мы не храним результаты вашего поиска.</div>
+    </div>
+  </section>
+
+  <!-- ===== КОРОТКИЙ ЗАПРОС (пусто, не ошибка) ===== -->
+  <section class="state" data-state="pusto">
+    <div class="wrap">
+      <p class="eyebrow">Архивы Великой Отечественной</p>
+      <h1>Найдите своего предка в государственных архивах</h1>
+      <p class="lead">Свой поиск по архивам мы не ведём — сайт подставляет ФИО в форму
+        государственных архивов и открывает их в новой вкладке.</p>
+      <form onsubmit="return false">
+        <div class="field">
+          <label for="fio2">ФИО предка</label>
+          <input id="fio2" type="text" value="Ив">
+        </div>
+        <p class="hint">Введите не менее 2 символов — поиск ещё не отправляется.</p>
+        <button class="btn primary" type="submit" disabled style="opacity:.5;cursor:not-allowed">Искать</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== ОШИБКА: пустое поле при нажатии «Искать» ===== -->
+  <section class="state" data-state="oshibka">
+    <div class="wrap">
+      <p class="eyebrow">Архивы Великой Отечественной</p>
+      <h1>Найдите своего предка в государственных архивах</h1>
+      <p class="lead">Свой поиск по архивам мы не ведём — сайт подставляет ФИО в форму
+        государственных архивов и открывает их в новой вкладке.</p>
+      <form onsubmit="return false">
+        <div class="field">
+          <label for="fio3">ФИО предка</label>
+          <input id="fio3" type="text" value="" style="border-color:var(--error)" aria-invalid="true" aria-describedby="fio3-err">
+        </div>
+        <p class="err-text" id="fio3-err">Введите ФИО — без него нечего искать в архивах.</p>
+        <button class="btn primary" type="submit">Искать</button>
+      </form>
+    </div>
+  </section>
+
+  <footer><p>Герои вокруг нас · демо-макет МС-17 · свой поиск по архивам сайт не ведёт (С5).</p></footer>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('.proto [data-st]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.state').forEach(function(s){ s.classList.toggle('on', s.dataset.state===b.dataset.st); });
+      document.querySelectorAll('.proto [data-st]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+  document.querySelectorAll('.proto [data-w]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('frame').classList.toggle('w360', b.dataset.w==='360');
+      document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

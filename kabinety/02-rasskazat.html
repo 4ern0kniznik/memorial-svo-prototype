@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Рассказать о герое — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:14px;font-size:14px}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.wide{width:100%}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px}
+.field{margin:0 0 18px}
+.field label{display:block;font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.field .req{color:var(--gold)}
+.field input,.field select,.field textarea{width:100%;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:12px 14px;font-size:16px}
+.field input,.field select{min-height:48px}
+.field textarea{min-height:120px;resize:vertical;font-family:inherit;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:var(--ink-2)}
+.field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+.field .err-msg{font-size:13px;color:var(--error);margin-top:6px}
+.field.has-err input,.field.has-err textarea{border-color:var(--error)}
+.two-col{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:560px){ .two-col{grid-template-columns:1fr 1fr} .three-col{grid-template-columns:1fr 1fr 1fr} }
+.three-col{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:640px){ .three-col{grid-template-columns:1fr 1fr 1fr} }
+
+.radio-row{display:flex;gap:10px;flex-wrap:wrap}
+.radio-card{flex:1;min-width:200px;border:1px solid var(--border-ctrl);border-radius:12px;padding:14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.radio-card input{margin-top:3px}
+.radio-card.sel{border-color:var(--gold);background:rgba(242,197,114,.06)}
+.radio-card b{display:block;font-size:15px}
+.radio-card span{color:var(--ink-2);font-size:13px}
+
+.check-row{display:flex;gap:10px;align-items:flex-start;margin:0 0 14px}
+.check-row input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--gold)}
+.check-row label{font-size:14px;color:var(--ink)}
+
+.steps{display:flex;gap:6px;margin:0 0 24px;flex-wrap:wrap}
+.step-dot{flex:1;min-width:24px;height:6px;border-radius:3px;background:var(--line)}
+.step-dot.done{background:var(--gold)}
+.step-dot.cur{background:var(--gold-d)}
+.step-label{font-size:13px;color:var(--ink-2);margin:0 0 20px}
+.step-label b{color:var(--gold)}
+
+.state-box{border-radius:14px;padding:18px;margin:0 0 20px}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 6px;font-size:16px}
+.state-box.warn{background:var(--warn-bg)} .state-box.warn h3{color:var(--warn);margin:0 0 6px;font-size:16px}
+.state-box p{margin:0;color:var(--ink-2)}
+
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin:0 0 12px}
+.photo-tile{position:relative;aspect-ratio:1;border-radius:10px;background:var(--bg-3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:12px;overflow:hidden}
+.photo-tile.up{background:linear-gradient(135deg,#0F1D33,#152645)}
+.photo-tile .rm{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(6,11,24,.8);border:1px solid var(--line);color:var(--ink);font-size:14px;line-height:1;cursor:pointer}
+.upload-zone{border:1px dashed var(--border-ctrl);border-radius:12px;padding:20px;text-align:center;color:var(--ink-2);cursor:pointer}
+.upload-zone:hover{border-color:var(--gold)}
+
+.doc-note{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);margin:10px 0 0}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+.nav-buttons{display:flex;gap:10px;justify-content:space-between;margin-top:24px;flex-wrap:wrap}
+.autosave{font-size:12px;color:var(--ink-2);text-align:right;margin-top:10px}
+main{padding:28px 0 60px}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 02 Рассказать о герое</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Пусто — черновик только начат. Много данных — шаг 5, 18 фото и длинный текст.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>Черноголовкин Андрей · автор</small></span>
+  </a>
+  <nav><a href="03-kabinet-avtora.html">Кабинет</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="steps" aria-hidden="true">
+    <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div>
+    <div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div>
+  </div>
+  <p class="step-label">Шаг <b>4 из 6</b> · Подвиг</p>
+
+  <!-- ===== ПУСТО: черновик только начат, шаг 1 ===== -->
+  <div class="when empty" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>1 из 6</b> · Кто вы</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Расскажите, кто вы автору</h1>
+      <p style="color:var(--ink-2);margin:0 0 20px">Это первый шаг. Дальше — о герое, каким он был, о подвиге, фото и документах. Черновик сохраняется автоматически на каждом шаге, вернуться можно в любой момент.</p>
+      <div class="field">
+        <label>Кем вы приходитесь герою <span class="req">*</span></label>
+        <div class="radio-row" role="radiogroup">
+          <label class="radio-card sel"><input type="radio" name="who" checked><span><b>Сослуживец</b><span>Служили вместе, сейчас уволен(а)</span></span></label>
+          <label class="radio-card"><input type="radio" name="who"><span><b>Родственник</b><span>Родня героя, любая степень</span></span></label>
+        </div>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="e-not-serving">
+        <label for="e-not-serving">Я не являюсь военнослужащим, не призван на военные сборы и не нахожусь в добровольческом формировании</label>
+      </div>
+      <div class="nav-buttons"><span></span><button class="btn primary" type="button" data-next>Далее</button></div>
+      <p class="autosave">Черновик сохранён автоматически · сегодня, 23.09.2026, 14:02</p>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА: статус «служу» блокирует шаг ===== -->
+  <div class="when error" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>2 из 6</b> · О герое</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">О герое</h1>
+      <div class="three-col">
+        <div class="field"><label>Фамилия героя <span class="req">*</span></label><input value="Сердюков"></div>
+        <div class="field"><label>Имя героя <span class="req">*</span></label><input value="Константин"></div>
+        <div class="field"><label>Отчество героя</label><input value="Викторович"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Год рождения <span class="req">*</span></label><input value="1994" inputmode="numeric"></div>
+        <div class="field">
+          <label>Статус героя <span class="req">*</span></label>
+          <div class="radio-row" role="radiogroup">
+            <label class="radio-card"><input type="radio" name="status"><span><b>Погиб</b></span></label>
+            <label class="radio-card"><input type="radio" name="status"><span><b>Уволен со службы</b></span></label>
+            <label class="radio-card sel" style="border-color:var(--error)"><input type="radio" name="status" checked><span><b>Служит сейчас</b></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="state-box err" role="alert">
+        <h3>Истории о действующих военнослужащих не принимаются</h3>
+        <p>Опубликовать историю можно будет, когда герой сам будет вправе рассказать о себе, или родственник — без указания места и подробностей службы. Данные этого шага не сохранены на сервере.</p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button" data-prev>Назад</button>
+        <button class="btn primary" type="button" disabled>Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА: сохраняем шаг / отправляем ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="card">
+      <div class="sk" style="height:24px;width:60%;margin-bottom:18px"></div>
+      <div class="sk" style="height:48px;margin-bottom:14px"></div>
+      <div class="sk" style="height:48px;margin-bottom:14px"></div>
+      <div class="sk" style="height:120px;margin-bottom:18px"></div>
+      <button class="btn primary wide" disabled>Отправляем…</button>
+      <p class="autosave">Сохраняем изменения…</p>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: шаг 4, подвиг ===== -->
+  <div class="when normal">
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Подвиг</h1>
+
+      <div class="field">
+        <label for="feat">Что он совершил</label>
+        <textarea id="feat">Под обстрелом вынес из окружения двух раненых сослуживцев, оказал первую помощь и вызвал эвакуацию. За это представлен к награде.</textarea>
+        <p class="hint">Без номеров частей, точных координат и дат боя — только регион и месяц/год.</p>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label for="ereg">Регион события</label>
+          <select id="ereg"><option>Луганская Народная Республика</option><option>Запорожская область</option><option>Донецкая Народная Республика</option></select>
+        </div>
+        <div class="field">
+          <label for="emonth">Месяц и год</label>
+          <input id="emonth" value="Март 2023">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="src">На чём основаны факты <span class="req">*</span></label>
+        <select id="src"><option>Наградной лист</option><option>Извещение о гибели</option><option>Запись книги памяти</option><option>Со слов семьи</option></select>
+        <p class="hint">Если фактов подвига нет или они только со слов семьи — так и укажите, это не помешает публикации истории о жизни героя.</p>
+      </div>
+
+      <div class="field">
+        <label for="award">Награда (если есть)</label>
+        <input id="award" placeholder="Например: медаль «За отвагу»">
+        <p class="hint">Номер приказа мы не публикуем — только название награды и источник сведений.</p>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button" data-prev>Назад</button>
+        <button class="btn primary" type="button" data-next>Далее</button>
+      </div>
+      <p class="autosave">Черновик сохранён автоматически · сегодня, 23.09.2026, 14:11</p>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: шаг 5, фото, много загружено ===== -->
+  <div class="when many" hidden>
+    <div class="steps" aria-hidden="true"><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot cur"></div><div class="step-dot"></div></div>
+    <p class="step-label">Шаг <b>5 из 6</b> · Фотографии из жизни</p>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Фотографии из жизни</h1>
+      <p style="color:var(--ink-2);margin:0 0 16px">До 20 фото, до 15 МБ каждое. Геометки и служебные данные снимаются автоматически.</p>
+
+      <div class="state-box warn">
+        <h3>Один файл не загрузился</h3>
+        <p>«screenshot_2023_черновик.png» — это не изображение, а скриншот с текстом поверх. Остальные 17 фото загружены и сохранены.</p>
+      </div>
+
+      <div class="photo-grid" id="photos">
+        <div class="photo-tile up">портрет<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+        <div class="photo-tile up">из жизни<button class="rm" aria-label="Удалить фото">×</button></div>
+      </div>
+      <p class="hint">Загружено 17 из 20 фото.</p>
+      <div class="upload-zone" role="button" tabindex="0">Перетащите фото сюда или нажмите, чтобы выбрать файл</div>
+
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button" data-prev>Назад</button>
+        <button class="btn primary" type="button" data-next>Далее</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Шаг 6, показан вместе с нормой ниже прокрутки: документ, флажки, согласия, отправка ===== -->
+  <div class="card when normal" id="step6" style="margin-top:24px">
+    <h1 style="font-size:22px;margin:0 0 16px">Документ и согласия</h1>
+    <div class="field">
+      <label>Документ об увольнении <span class="req">*</span></label>
+      <div class="upload-zone" role="button" tabindex="0">Прикрепить запись в военном билете или справку</div>
+      <div class="doc-note">Документ видит только модератор, после проверки он удаляется — копия в базе не хранится.</div>
+    </div>
+    <div class="check-row"><input type="checkbox" id="c1"><label for="c1">Я не являюсь военнослужащим, не призван на военные сборы и не нахожусь в добровольческом формировании</label></div>
+    <div class="check-row"><input type="checkbox" id="c2"><label for="c2">В тексте нет номеров частей, дислокации, сведений о потерях и упоминаний действующих военнослужащих по имени</label></div>
+    <div class="check-row"><input type="checkbox" id="c3"><label for="c3">Согласен(на) на обработку моих персональных данных как автора истории</label></div>
+    <div class="nav-buttons">
+      <button class="btn ghost" type="button" data-prev>Назад</button>
+      <button class="btn primary" type="button" data-submit>Отправить на проверку</button>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Черновик можно закрыть на любом шаге — он сохранён и ждёт в личном кабинете.</div></footer>
+</div>
+
+<script>
+(function(){
+  const body=document.body, frame=document.getElementById('frame');
+  let state='normal';
+  const supported=['normal','empty','loading','error','many'];
+  function label(k){return {normal:'Норма',empty:'Пусто',loading:'Загрузка',error:'Ошибка',many:'Много данных'}[k]}
+  function apply(){
+    document.querySelectorAll('main > .wrap > .when').forEach(el=>{
+      el.hidden = !el.classList.contains(state);
+    });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{
+    location.href='03-kabinet-avtora.html';
+  }));
+  document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
+    location.href='03-kabinet-avtora.html';
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

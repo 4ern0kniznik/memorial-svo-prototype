@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Обращения семей — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:16px;font-size:14px;align-items:center}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.top nav a.cur{color:var(--gold)}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:14px;transition:transform .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px}
+.btn.danger{border-color:var(--error);color:var(--error)}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none} }
+
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:24px 0 16px;flex-wrap:wrap}
+.page-head h1{font-size:22px}
+.page-head p{color:var(--ink-2);margin:6px 0 0;font-size:14px}
+
+.tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.tabs button{background:var(--bg-2);border:1px solid var(--line);color:var(--ink-2);border-radius:20px;padding:8px 14px;font-size:13px;min-height:36px}
+.tabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold)}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.item{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.item .row{display:flex;gap:14px;align-items:flex-start;padding:16px;cursor:pointer}
+.item h3{font-size:16px;margin:0 0 4px;overflow-wrap:anywhere}
+.item .meta{font-size:13px;color:var(--ink-2);margin:0 0 4px}
+.item .text{font-size:13px;color:var(--ink-2)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;flex:none;white-space:nowrap}
+.chip.hide{background:var(--warn-bg);color:var(--warn)}
+.chip.fix{background:rgba(242,197,114,.12);color:var(--gold)}
+.chip.report{background:var(--bg-3);color:var(--ink-2)}
+.chip.overdue{background:var(--error-bg);color:var(--error)}
+.detail{border-top:1px solid var(--line);padding:16px;background:var(--bg-3)}
+.detail .grid{display:grid;gap:8px;font-size:14px;margin:0 0 14px}
+.detail .grid div span{color:var(--ink-2)}
+.decision-row{display:flex;gap:10px;flex-wrap:wrap}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.sk-item{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+main{padding-bottom:60px}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 08 Обращения семей</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>Валиахметова Регина · редактор</small></span>
+  </a>
+  <nav><a href="06-moderator-ochered.html">Очередь</a><a class="cur" href="08-moderator-obrashcheniya.html">Обращения</a><a href="09-zhurnal.html">Журнал</a><a href="01-vhod.html">Выйти</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ===== ПУСТО ===== -->
+  <div class="when empty">
+    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="state-box">
+      <h3>Обращений нет</h3>
+      <p>Здесь появятся запросы на скрытие страниц, просьбы поправить историю и жалобы читателей.</p>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="sk-item"><div class="sk" style="height:18px;width:50%;margin-bottom:8px"></div><div class="sk" style="height:12px;width:30%"></div></div>
+  </div>
+
+  <!-- ===== ОШИБКА ===== -->
+  <div class="when error" hidden>
+    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="state-box err" role="alert">
+      <h3>Не удалось загрузить обращения</h3>
+      <p>Нет связи с сервером. Попробуйте обновить страницу.</p>
+      <button class="btn primary" type="button" onclick="location.reload()">Повторить</button>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА ===== -->
+  <div class="when normal" hidden>
+    <div class="page-head"><div><h1>Обращения семей</h1><p>3 открытых обращения</p></div></div>
+    <div class="tabs" role="group" aria-label="Фильтр">
+      <button aria-pressed="true">Все · 3</button>
+      <button aria-pressed="false">Скрыть страницу · 1</button>
+      <button aria-pressed="false">Исправить · 1</button>
+      <button aria-pressed="false">Жалоба · 1</button>
+    </div>
+    <div class="list">
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1">
+            <h3>Сердюков Константин Викторович</h3>
+            <p class="meta">Заявитель: Сердюкова Наталья Викторовна · сестра · 23.09.2026</p>
+            <p class="text">«Прошу временно скрыть страницу — не согласовывали с семьёй фото».</p>
+          </div>
+          <span class="chip hide">Скрыть · срок до 26.09</span>
+        </div>
+        <div class="detail" hidden>
+          <div class="grid">
+            <div>Тип обращения: <span>скрыть страницу (сразу скрыта, до проверки родства)</span></div>
+            <div>Контакт заявителя: <span>+7 900 123-45-67</span></div>
+            <div>Срок решения: <span>до 26.09.2026, 3 рабочих дня</span></div>
+          </div>
+          <div class="decision-row">
+            <button class="btn primary" type="button" data-resolve>Оставить скрытой</button>
+            <button class="btn ghost" type="button" data-resolve>Вернуть публикацию</button>
+            <button class="btn danger" type="button" data-resolve>Эскалировать (спор наследников)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1">
+            <h3>Черноголовкина Александра Владиславовна</h3>
+            <p class="meta">Заявитель: Черноголовкин Владислав Петрович · отец · 21.09.2026</p>
+            <p class="text">«Просим поправить дату рождения — указан не тот год».</p>
+          </div>
+          <span class="chip fix">Исправить</span>
+        </div>
+        <div class="detail" hidden>
+          <div class="grid"><div>Тип обращения: <span>исправить опубликованную историю</span></div></div>
+          <div class="decision-row">
+            <button class="btn primary" type="button" data-resolve>Передать автору на правку</button>
+            <button class="btn ghost" type="button" data-resolve>Отклонить обращение</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1">
+            <h3>Романовский Фёдор Ильич</h3>
+            <p class="meta">Жалоба читателя · 22.09.2026</p>
+            <p class="text">«В тексте, кажется, указан номер воинской части — проверьте, пожалуйста».</p>
+          </div>
+          <span class="chip report">Жалоба</span>
+        </div>
+        <div class="detail" hidden>
+          <div class="grid"><div>Тип обращения: <span>жалоба на опубликованную историю, требует пересмотра по чек-листу</span></div></div>
+          <div class="decision-row">
+            <button class="btn primary" type="button" data-resolve>Пересмотреть по чек-листу</button>
+            <button class="btn ghost" type="button" data-resolve>Отклонить, нарушений нет</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ ===== -->
+  <div class="when many" hidden>
+    <div class="page-head"><div><h1>Обращения семей</h1><p>14 открытых обращений, 4 просрочены</p></div></div>
+    <div class="tabs" role="group" aria-label="Фильтр">
+      <button aria-pressed="true">Все · 14</button>
+      <button aria-pressed="false">Скрыть страницу · 6</button>
+      <button aria-pressed="false">Исправить · 5</button>
+      <button aria-pressed="false">Жалоба · 3</button>
+      <button aria-pressed="false">Просрочено · 4</button>
+    </div>
+    <div class="list">
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1"><h3>Верхнепышминский-Одоевский Константин Александрович</h3><p class="meta">Заявитель: Верхнепышминская-Одоевская Марина Игоревна · вдова · 10.09.2026</p><p class="text">Спор наследников: сестра погибшего требует снять страницу, вдова просит оставить.</p></div>
+          <span class="chip overdue">Спор · просрочено</span>
+        </div>
+        <div class="detail" hidden><div class="decision-row"><button class="btn primary" type="button" data-resolve>Держать скрытой до решения суда</button></div></div>
+      </div>
+      <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Сердюков Константин Викторович</h3><p class="meta">Скрыть · 23.09.2026</p><p class="text">«Прошу временно скрыть страницу — не согласовывали с семьёй фото».</p></div><span class="chip hide">Срок до 26.09</span></div><div class="detail" hidden></div></div>
+      <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Прокопьев-Задорожный Валентин Геннадьевич</h3><p class="meta">Исправить · 22.09.2026</p><p class="text">«Уточните, пожалуйста, название населённого пункта».</p></div><span class="chip fix">Исправить</span></div><div class="detail" hidden></div></div>
+      <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Никонов Пётр Александрович</h3><p class="meta">Жалоба читателя · 22.09.2026</p><p class="text">«В тексте, кажется, указан номер воинской части».</p></div><span class="chip report">Жалоба</span></div><div class="detail" hidden></div></div>
+      <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Дегтярёв Максим Олегович</h3><p class="meta">Скрыть · 11.09.2026</p><p class="text">Заявитель не подтвердил родство при первой проверке.</p></div><span class="chip overdue">Просрочено</span></div><div class="detail" hidden></div></div>
+      <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Синицын Артём Валерьевич</h3><p class="meta">Исправить · 19.09.2026</p><p class="text">«Добавьте, пожалуйста, фотографию из семейного архива».</p></div><span class="chip fix">Исправить</span></div><div class="detail" hidden></div></div>
+    </div>
+    <p style="font-size:13px;color:var(--ink-2);margin-top:12px">…и ещё 8 обращений. Список подгружается по мере прокрутки.</p>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Обращения семьи решает редактор. Спор наследников остаётся скрытым до согласия сторон или решения суда.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='normal';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-toggle]').forEach(row=>row.addEventListener('click',()=>{
+    const d=row.parentElement.querySelector('.detail');
+    d.hidden=!d.hidden;
+  }));
+  let toastEl;
+  function toast(t){
+    if(!toastEl){ toastEl=document.createElement('div'); toastEl.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:90;max-width:90vw'; document.body.appendChild(toastEl); }
+    toastEl.textContent=t; toastEl.style.display='block';
+    clearTimeout(toast.t); toast.t=setTimeout(()=>toastEl.style.display='none',2600);
+  }
+  document.querySelectorAll('[data-resolve]').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();
+    toast('Решение сохранено и записано в журнал');
+    b.closest('.item').style.opacity='.5';
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

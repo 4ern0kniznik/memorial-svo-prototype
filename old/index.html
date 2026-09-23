@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Герои вокруг нас — прототип</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{
+  --bg:#FFFFFF; --bg-soft:#F6F4EF; --bg-sunk:#ECE8DF;
+  --text:#1C1B19;        /* 17.21:1 на белом, 15.66:1 на bg-soft */
+  --text-2:#5C5850;      /* 7.08:1 на белом, 6.44:1 на bg-soft */
+  --action:#7A2B2B;      /* 9.51:1 на белом — текст и заливка под белую надпись */
+  --action-h:#652222; --action-bg:#F4ECE6; /* action на action-bg 8.15:1 */
+  --ok:#0F6B3A; --ok-bg:#E8F4EC;       /* 5.84:1 */
+  --error:#B42828; --error-bg:#FDECEC; /* 5.61:1 */
+  --warn:#8A5A00; --warn-bg:#FFF4D6;   /* 5.41:1 */
+  --border:#DDD9D0;      /* только декоративные разделители */
+  --border-ctrl:#8C877C; /* границы полей 3.58:1 */
+  --dark:#23211E; --on-dark:#F3EFE6; --on-dark-2:#B8B2A5; /* 13.99:1 и 7.61:1 */
+  --r-ctrl:8px; --r-card:12px;
+  --font:'Golos Text', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.5 var(--font);color:var(--text);background:#DAD5CA}
+a{color:var(--action)}
+:focus-visible{outline:2px solid var(--action);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+
+/* Панель прототипа */
+.proto{position:sticky;top:0;z-index:50;background:#111;color:#eee;font-size:14px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:4px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#bbb}
+
+.frame{container-type:inline-size;background:var(--bg);margin:0 auto;min-height:100vh;max-width:100%}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #999}
+
+/* Шапка сайта */
+.site-h{background:var(--dark);color:var(--on-dark);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;color:var(--on-dark);text-decoration:none;font-weight:600;line-height:1.2}
+.logo small{display:block;font-weight:400;color:var(--on-dark-2);font-size:14px}
+.nav{display:none;gap:4px;margin-left:auto}
+.nav a{color:var(--on-dark);text-decoration:none;padding:10px 12px;border-radius:var(--r-ctrl);min-height:44px;display:inline-flex;align-items:center}
+.nav a[aria-current=page]{background:#3A3732}
+.burger{margin-left:auto;background:none;border:1px solid var(--on-dark-2);color:var(--on-dark);border-radius:var(--r-ctrl);width:48px;height:48px;cursor:pointer}
+.mnav{display:none;width:100%;flex-direction:column}
+.mnav.open{display:flex}
+.mnav a{color:var(--on-dark);text-decoration:none;padding:12px 4px;border-top:1px solid #3A3732}
+@container (min-width:768px){ .nav{display:flex} .burger,.mnav,.mnav.open{display:none} }
+
+main{max-width:1200px;margin:0 auto;padding:24px 16px 48px}
+.screen{display:none}
+.screen.on{display:block}
+h1{font-size:28px;line-height:1.2;margin:0 0 12px}
+h2{font-size:22px;line-height:1.25;margin:32px 0 12px}
+h3{font-size:18px;margin:0 0 6px}
+p{margin:0 0 12px}
+.muted{color:var(--text-2)}
+.lead{font-size:18px;color:var(--text-2);max-width:720px}
+.small{font-size:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--r-ctrl);border:1px solid var(--action);background:var(--bg);color:var(--action);text-decoration:none;font-weight:600;cursor:pointer;text-align:center;line-height:1.2}
+.btn.primary{background:var(--action);color:#fff}
+.btn.block{width:100%}
+@media (hover:hover) and (pointer:fine){ .btn.primary:hover{background:var(--action-h)} .btn:not(.primary):hover{background:var(--action-bg)} }
+@container (min-width:768px){ .btn{min-height:44px} }
+.row{display:flex;gap:12px;flex-wrap:wrap}
+
+.demo{display:inline-block;background:var(--warn-bg);color:var(--warn);font-size:14px;padding:2px 8px;border-radius:6px;font-weight:600}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:14px;padding:2px 8px;border-radius:6px;background:var(--ok-bg);color:var(--ok);font-weight:600}
+.badge.wait{background:var(--warn-bg);color:var(--warn)}
+
+.card{border:1px solid var(--border);border-radius:var(--r-card);padding:16px;background:var(--bg)}
+.card.soft{background:var(--bg-soft);border-color:transparent}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}
+@container (min-width:768px){ .grid.c2{grid-template-columns:1fr 1fr} .grid.c3{grid-template-columns:repeat(3,1fr)} }
+
+/* Главная */
+.hero{background:var(--bg-soft);border-radius:var(--r-card);padding:24px 16px}
+@container (min-width:768px){ .hero{padding:48px} .hero h1{font-size:40px} }
+.stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px}
+.stats div{font-size:14px;color:var(--text-2)} .stats b{display:block;font-size:24px;color:var(--text)}
+
+/* Карта */
+.mapwrap{display:grid;gap:16px;grid-template-columns:1fr}
+@container (min-width:900px){ .mapwrap{grid-template-columns:3fr 2fr} }
+.map{background:#E4E9EC;border-radius:var(--r-card);position:relative;overflow:hidden}
+.map svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}
+.pin circle{fill:var(--action);stroke:#fff;stroke-width:2}
+.pin text{fill:#fff;font:600 12px var(--font)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filters select,.filters input{min-height:48px;border:1px solid var(--border-ctrl);border-radius:var(--r-ctrl);padding:0 12px;background:#fff}
+.filters input{flex:1 1 200px}
+.list{display:flex;flex-direction:column;gap:12px;max-height:640px;overflow:auto}
+.item{display:flex;gap:12px;text-decoration:none;color:inherit}
+.ph{flex:0 0 64px;height:80px;border-radius:8px;background:var(--bg-sunk);display:flex;align-items:center;justify-content:center;color:var(--text-2)}
+.item h3{overflow-wrap:anywhere}
+.gallery{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@container (min-width:768px){ .gallery{grid-template-columns:repeat(4,1fr)} }
+.gallery figure{margin:0} .ph-g{height:auto;aspect-ratio:4/3;flex:none}
+.gallery figcaption{font-size:14px;color:var(--text-2);margin-top:4px}
+
+/* Скелет */
+.sk{background:linear-gradient(90deg,var(--bg-sunk),var(--bg-soft),var(--bg-sunk));background-size:200% 100%;animation:sk 1.2s linear infinite;border-radius:8px}
+@keyframes sk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none} }
+
+.state-box{border-radius:var(--r-card);padding:24px;text-align:left}
+.state-box.err{background:var(--error-bg);color:var(--text)} .state-box.err h3{color:var(--error)}
+
+/* Карточка героя */
+.person{display:grid;gap:24px;grid-template-columns:1fr}
+@container (min-width:900px){ .person{grid-template-columns:280px 1fr} }
+.portrait{aspect-ratio:3/4;background:var(--bg-sunk);border-radius:var(--r-card);display:flex;align-items:center;justify-content:center;color:var(--text-2);text-align:center;padding:16px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:16px}
+.facts dt{color:var(--text-2)} .facts dd{margin:0;overflow-wrap:anywhere}
+.story{border-left:3px solid var(--action);padding:4px 0 4px 16px;margin:16px 0}
+.author{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--text-2)}
+
+/* Форма */
+.steps{display:flex;gap:4px;margin:0 0 24px;padding:0;list-style:none;counter-reset:s}
+.steps li{flex:1;font-size:14px;color:var(--text-2);border-top:4px solid var(--border);padding-top:6px}
+.steps li.cur{color:var(--text);border-color:var(--action);font-weight:600}
+.steps li.done{border-color:var(--ok)}
+.form{max-width:720px}
+.f{margin-bottom:16px}
+.f label{display:block;font-weight:600;margin-bottom:4px}
+.f .hint{font-size:14px;color:var(--text-2);margin-top:4px}
+.f input,.f select,.f textarea{width:100%;min-height:48px;border:1px solid var(--border-ctrl);border-radius:var(--r-ctrl);padding:10px 12px;background:#fff}
+.f textarea{min-height:180px;resize:vertical}
+.f.bad input,.f.bad textarea{border:2px solid var(--error)}
+.f .errt{display:none;color:var(--error);font-size:14px;margin-top:4px}
+.f.bad .errt{display:block}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:12px 0}
+.chk input{width:24px;height:24px;flex:0 0 24px;margin-top:2px}
+.esia{background:#fff;border:2px solid #0D4CD3;color:#0D4CD3}
+.fio{display:grid;gap:12px;grid-template-columns:1fr}
+@container (min-width:768px){ .fio{grid-template-columns:1fr 1fr 1fr} }
+
+/* Поддержка */
+.who{display:grid;gap:12px;grid-template-columns:1fr}
+@container (min-width:768px){ .who{grid-template-columns:repeat(3,1fr)} }
+.who button{min-height:64px;text-align:left;padding:12px 16px;border:1px solid var(--border-ctrl);border-radius:var(--r-card);background:#fff;cursor:pointer;color:var(--text)}
+.who button[aria-pressed=true]{border:2px solid var(--action);background:var(--action-bg)}
+.topic{display:block;text-decoration:none;color:inherit}
+.topic h3{color:var(--action)}
+ol.howto{padding-left:0;list-style:none;counter-reset:h;margin:0}
+ol.howto>li{counter-increment:h;position:relative;padding:0 0 20px 48px}
+ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--action);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600}
+.src{font-size:14px;color:var(--text-2);border-top:1px solid var(--border);padding-top:12px;margin-top:8px}
+
+/* Династия */
+.tree{display:flex;flex-direction:column;gap:0;max-width:720px}
+.gen{display:flex;gap:16px}
+.gen .line{flex:0 0 24px;display:flex;flex-direction:column;align-items:center}
+.gen .dot{width:16px;height:16px;border-radius:50%;background:var(--action);margin-top:20px}
+.gen .bar{flex:1;width:2px;background:var(--border-ctrl)}
+.gen .card{flex:1;margin-bottom:12px}
+
+.foot{background:var(--dark);color:var(--on-dark-2);padding:24px 16px;font-size:14px}
+.foot a{color:var(--on-dark)}
+.toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;display:none;z-index:60;max-width:90vw}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Прототип · МС-1</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Все люди и истории — вымышленные, для показа механики.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="site-h">
+  <a class="logo" href="#home">
+    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#E0B25C"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#F3EFE6"/></svg>
+    <span>Герои вокруг нас<small>истории участников СВО и связь поколений</small></span>
+  </a>
+  <nav class="nav" aria-label="Разделы">
+    <a href="#map">Карта историй</a><a href="#story">Рассказать</a><a href="#support">Поддержка семьям</a><a href="#dynasty">Связь поколений</a><a href="#ancestor">Найти предка</a>
+  </nav>
+  <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Меню">☰</button>
+  <nav class="mnav" id="mnav" aria-label="Разделы">
+    <a href="#map">Карта историй</a><a href="#story">Рассказать о герое</a><a href="#support">Поддержка семьям</a><a href="#dynasty">Связь поколений</a><a href="#ancestor">Найти предка</a>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- ===== ГЛАВНАЯ ===== -->
+<section class="screen" id="s-home" data-states="normal">
+  <div class="hero">
+    <p class="small muted" style="margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase">Герои — вокруг нас</p>
+    <h1>Какими они были в жизни и что совершили</h1>
+    <p class="lead">Истории участников СВО рассказывают те, кто знал их лично: сослуживцы, уже уволенные со службы, и родные. Фотографии из жизни, рассказ о человеке и описание подвига. Каждую историю проверяет модератор до публикации.</p>
+    <div class="row" style="margin-top:20px">
+      <a class="btn primary" href="#story">Рассказать о герое</a>
+      <a class="btn" href="#map">Открыть карту историй</a>
+    </div>
+    <div class="stats" aria-label="Показатели, демо">
+      <div><b>0</b>историй — сайт ещё не запущен</div>
+      <div><b>3</b>демо-карточки в прототипе</div>
+    </div>
+  </div>
+
+  <h2>Что есть на сайте</h2>
+  <div class="grid c3">
+    <a class="card topic" href="#map"><h3>Карта историй</h3><p class="muted">Истории о подвигах. Место события — с точностью до региона, чтобы не раскрывать ничего лишнего.</p></a>
+    <a class="card topic" href="#support"><h3>Поддержка семьям</h3><p class="muted">Меры поддержки по шагам: путёвка в лагерь ребёнку, выплаты, учёба, льготы. Только официальные источники.</p></a>
+    <a class="card topic" href="#dynasty"><h3>Связь поколений</h3><p class="muted">Прадед воевал в Великую Отечественную, правнук — участник СВО. Семейные линии защитников.</p></a>
+    <a class="card topic" href="#ancestor"><h3>Найти предка</h3><p class="muted">Знаете только имя прадеда? Подскажем, где искать в открытых архивах.</p></a>
+    <a class="card topic" href="#hero"><h3>Пример страницы героя</h3><p class="muted">Каким он был, фотографии из жизни, подвиг и воспоминания тех, кто был рядом.</p></a>
+    <div class="card soft"><h3>Как мы проверяем</h3><p class="muted">ФИО автора подтверждены при входе · статус сослуживца проверен модератором по документам · история прошла модерацию · семья может попросить снять страницу.</p></div>
+  </div>
+</section>
+
+<!-- ===== КАРТА ===== -->
+<section class="screen" id="s-map" data-states="normal empty loading error many">
+  <h1>Карта историй</h1>
+  <p class="lead">Истории со всей России. Точки — места памяти: родной город героя. Место события указано в истории с точностью до региона.</p>
+  <div class="filters" role="search">
+    <label class="sr" for="q" style="position:absolute;left:-9999px">Поиск по ФИО или городу</label>
+    <input id="q" type="search" placeholder="ФИО или город">
+    <label for="reg" style="position:absolute;left:-9999px">Регион</label>
+    <select id="reg"><option>Все регионы</option><option>Московская область</option><option>Тульская область</option><option>Свердловская область</option></select>
+  </div>
+
+  <div class="when normal many mapwrap">
+    <div class="map" aria-label="Схема карты">
+      <svg viewBox="0 0 600 380" role="img" aria-label="Схематичная карта с точками мест памяти">
+        <path d="M40 250 L70 150 L130 110 L160 60 L230 70 L300 40 L380 60 L470 50 L560 90 L575 170 L540 250 L470 300 L380 320 L300 310 L220 340 L150 320 L90 300 Z" fill="#F7F5EF" stroke="#8C877C" stroke-width="1.5"/>
+        <g class="pin" data-go="hero"><circle cx="140" cy="190" r="16"/><text x="140" y="194" text-anchor="middle">2</text></g>
+        <g class="pin" data-go="hero"><circle cx="150" cy="225" r="13"/><text x="150" y="229" text-anchor="middle">1</text></g>
+        <g class="pin many-only"><circle cx="110" cy="265" r="22"/><text x="110" y="269" text-anchor="middle">148</text></g>
+        <g class="pin many-only"><circle cx="330" cy="170" r="26"/><text x="330" y="174" text-anchor="middle">1 204</text></g>
+        <g class="pin many-only"><circle cx="200" cy="150" r="18"/><text x="200" y="154" text-anchor="middle">86</text></g>
+        <text x="16" y="366" font-size="13" fill="#5C5850">Схема для прототипа. В рабочей версии — карта на своём сервере в РФ.</text>
+      </svg>
+    </div>
+    <div>
+      <p class="muted small" id="cnt">Найдено 3 истории</p>
+      <div class="list" id="list">
+        <a class="card item" href="#hero"><div class="ph">фото</div><div><h3>Колесников Сергей Викторович</h3><p class="muted small">1994–2023 · Наро-Фоминск</p><span class="badge">✓ 2 сослуживца подтвердили</span> <span class="demo">демо</span></div></a>
+        <a class="card item" href="#hero"><div class="ph">фото</div><div><h3>Гарипов Ильдар Рустамович</h3><p class="muted small">1988–2024 · Наро-Фоминск</p><span class="badge">✓ 1 сослуживец подтвердил</span> <span class="demo">демо</span></div></a>
+        <a class="card item" href="#hero"><div class="ph">фото</div><div><h3>Ершов Павел Андреевич</h3><p class="muted small">1999 · Апрелевка · жив, награждён</p><span class="badge wait">на проверке у модератора</span> <span class="demo">демо</span></div></a>
+        <a class="card item many-only" href="#hero"><div class="ph">фото</div><div><h3>Верхнепышминский-Одоевский Константин Александрович</h3><p class="muted small">1979–2024 · Верхняя Пышма</p><span class="badge">✓ 5 сослуживцев подтвердили</span> <span class="demo">демо</span></div></a>
+        <a class="card item many-only" href="#hero"><div class="ph">фото</div><div><h3>Иванов Иван Иванович</h3><p class="muted small">1990–2023 · Тула</p><span class="badge">✓ 1 сослуживец подтвердил</span> <span class="demo">демо</span></div></a>
+        <p class="muted small many-only">…и ещё 1 436 историй. Список подгружается по мере прокрутки.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="when empty">
+    <div class="card soft state-box">
+      <h3>По этому запросу историй пока нет</h3>
+      <p class="muted">Возможно, о человеке ещё никто не рассказал. Если вы знали его лично — ваша история может стать первой.</p>
+      <div class="row"><a class="btn primary" href="#story">Рассказать о герое</a><button class="btn" type="button" data-reset>Сбросить поиск</button></div>
+    </div>
+  </div>
+
+  <div class="when loading mapwrap" aria-busy="true">
+    <div class="sk" style="aspect-ratio:600/380"></div>
+    <div class="list"><div class="sk" style="height:112px"></div><div class="sk" style="height:112px"></div><div class="sk" style="height:112px"></div></div>
+  </div>
+
+  <div class="when error">
+    <div class="state-box err" role="alert">
+      <h3>Карта не загрузилась</h3>
+      <p>Нет связи с сервером. Проверьте интернет — истории никуда не пропали, их просто не удалось получить.</p>
+      <div class="row"><button class="btn primary" type="button" data-reset>Попробовать ещё раз</button><a class="btn" href="#home">На главную</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== КАРТОЧКА ГЕРОЯ ===== -->
+<section class="screen" id="s-hero" data-states="normal loading error many">
+  <p class="small"><a href="#map">← К карте историй</a></p>
+  <div class="when normal many person">
+    <div>
+      <div class="portrait">Фото предоставляет семья<br>с согласия на публикацию</div>
+      <p class="small muted" style="margin-top:8px"><span class="demo">демо</span> Человек вымышлен.</p>
+    </div>
+    <div>
+      <h1><span class="many-hide">Колесников Сергей Викторович</span><span class="many-only">Верхнепышминский-Одоевский Константин Александрович</span></h1>
+      <dl class="facts">
+        <dt>Годы жизни</dt><dd>12.03.1994 — 17.08.2023</dd>
+        <dt>Родной город</dt><dd>Наро-Фоминск, Московская область</dd>
+        <dt>Где был подвиг</dt><dd>Регион указан в истории; точные координаты не публикуются</dd>
+        <dt>Награды</dt><dd>Орден Мужества (посмертно) — со слов семьи, документ у модератора</dd>
+      </dl>
+      <div class="row" style="margin-top:16px">
+        <a class="btn primary" href="#story">Добавить воспоминание</a>
+        <a class="btn" href="#dynasty">Связь поколений</a>
+      </div>
+
+      <h2>Каким он был</h2>
+      <p>Вырос в Наро-Фоминске, окончил колледж по специальности «автомеханик», десять лет чинил машины в мастерской на Московской улице. Женат, двое детей — Маша и Тёма. Высокий, светловолосый, всегда с улыбкой. По выходным возил сына на хоккей, летом с друзьями сплавлялся по Протве.</p>
+      <p class="small muted">Рассказала Колесникова Анна Сергеевна, жена · <span class="demo">демо</span></p>
+
+      <h2>Фотографии из жизни</h2>
+      <div class="gallery">
+        <figure><div class="ph ph-g">фото</div><figcaption>Выпускной, 2012</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>С сыном на катке</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>Мастерская, 2019</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>Сплав по Протве</figcaption></figure>
+      </div>
+      <p class="small muted">Фото публикуются с согласия семьи.</p>
+
+      <h2>Подвиг</h2>
+      <article class="story">
+        <p>«Мы с Серёгой были в одном расчёте с весны 2023-го. Когда колонну накрыло, он вытаскивал раненых к укрытию, пока не вынес последнего. Троих ребят, которые сегодня живы, он спас сам.»</p>
+        <div class="author">Андрей Л., сослуживец, уволен со службы <span class="badge">✓ ФИО подтверждены при входе</span> <span class="badge">✓ статус проверен модератором</span></div>
+      </article>
+      <article class="story many-only">
+        <p>«Длинная история на несколько экранов — проверяем, что текст читается и не ломает вёрстку. Сервисслужбаобеспеченияподразделенийбезпробелов — так выглядит длинное слово без пробелов, и оно переносится.»</p>
+        <div class="author">Михаил Т., сослуживец <span class="badge wait">проверка ждёт модератора</span></div>
+      </article>
+
+      <h2>От семьи</h2>
+      <p class="muted">Семья может добавить фото и письма, а также в любой момент попросить скрыть страницу.</p>
+      <a class="small" href="#support">Меры поддержки для семьи погибшего →</a>
+    </div>
+  </div>
+  <div class="when loading person" aria-busy="true"><div class="sk" style="aspect-ratio:3/4"></div><div><div class="sk" style="height:36px;width:70%;margin-bottom:16px"></div><div class="sk" style="height:120px;margin-bottom:16px"></div><div class="sk" style="height:200px"></div></div></div>
+  <div class="when error">
+    <div class="state-box err" role="alert">
+      <h3>Страница скрыта по просьбе семьи</h3>
+      <p>Родственники попросили не показывать эту страницу. Если вы знали его и хотите передать семье воспоминания — напишите модератору, он свяжется с ними.</p>
+      <div class="row"><a class="btn primary" href="#map">К карте историй</a><a class="btn" href="#story">Написать модератору</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== РАССКАЗАТЬ ===== -->
+<section class="screen" id="s-story" data-states="normal loading error">
+  <h1>Рассказать о герое</h1>
+  <p class="lead">Расскажите, каким он был в жизни и что совершил. Писать могут родные, друзья и сослуживцы, уже уволенные с военной службы. Модератор проверяет каждую историю до публикации — обычно за 3 рабочих дня.</p>
+  <ol class="steps" aria-label="Шаги">
+    <li class="done">1. Вход</li><li class="cur" aria-current="step">2. О ком</li><li>3. Жизнь и подвиг</li><li>4. Фото</li><li>5. Отправка</li>
+  </ol>
+
+  <div class="when normal loading form">
+    <div class="card soft" style="margin-bottom:24px">
+      <p style="margin:0"><b>Шаг 1 пройден:</b> вы вошли через Сбер ID как <b>Лаптев Андрей Петрович</b>. Имя на сайте покажем сокращённо: «Андрей Л.» — можно изменить в настройках.</p>
+    </div>
+    <form onsubmit="return false">
+      <fieldset style="border:0;padding:0;margin:0">
+        <legend class="f" style="font-weight:600;font-size:18px;padding:0">О ком вы рассказываете</legend>
+        <div class="fio">
+          <div class="f"><label for="fam">Фамилия</label><input id="fam" value="Колесников" autocomplete="off"></div>
+          <div class="f"><label for="nam">Имя</label><input id="nam" value="Сергей" autocomplete="off"></div>
+          <div class="f"><label for="otc">Отчество <span class="muted">(если есть)</span></label><input id="otc" value="Викторович" autocomplete="off"></div>
+        </div>
+        <div class="grid c2">
+          <div class="f"><label for="bd">Дата рождения</label><input id="bd" placeholder="ДД.ММ.ГГГГ" inputmode="numeric"><div class="hint">Если не знаете точно — укажите год</div></div>
+          <div class="f"><label for="st">Что с ним сейчас</label><select id="st"><option>Погиб</option><option>Пропал без вести</option><option>Жив, награждён</option><option>Жив</option></select></div>
+        </div>
+        <div class="f"><label for="city">Родной город</label><input id="city" value="Наро-Фоминск"><div class="hint">Эта точка появится на карте</div></div>
+        <div class="f"><label for="rel">Кем вы ему приходитесь</label><select id="rel"><option>Сослуживец (уже не служит)</option><option>Родственник</option><option>Друг</option><option>Одноклассник, однокурсник</option><option>Коллега по работе</option></select></div>
+        <div class="f"><label for="doc">Документ об увольнении с военной службы <span class="muted">(для сослуживцев)</span></label><input id="doc" type="file" accept="image/*,.pdf"><div class="hint">Его увидит только модератор. После проверки файл удаляется, на сайте не публикуется.</div></div>
+      </fieldset>
+
+      <div class="f"><label for="life">Каким он был</label>
+        <textarea id="life" placeholder="Где вырос, кем работал, семья, увлечения, как выглядел, каким его запомнили"></textarea>
+      </div>
+      <div class="f" id="f-text"><label for="txt">Подвиг</label>
+        <textarea id="txt" placeholder="Что произошло, когда, что он сделал. Пишите так, как рассказали бы семье."></textarea>
+        <div class="hint">Место события — только регион. Не указывайте номер части, позывные, координаты и имена живых бойцов без их согласия: такие истории модератор вернёт на доработку.</div>
+        <div class="errt">Напишите хотя бы несколько предложений — от 300 знаков.</div>
+      </div>
+
+      <div class="f"><label for="ph">Фотографии из жизни <span class="muted">(до 10)</span></label><input id="ph" type="file" accept="image/*" multiple><div class="hint">Фото погибшего публикуем только с согласия семьи — мы спросим её сами.</div></div>
+      <div class="chk"><input type="checkbox" id="c0"><label for="c0">Я не прохожу военную службу сейчас</label></div>
+      <div class="chk"><input type="checkbox" id="c1"><label for="c1">Подтверждаю, что лично знал этого человека и всё написанное — правда</label></div>
+      <div class="chk" id="c2w"><input type="checkbox" id="c2"><label for="c2">Согласен на обработку персональных данных по <a href="#home">правилам сайта</a> (152-ФЗ)</label></div>
+      <p class="small muted">Если человек погиб, мы сообщим семье о новой истории и покажем её им до публикации.</p>
+      <button class="btn primary block" type="button" id="send">Отправить на проверку</button>
+      <p class="small muted" style="margin-top:8px">Отправить можно без фото — семья добавит их позже.</p>
+    </form>
+  </div>
+  <div class="when error form">
+    <div class="state-box err" role="alert" style="margin-bottom:16px">
+      <h3>История не отправлена</h3>
+      <p>Не заполнено поле «Подвиг» и не отмечено согласие на обработку данных. Черновик сохранён — ничего не потеряется.</p>
+    </div>
+    <div class="f bad"><label for="txt2">Подвиг</label><textarea id="txt2">Служили вместе.</textarea><div class="errt">Напишите хотя бы несколько предложений — от 300 знаков.</div></div>
+    <div class="chk"><input type="checkbox" id="c3" aria-invalid="true"><label for="c3" style="color:var(--error)">Согласен на обработку персональных данных (152-ФЗ) — обязательно</label></div>
+    <button class="btn primary block" type="button">Отправить на проверку</button>
+  </div>
+  <div class="card soft" style="margin-top:32px;max-width:720px">
+    <h3>Как выглядит первый шаг — вход</h3>
+    <p class="muted">Автор входит одним из российских способов — так мы знаем его настоящие ФИО. Читать сайт можно без входа.</p>
+    <div class="grid c3">
+      <button class="btn" type="button" data-toast="Здесь будет вход по коду из СМС">По номеру телефона</button>
+      <button class="btn" type="button" data-toast="Здесь будет переход в Сбер ID">Сбер ID</button>
+      <button class="btn" type="button" data-toast="Здесь будет переход в VK ID">VK ID</button>
+    </div>
+    <p class="small muted" style="margin-top:8px">Код не приходит? Проверьте номер или войдите через Сбер ID или VK ID.</p>
+  </div>
+</section>
+
+<!-- ===== ОТПРАВЛЕНО ===== -->
+<section class="screen" id="s-sent" data-states="normal">
+  <div class="card soft state-box" style="max-width:720px">
+    <span class="badge">✓ Отправлено</span>
+    <h1 style="margin-top:12px">Спасибо. История у модератора</h1>
+    <p>Обычно проверка занимает до 3 рабочих дней. Если нужны уточнения — позвоним или напишем. Если человек погиб, сначала покажем историю и фото семье. После публикации на странице появится отметка «статус автора проверен».</p>
+    <div class="row"><a class="btn primary" href="#map">К карте историй</a><a class="btn" href="#story">Рассказать ещё об одном герое</a></div>
+  </div>
+</section>
+
+<!-- ===== ПОДДЕРЖКА ===== -->
+<section class="screen" id="s-support" data-states="normal">
+  <h1>Поддержка семьям участников СВО</h1>
+  <p class="lead">Меры поддержки разбросаны по десяткам сайтов. Мы собрали их в одном месте и расписали по шагам — с ссылкой на официальный источник и датой проверки у каждой.</p>
+  <h2>Кто вы</h2>
+  <div class="who" id="who">
+    <button type="button" aria-pressed="false" data-who="uch">Участник СВО или ветеран боевых действий</button>
+    <button type="button" aria-pressed="false" data-who="ran">Участник получил ранение</button>
+    <button type="button" aria-pressed="false" data-who="fam">Член семьи участника</button>
+    <button type="button" aria-pressed="false" data-who="dead">Семья погибшего</button>
+    <button type="button" aria-pressed="false" data-who="lost">Семья пропавшего без вести</button>
+    <button type="button" aria-pressed="true" data-who="all">Показать всё</button>
+  </div>
+  <h2>Что нужно</h2>
+  <div class="grid c3" id="topics">
+
+    <a class="card topic" data-for="all" href="#support-camp" data-soon><h3>Сначала — документы</h3><p class="muted">Справка об участии в СВО, удостоверение ветерана боевых действий, удостоверение члена семьи погибшего. Без них не оформить почти ничего.</p></a>
+    <a class="card topic" data-for="fam dead lost" href="#support-camp"><h3>Путёвка ребёнку в лагерь</h3><p class="muted">Льготная путёвка от региона. Детям погибших — ещё и выплата Минобороны на отдых. <b>Пример расписан по шагам →</b></p></a>
+    <a class="card topic" data-for="fam dead lost" href="#support-camp" data-soon><h3>Детсад, школа, кружки, питание</h3><p class="muted">Первоочередное место, бесплатные продлёнка, кружки и питание — по Указу № 327, порядок у региона.</p></a>
+    <a class="card topic" data-for="uch fam dead" href="#support-camp" data-soon><h3>Вуз по отдельной квоте</h3><p class="muted">Не меньше 10 % бюджетных мест. Для участников, их детей, с 25.04.2026 — и для вдов, не вступивших в новый брак.</p></a>
+    <a class="card topic" data-for="dead" href="#support-camp" data-soon><h3>Выплаты семье погибшего</h3><p class="muted">Единовременная выплата по Указу № 98, страховая сумма, ежемесячная компенсация, пенсия по потере кормильца.</p></a>
+    <a class="card topic" data-for="ran" href="#support-camp" data-soon><h3>Выплата за ранение</h3><p class="muted">Размер зависит от тяжести: 0,1, 1, 3 или 4 млн ₽ (Указ № 98 в редакции Указа № 968).</p></a>
+    <a class="card topic" data-for="uch fam lost" href="#support-camp" data-soon><h3>Кредитные каникулы</h3><p class="muted">На всё время службы плюс 180 дней. Требование подать до 31.12.2026.</p></a>
+    <a class="card topic" data-for="uch ran" href="#support-camp" data-soon><h3>Реабилитация и санаторий</h3><p class="muted">Центры Соцфонда, набор соцуслуг, протезы, психологическая помощь.</p></a>
+    <a class="card topic" data-for="all" href="#support-camp" data-soon><h3>Социальный координатор фонда</h3><p class="muted">Личный помощник от фонда «Защитники Отечества»: поможет собрать документы. Телефон 117, добавочный 1.</p></a>
+  </div>
+  <div class="card soft" style="margin-top:24px">
+    <h3>Не нашли ответ?</h3>
+    <p class="muted">В каждом регионе есть филиал фонда «Защитники Отечества» и личный социальный координатор. Он поможет собрать документы.</p>
+    <a class="btn" href="#support-camp">Как получить соцкоординатора</a>
+  </div>
+</section>
+
+<!-- ===== ИНСТРУКЦИЯ ===== -->
+<section class="screen" id="s-support-camp" data-states="normal">
+  <p class="small"><a href="#support">← Все меры поддержки</a></p>
+
+  <h1>Путёвка в детский лагерь для ребёнка участника СВО</h1>
+  <p><span class="badge">Проверено 23.09.2026</span> <span class="demo">региональная мера</span></p>
+  <p class="lead">Единой федеральной путёвки нет. Указ Президента № 327 от 15.05.2026 поручил регионам давать детям участников СВО льготные путёвки, а порядок каждый регион устанавливает сам.</p>
+
+  <div class="card soft" style="margin:16px 0">
+    <p style="margin:0"><b>Кому:</b> детям и иждивенцам участников СВО, в том числе погибших и пропавших без вести.</p>
+  </div>
+
+  <h2>Ваш регион</h2>
+  <div class="who" id="reg-pick" style="margin-bottom:16px">
+    <button type="button" aria-pressed="true" data-reg="msk">Москва</button>
+    <button type="button" aria-pressed="false" data-reg="mo">Московская область</button>
+    <button type="button" aria-pressed="false" data-reg="other">Другой регион</button>
+  </div>
+
+  <div data-regbox="msk">
+    <p>Детям 7–15 лет — <b>сертификат на отдых 40 000 ₽</b> от МОСГОРТУРа. Можно выбрать лагерь у партнёров или получить компенсацию за купленную самостоятельно путёвку.</p>
+    <ol class="howto">
+      <li><b>Получите справку об участии в СВО</b> на Госуслугах — если участник жив, онлайн за 4 рабочих дня. Семья погибшего берёт удостоверение члена семьи погибшего в военкомате.</li>
+      <li><b>Подготовьте документы:</b> паспорт заявителя, СНИЛС, свидетельство о рождении ребёнка, документ о статусе военнослужащего или погибшего.</li>
+      <li><b>Подайте заявление на mos.ru:</b> «Услуги» → «Культура, спорт, отдых» → «Отдых» → «Отдых и оздоровление детей». Можно лично в офисе МОСГОРТУРа по записи.</li>
+      <li><b>Дождитесь решения</b> и выберите лагерь по сертификату.</li>
+    </ol>
+    <div class="card" style="border-color:var(--warn);background:var(--warn-bg)"><p style="margin:0;color:var(--warn)"><b>Когда подавать.</b> На 2026 год заявления принимали 02.11–10.12.2025. Приём на 2027 год ещё не объявлен — проверим в ноябре 2026.</p></div>
+    <p class="src">Источник: <a href="https://mosgortur.ru/parents/faq.htm" target="_blank" rel="noopener">МОСГОРТУР, вопросы родителей</a>. Помощь: Единый центр поддержки участников СВО, +7 495 870-55-45, ежедневно 9:00–21:00.</p>
+  </div>
+
+  <div data-regbox="mo" hidden>
+    <p>Бесплатные путёвки в лагеря «Литвиново» (дети 7–15 лет), «Имени 28 Героев Панфиловцев» и «Левково».</p>
+    <ol class="howto">
+      <li><b>Получите справку об участии в СВО</b> или удостоверение члена семьи погибшего.</li>
+      <li><b>Обратитесь</b> в муниципальный центр помощи семьям участников СВО или в администрацию по месту жительства.</li>
+      <li><b>Подайте заявление</b> там же или на <a href="https://uslugi.mosreg.ru/services/23083" target="_blank" rel="noopener">региональном портале госуслуг</a>.</li>
+      <li><b>Получите путёвку.</b> Перечень документов и сроки заезда уточняют при обращении.</li>
+    </ol>
+    <p class="src">Основание: постановление Губернатора Московской области от 08.10.2025 № 350-ПГ. Источник: <a href="https://uslugi.mosreg.ru/svo" target="_blank" rel="noopener">uslugi.mosreg.ru/svo</a>. Горячая линия: 122-6.</p>
+  </div>
+
+  <div data-regbox="other" hidden>
+    <ol class="howto">
+      <li><b>Найдите меру своего региона</b> в <a href="https://www.gosuslugi.ru/fzo" target="_blank" rel="noopener">каталоге мер поддержки на Госуслугах</a>: укажите регион и тему «Отдых и оздоровление».</li>
+      <li><b>Получите справку об участии в СВО</b> или удостоверение члена семьи погибшего.</li>
+      <li><b>Подайте заявление</b> туда, куда указано в мере: региональный портал, МФЦ, соцзащита или управление образования.</li>
+      <li><b>Получите путёвку или сертификат.</b> Не разобрались — позвоните в фонд «Защитники Отечества»: 117, добавочный 1.</li>
+    </ol>
+    <p class="src">Основание: <a href="http://static.kremlin.ru/media/events/files/ru/AN0zunLpBnjgcGA56EEBRlp4YN9u1E5Z.pdf" target="_blank" rel="noopener">Указ Президента № 327 от 15.05.2026</a>, п. 3 «а».</p>
+  </div>
+
+  <h2>Если участник погиб, пропал без вести или стал инвалидом из-за военной травмы</h2>
+  <div class="card">
+    <p>Если он служил по контракту — один из родителей получает <b>29 511,36 ₽ в год</b> на каждого ребёнка-школьника на оздоровительный отдых. Это отдельная выплата Минобороны, она не заменяет путёвку от региона.</p>
+    <p style="margin:0"><b>Куда:</b> пенсионный отдел военкомата. <b>Документы:</b> заявление, паспорт, извещение о гибели или решение о признании безвестно отсутствующим, свидетельство о рождении ребёнка, справка из школы.</p>
+    <p class="src">Основание: постановление Правительства РФ от 31.12.2004 № 911.</p>
+  </div>
+
+  <h2>«Артек», «Орлёнок», «Океан», «Смена»</h2>
+  <p class="muted">Отдельной квоты для детей участников СВО там нет — отбор общий, по достижениям ребёнка. Заявка в «Артек» подаётся через <a href="https://artek.org/informaciya-dlya-roditelyay/kak-poluchitsya-putevku-v-artek" target="_blank" rel="noopener">АИС «Артек»</a>. Региональную квоту уточните у оператора вашего региона.</p>
+
+  <div class="row" style="margin-top:24px"><a class="btn primary" href="https://www.gosuslugi.ru/fzo" target="_blank" rel="noopener">Открыть каталог мер на Госуслугах</a><a class="btn" href="#support">Все меры поддержки</a></div>
+</section>
+
+<!-- ===== ДИНАСТИЯ ===== -->
+<section class="screen" id="s-dynasty" data-states="normal">
+  <h1>Связь поколений</h1>
+  <p class="lead">Семейная линия защитников Отечества. Родство подтверждают документами, которые семья показывает модератору: на сайте они не публикуются.</p>
+  <p><span class="demo">демо</span> <span class="small muted">Семья вымышлена. Правила подтверждения родства — задача МС-7, ждём материалы партнёров.</span></p>
+  <div class="tree">
+    <div class="gen"><div class="line"><span class="dot"></span><span class="bar"></span></div>
+      <div class="card"><p class="small muted" style="margin:0">Прадед · Великая Отечественная война</p><h3>Колесников Иван Степанович, 1918–1943</h3><p class="muted small">Сведения — из открытой архивной базы «Память народа».</p><span class="badge">✓ родство подтверждено документами</span></div></div>
+    <div class="gen"><div class="line"><span class="dot"></span><span class="bar"></span></div>
+      <div class="card"><p class="small muted" style="margin:0">Дед</p><h3>Колесников Пётр Иванович, 1941–2012</h3><p class="muted small">Кадровый военный, 25 лет службы.</p><span class="badge wait">родство на проверке</span></div></div>
+    <div class="gen"><div class="line"><span class="dot"></span></div>
+      <div class="card"><p class="small muted" style="margin:0">Внук · участник СВО</p><h3><a href="#hero">Колесников Сергей Викторович, 1994–2023</a></h3><p class="muted small">2 истории сослуживцев</p></div></div>
+  </div>
+  <div class="row" style="margin-top:16px"><a class="btn primary" href="#ancestor">Найти своего предка</a><a class="btn" href="#story">Рассказать о герое</a></div>
+</section>
+
+<!-- ===== НАЙТИ ПРЕДКА ===== -->
+<section class="screen" id="s-ancestor" data-states="normal">
+  <h1>Найти предка — участника Великой Отечественной</h1>
+  <p class="lead">Знаете только имя прадеда? Начните с открытых государственных баз. В рабочей версии поиск пойдёт по ним сразу отсюда (задача МС-8).</p>
+  <form class="form" onsubmit="return false">
+    <div class="fio">
+      <div class="f"><label for="af">Фамилия</label><input id="af" value="Колесников"></div>
+      <div class="f"><label for="an">Имя</label><input id="an" value="Иван"></div>
+      <div class="f"><label for="ao">Отчество <span class="muted">(если есть)</span></label><input id="ao" value="Степанович"></div>
+    </div>
+    <div class="f" style="max-width:240px"><label for="ay">Год рождения, если знаете</label><input id="ay" inputmode="numeric" value="1918"></div>
+    <button class="btn primary" type="button" data-toast="В прототипе поиск не подключён — ниже ссылки на архивы">Искать</button>
+  </form>
+  <h2>Где искать сейчас</h2>
+  <div class="grid c3">
+    <a class="card topic" href="https://pamyat-naroda.ru/" target="_blank" rel="noopener"><h3>Память народа ↗</h3><p class="muted">Минобороны: судьбы, награды, боевой путь частей.</p></a>
+    <a class="card topic" href="https://obd-memorial.ru/" target="_blank" rel="noopener"><h3>ОБД «Мемориал» ↗</h3><p class="muted">Погибшие и пропавшие без вести, донесения о потерях.</p></a>
+    <a class="card topic" href="https://podvignaroda.ru/" target="_blank" rel="noopener"><h3>Подвиг народа ↗</h3><p class="muted">Наградные документы 1941–1945.</p></a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <p>Герои вокруг нас · прототип от 23.09.2026 · все данные на страницах вымышлены.</p>
+  <p>Персональные данные хранятся на серверах в России. Семья погибшего может в любой момент попросить скрыть страницу.</p>
+</footer>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  const screens=[...document.querySelectorAll('.screen')];
+  const body=document.body, frame=document.getElementById('frame');
+  const toast=document.getElementById('toast');
+  function say(t){toast.textContent=t;toast.style.display='block';clearTimeout(say.t);say.t=setTimeout(()=>toast.style.display='none',2600)}
+  let state='normal';
+  function cur(){return document.querySelector('.screen.on')}
+  function apply(){
+    const s=cur(); if(!s) return;
+    const allowed=(s.dataset.states||'normal').split(' ');
+    let st=allowed.includes(state)?state:'normal';
+    if(st!==state) say('У этого экрана нет состояния «'+label(state)+'» — показана норма');
+    s.querySelectorAll('.when').forEach(el=>{el.style.display=el.classList.contains(st)?'':'none'});
+    s.querySelectorAll('.many-only').forEach(el=>el.style.display=st==='many'?'':'none');
+    s.querySelectorAll('.many-hide').forEach(el=>el.style.display=st==='many'?'none':'');
+    const c=s.querySelector('#cnt'); if(c) c.textContent=st==='many'?'Найдено 1 441 история':'Найдено 3 истории';
+  }
+  function label(k){return {normal:'Норма',empty:'Пусто',loading:'Загрузка',error:'Ошибка',many:'Много данных'}[k]}
+  function route(){
+    const id=(location.hash||'#home').slice(1);
+    const target=document.getElementById('s-'+id)||document.getElementById('s-home');
+    screens.forEach(s=>s.classList.toggle('on',s===target));
+    document.querySelectorAll('.nav a').forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+id?'page':'false'));
+    document.getElementById('mnav').classList.remove('open');
+    apply(); window.scrollTo(0,0);
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelector('.burger').addEventListener('click',e=>{
+    const m=document.getElementById('mnav'); m.classList.toggle('open');
+    e.currentTarget.setAttribute('aria-expanded',m.classList.contains('open'));
+  });
+  document.addEventListener('click',e=>{
+    const p=e.target.closest('[data-go]'); if(p){location.hash=p.dataset.go;return}
+    const t=e.target.closest('[data-toast]'); if(t){say(t.dataset.toast);return}
+    if(e.target.closest('[data-reset]')){document.querySelector('#stateBtns [data-st=normal]').click();return}
+    const w=e.target.closest('#who button'); if(w){document.querySelectorAll('#who button').forEach(x=>x.setAttribute('aria-pressed',x===w));
+      const k=w.dataset.who; document.querySelectorAll('#topics .topic').forEach(t=>{const f=t.dataset.for.split(' ');t.style.display=(k==='all'||f.includes('all')||f.includes(k))?'':'none'});return}
+    const r=e.target.closest('#reg-pick button'); if(r){document.querySelectorAll('#reg-pick button').forEach(x=>x.setAttribute('aria-pressed',x===r));
+      document.querySelectorAll('[data-regbox]').forEach(b=>b.hidden=b.dataset.regbox!==r.dataset.reg);return}
+    const soon=e.target.closest('[data-soon]'); if(soon){e.preventDefault();say('В прототипе по шагам расписан пример про лагерь. Остальные темы собраны в исследовании МС-2');return}
+  });
+  document.getElementById('send').addEventListener('click',()=>{
+    const b=document.getElementById('send'); b.disabled=true; b.textContent='Отправляем…';
+    setTimeout(()=>{b.disabled=false;b.textContent='Отправить на проверку';location.hash='sent'},700);
+  });
+  window.addEventListener('hashchange',route); route();
+})();
+</script>
+</body>
+</html>

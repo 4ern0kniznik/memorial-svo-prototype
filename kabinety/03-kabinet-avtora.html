@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кабинет автора — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:14px;font-size:14px;align-items:center}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.sm{min-height:38px;padding:0 14px;font-size:14px}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:28px 0 20px;flex-wrap:wrap}
+.page-head h1{font-size:24px}
+.page-head p{color:var(--ink-2);margin:6px 0 0}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:14px;align-items:flex-start;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink)}
+@media (hover:hover) and (pointer:fine){ .item:hover{border-color:var(--gold)} }
+.item .ph{flex:none;width:56px;height:56px;border-radius:10px;background:var(--bg-3);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-2);text-align:center}
+.item .body{flex:1;min-width:0}
+.item h3{font-size:16px;margin:0 0 4px;overflow-wrap:anywhere}
+.item .meta{font-size:13px;color:var(--ink-2);margin:0 0 8px}
+.item .reason{font-size:13px;color:var(--error);background:var(--error-bg);border-radius:8px;padding:8px 10px;margin-top:6px}
+.item .sub{font-size:13px;color:var(--warn);margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 12px;border-radius:20px;flex:none;white-space:nowrap}
+.chip.draft{background:var(--bg-3);color:var(--ink-2)}
+.chip.submitted{background:rgba(242,197,114,.12);color:var(--gold)}
+.chip.returned{background:var(--error-bg);color:var(--error)}
+.chip.consent{background:var(--warn-bg);color:var(--warn)}
+.chip.published{background:var(--ok-bg);color:var(--ok)}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.sk-item{display:flex;gap:14px;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+main{padding-bottom:60px}
+.count-note{font-size:13px;color:var(--ink-2);margin:0 0 12px}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 03 Кабинет автора</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="false">Норма</button>
+    <button data-st="empty" aria-pressed="true">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>Черноголовкин Андрей · автор</small></span>
+  </a>
+  <nav><a href="02-rasskazat.html">Новая история</a><a href="01-vhod.html">Выйти</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ===== ПУСТО ===== -->
+  <div class="when empty">
+    <div class="page-head"><div><h1>Мои истории</h1><p>Здесь появятся истории, которые вы начали писать или отправили на проверку.</p></div></div>
+    <div class="state-box">
+      <h3>Вы ещё не рассказали ни одной истории</h3>
+      <p>Расскажите о герое: каким он был, чем занимался, о его подвиге — если хотите. Черновик сохраняется автоматически, можно вернуться в любой момент.</p>
+      <a class="btn primary" href="02-rasskazat.html">Рассказать о герое</a>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="page-head"><div><h1>Мои истории</h1></div></div>
+    <div class="list">
+      <div class="sk-item"><div class="sk" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div class="sk" style="height:16px;width:60%;margin-bottom:8px"></div><div class="sk" style="height:12px;width:40%"></div></div></div>
+      <div class="sk-item"><div class="sk" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div class="sk" style="height:16px;width:50%;margin-bottom:8px"></div><div class="sk" style="height:12px;width:35%"></div></div></div>
+      <div class="sk-item"><div class="sk" style="width:56px;height:56px;flex:none"></div><div style="flex:1"><div class="sk" style="height:16px;width:65%;margin-bottom:8px"></div><div class="sk" style="height:12px;width:30%"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА ===== -->
+  <div class="when error" hidden>
+    <div class="page-head"><div><h1>Мои истории</h1></div></div>
+    <div class="state-box err" role="alert">
+      <h3>Не получилось загрузить список</h3>
+      <p>Нет связи с сервером. Ваши истории никуда не пропали — попробуйте обновить страницу.</p>
+      <button class="btn primary" type="button" onclick="location.reload()">Повторить</button>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: несколько историй разных статусов ===== -->
+  <div class="when normal" hidden>
+    <div class="page-head"><div><h1>Мои истории</h1><p>4 истории</p></div><a class="btn primary" href="02-rasskazat.html">Рассказать о герое</a></div>
+    <div class="list">
+      <a class="item" href="02-rasskazat.html">
+        <div class="ph">черновик</div>
+        <div class="body"><h3>Сердюков Константин Викторович</h3><p class="meta">Начата 20.09.2026 · не отправлена</p></div>
+        <span class="chip draft">Черновик</span>
+      </a>
+      <a class="item" href="#">
+        <div class="ph">фото</div>
+        <div class="body"><h3>Морозов Виталий Сергеевич</h3><p class="meta">Отправлена 18.09.2026</p></div>
+        <span class="chip submitted">На проверке</span>
+      </a>
+      <a class="item" href="02-rasskazat.html">
+        <div class="ph">фото</div>
+        <div class="body">
+          <h3>Ковальчук Игорь Николаевич</h3><p class="meta">Отправлена 09.09.2026</p>
+          <p class="reason">«В истории упомянут ещё один человек по имени. Пока он сам не подтвердил согласие на публикацию, просим заменить имя на описание роли, например „сослуживец“ или „командир взвода“».</p>
+        </div>
+        <span class="chip returned">Возвращена</span>
+      </a>
+      <a class="item" href="#">
+        <div class="ph">фото</div>
+        <div class="body"><h3>Черноголовкина Александра Владиславовна</h3><p class="meta">Отправлена 30.08.2026</p></div>
+        <span class="chip published">Опубликована</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ ===== -->
+  <div class="when many" hidden>
+    <div class="page-head"><div><h1>Мои истории</h1><p>11 историй</p></div><a class="btn primary" href="02-rasskazat.html">Рассказать о герое</a></div>
+    <p class="count-note">Показаны все истории. Сортировка — по дате последнего изменения, новые сверху.</p>
+    <div class="list">
+      <a class="item" href="02-rasskazat.html"><div class="ph">черновик</div><div class="body"><h3>Верхнепышминский-Одоевский Константин Александрович</h3><p class="meta">Начата 23.09.2026 · не отправлена</p></div><span class="chip draft">Черновик</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Сердюков Константин Викторович</h3><p class="meta">Отправлена 22.09.2026</p></div><span class="chip submitted">На проверке</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Морозов Виталий Сергеевич</h3><p class="meta">Отправлена 20.09.2026</p><p class="sub">Ждём согласия семьи · 3-й день из 30</p></div><span class="chip consent">На проверке</span></a>
+      <a class="item" href="02-rasskazat.html"><div class="ph">фото</div><div class="body"><h3>Ковальчук Игорь Николаевич</h3><p class="meta">Отправлена 09.09.2026</p><p class="reason">«Расскажите, пожалуйста, на основании какого документа мы можем подтвердить подвиг — наградного листа, извещения или записи книги памяти. Без этого мы пока не можем опубликовать эту часть истории».</p></div><span class="chip returned">Возвращена</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Черноголовкина Александра Владиславовна</h3><p class="meta">Опубликована 30.08.2026</p></div><span class="chip published">Опубликована</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Прокопьев-Задорожный Валентин Геннадьевич</h3><p class="meta">Опубликована 26.08.2026</p></div><span class="chip published">Опубликована</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Никонов Пётр Александрович</h3><p class="meta">Опубликована 21.08.2026</p></div><span class="chip published">Опубликована</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Дегтярёв Максим Олегович</h3><p class="meta">Опубликована 14.08.2026</p></div><span class="chip published">Опубликована</span></a>
+      <a class="item" href="02-rasskazat.html"><div class="ph">фото</div><div class="body"><h3>Юрченко Владислав Романович</h3><p class="meta">Отправлена 05.08.2026</p><p class="reason">«Просим уточнить место события — у нас принято указывать только регион, без точного населённого пункта».</p></div><span class="chip returned">Возвращена</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Синицын Артём Валерьевич</h3><p class="meta">Опубликована 22.07.2026</p></div><span class="chip published">Опубликована</span></a>
+      <a class="item" href="#"><div class="ph">фото</div><div class="body"><h3>Романовский Фёдор Ильич</h3><p class="meta">Опубликована 03.07.2026</p></div><span class="chip published">Опубликована</span></a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Статусы истории: черновик → на проверке (иногда с подстатусом «ждём согласия семьи») → возвращена с комментарием или опубликована.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='empty';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

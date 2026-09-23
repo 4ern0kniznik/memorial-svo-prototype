@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Проверка истории — Герои вокруг нас</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:16px;font-size:14px;align-items:center}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.top nav a.cur{color:var(--gold)}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+.role-switch{display:flex;gap:4px;background:var(--bg-3);border-radius:20px;padding:3px}
+.role-switch button{background:transparent;border:0;color:var(--ink-2);border-radius:16px;padding:6px 12px;font-size:13px}
+.role-switch button[aria-pressed=true]{background:var(--gold);color:#0B1526}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:14px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.danger{border-color:var(--error);color:var(--error)}
+.btn.warnbtn{border-color:var(--warn);color:var(--warn)}
+.btn[disabled]{opacity:.5;cursor:default}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} }
+.btn:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none} }
+
+main{padding:24px 0 60px}
+.layout{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:980px){ .layout{grid-template-columns:2fr 1fr;align-items:start} }
+
+.hero-mini{display:flex;gap:14px;align-items:center;margin:0 0 18px}
+.hero-mini .ph{flex:none;width:64px;height:64px;border-radius:10px;background:var(--bg-3);display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:11px;text-align:center}
+.hero-mini h1{font-size:20px;overflow-wrap:anywhere}
+.hero-mini p{color:var(--ink-2);font-size:13px;margin:4px 0 0}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px}
+.chip.svc{background:rgba(242,197,114,.12);color:var(--gold)}
+.chip.rel{background:var(--bg-3);color:var(--ink-2)}
+.chip.dead{background:var(--error-bg);color:var(--error)}
+.chip.disch{background:var(--ok-bg);color:var(--ok)}
+.chip.esc{background:var(--warn-bg);color:var(--warn)}
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:22px;margin:0 0 18px}
+.card h2{font-size:16px;color:var(--gold);margin:0 0 14px}
+
+.story-text{line-height:1.7}
+.story-text mark{background:rgba(255,224,163,.22);color:var(--warn);border-radius:3px;padding:0 2px}
+.story-text p{margin:0 0 12px}
+.story-text .more{font-size:13px;color:var(--ink-2)}
+.photo-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin-top:12px}
+.photo-strip .ph{aspect-ratio:1;border-radius:8px;background:var(--bg-3);display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:10px;text-align:center}
+
+.checklist{display:flex;flex-direction:column;gap:10px}
+.check-item{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check-item input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--ok)}
+.check-item.fail input{accent-color:var(--error)}
+.check-item span{color:var(--ink)}
+.check-item small{display:block;color:var(--ink-2);font-size:12px;margin-top:2px}
+
+.doc-block{background:var(--bg-3);border:1px solid var(--line);border-radius:12px;padding:16px}
+.doc-block .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.doc-note{font-size:12px;color:var(--ink-2);margin-top:8px}
+
+.sidebar .card{position:sticky;top:66px}
+.decision-list{display:flex;flex-direction:column;gap:10px}
+.decision-list .btn{justify-content:flex-start;padding:0 16px;text-align:left}
+
+.tpl{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.tpl button{text-align:left;background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink-2)}
+.tpl button[aria-pressed=true]{border-color:var(--gold);color:var(--ink)}
+
+.field{margin:12px 0}
+.field label{display:block;font-size:13px;color:var(--ink-2);margin:0 0 6px}
+.field textarea{width:100%;min-height:90px;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:10px 12px;font-size:15px;resize:vertical;font-family:inherit}
+
+.state-box{border-radius:14px;padding:28px;text-align:center}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
+.state-box h3{margin:0 0 8px;font-size:18px}
+.state-box p{margin:0 0 18px;color:var(--ink-2)}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.notice{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 18px}
+.notice.esc{background:rgba(242,197,114,.1);color:var(--gold)}
+.notice b{display:block;margin-bottom:2px}
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
+.back{font-size:13px;color:var(--ink-2);text-decoration:none;display:inline-block;margin:16px 0}
+</style>
+</head>
+<body data-state="normal">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 07 Проверка истории</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="normal" aria-pressed="true">Норма</button>
+    <button data-st="empty" aria-pressed="false">Пусто</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Норма — сослуживец, живой герой. Много данных — погибший, эскалация, длинный текст, документ.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Герои вокруг нас</b><small>Валиахметова Регина · <span id="whoami">модератор</span></small></span>
+  </a>
+  <div class="role-switch" role="group" aria-label="Роль в демо">
+    <button aria-pressed="true" data-role="Модератор">Модератор</button>
+    <button aria-pressed="false" data-role="Редактор">Редактор</button>
+  </div>
+  <nav><a href="06-moderator-ochered.html">Очередь</a><a href="08-moderator-obrashcheniya.html">Обращения</a><a href="09-zhurnal.html">Журнал</a><a href="01-vhod.html">Выйти</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+  <a class="back" href="06-moderator-ochered.html">← К очереди</a>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="sk" style="height:64px;width:64px;border-radius:10px;float:left;margin-right:14px"></div>
+    <div class="sk" style="height:20px;width:40%;margin-bottom:10px"></div>
+    <div class="sk" style="height:14px;width:25%"></div>
+    <div style="clear:both;margin-top:20px">
+      <div class="sk" style="height:260px;border-radius:16px"></div>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА: документ не открылся ===== -->
+  <div class="when error" hidden>
+    <div class="hero-mini"><div class="ph">фото</div><div><h1>Юрченко Владислав Романович</h1><p>1996 г.р. · автор — сослуживец</p></div></div>
+    <div class="state-box err" role="alert">
+      <h3>Документ не открылся</h3>
+      <p>Файл «voenniy_bilet.jpg» не загрузился с сервера. Попробуйте открыть ещё раз — если не получится, попросите автора прислать документ повторно через личный кабинет.</p>
+      <button class="btn primary" type="button" onclick="location.reload()">Открыть ещё раз</button>
+    </div>
+  </div>
+
+  <!-- ===== ПУСТО: нет других вариантов у этого экрана — показывает пояснение ===== -->
+  <div class="when empty" hidden>
+    <div class="state-box" style="margin-top:40px">
+      <h3>У карточки проверки нет состояния «Пусто»</h3>
+      <p>Карточка всегда открывается по конкретной истории из очереди — если истории нет, экран так и остаётся 06-moderator-ochered.html.</p>
+      <a class="btn primary" href="06-moderator-ochered.html">К очереди</a>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: сослуживец, живой герой ===== -->
+  <div class="when normal">
+    <div class="hero-mini">
+      <div class="ph">фото героя</div>
+      <div>
+        <h1>Юрченко Владислав Романович</h1>
+        <p>Родился в 1996 · Курск · <span class="chip disch">Уволен со службы</span></p>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Автор</h2>
+          <p style="margin:0 0 4px">Автор — сослуживец, вход через Сбер ID. ФИО: <b>Сорокин Дмитрий Андреевич</b> <button class="btn ghost" type="button" style="min-height:28px;padding:0 10px;font-size:12px;margin-left:6px" data-log-pii>Показать</button></p>
+          <p class="doc-note">Открытие ФИО автора и документа фиксируется в журнале доступа к персональным данным.</p>
+        </div>
+
+        <div class="card">
+          <h2>Текст истории</h2>
+          <div class="story-text">
+            <p><b>Каким он был.</b> Владислав вырос в Курске, окончил училище связи, работал наладчиком оборудования. Увлекался рыбалкой и был известен во дворе как человек, который всегда чинит соседские велосипеды бесплатно.</p>
+            <p><b>Подвиг.</b> Под обстрелом восстановил связь между подразделениями, чем позволил вовремя вызвать эвакуацию раненых. Представлен к медали — подтверждено наградным листом.</p>
+          </div>
+          <div class="photo-strip">
+            <div class="ph">портрет</div><div class="ph">из жизни</div><div class="ph">из жизни</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Чек-лист (МС-6, разд. 2)</h2>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Автор прошёл вход одним из разрешённых способов</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Отмечен флажок «не военнослужащий, не призван на сборы, не в добровольческом формировании»</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Отмечен флажок «в тексте нет частей, дислокации, потерь, действующих военных»</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Документ об увольнении проверен<small>Военный билет с записью об увольнении, отметка поставлена 23.09.2026</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>В тексте нет номеров частей, координат, потерь, оценок командования</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Факты подвига подтверждены документом (наградной лист)</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>На фото нет техники, позиций и лиц живых сослуживцев без согласия</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Ссылки в тексте — из белого списка доменов (ссылок нет)</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Документ об увольнении</h2>
+          <div class="doc-block">
+            <div class="row">
+              <span>voenniy_bilet_uvolnenie.jpg · загружен 22.09.2026</span>
+              <button class="btn ghost" type="button" data-log-pii>Открыть документ</button>
+            </div>
+            <p class="doc-note">Открытие фиксируется в журнале. Файл будет удалён автоматически после решения по истории — копия не хранится.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="card">
+          <h2>Решение</h2>
+          <div class="decision-list">
+            <button class="btn primary" type="button" data-decision="publish">Опубликовать</button>
+            <button class="btn ghost" type="button" data-decision="return">Вернуть с причиной</button>
+            <button class="btn danger" type="button" data-decision="reject">Отклонить</button>
+            <button class="btn warnbtn" type="button" data-decision="escalate">Эскалировать редактору</button>
+          </div>
+
+          <div id="tpl-block" hidden>
+            <p class="field-label" style="font-size:13px;color:var(--ink-2);margin:14px 0 6px">Шаблон причины</p>
+            <div class="tpl" id="tpl-list">
+              <button type="button" data-tpl="Здравствуйте! Ваша история почти готова к публикации. Просим уточнить место события — у нас принято указывать только регион, без точного населённого пункта.">Место события указано точнее региона</button>
+              <button type="button" data-tpl="Здравствуйте! В истории упомянут ещё один человек по имени. Пока он сам не подтвердил согласие на публикацию, просим заменить имя на описание роли, например «сослуживец» или «командир взвода».">Назван сослуживец по имени</button>
+              <button type="button" data-tpl="Здравствуйте! Расскажите, пожалуйста, на основании какого документа мы можем подтвердить подвиг. Без этого мы пока не можем опубликовать эту часть истории.">Не подтверждён факт подвига</button>
+            </div>
+            <div class="field">
+              <label for="reason">Комментарий автору</label>
+              <textarea id="reason" placeholder="Без пересказа военных подробностей — только что поправить"></textarea>
+            </div>
+            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: погибший, эскалация, длинный текст ===== -->
+  <div class="when many" hidden>
+    <div class="hero-mini">
+      <div class="ph">фото героя</div>
+      <div>
+        <h1>Верхнепышминский-Одоевский Константин Александрович</h1>
+        <p>Родился в 1979 · Северо-Курильск · <span class="chip dead">Погиб</span> · <span class="chip esc">Эскалирована редактору</span></p>
+      </div>
+    </div>
+
+    <div class="notice esc"><b>Требуется вторая подпись редактора</b>Погибший герой — публикация возможна только после проверки модератора и подтверждения редактором (МС-6, разд. 5.3). Согласие семьи получено 20.09.2026.</div>
+
+    <div class="layout">
+      <div>
+        <div class="card">
+          <h2>Автор</h2>
+          <p style="margin:0 0 4px">Автор — родственница, вход через VK ID (верифицирован). ФИО: <b>Черноголовкина Александра Владиславовна</b> <button class="btn ghost" type="button" style="min-height:28px;padding:0 10px;font-size:12px;margin-left:6px">Показать</button></p>
+        </div>
+
+        <div class="card">
+          <h2>Текст истории</h2>
+          <div class="story-text">
+            <p><b>Каким он был.</b> Константин родился в Северо-Курильске, окончил мореходное училище, много лет ходил на промысловых судах. Соседи вспоминают его как человека дела: чинил лодочные моторы всей улице, учил соседских детей вязать морские узлы. Женился поздно, в 2019 году, воспитывал приёмного сына жены как родного. В свободное время собирал модели кораблей — дома осталась коллекция из полусотни макетов, часть из них он вырезал сам из дерева ещё в юности.</p>
+            <p><b>Подвиг.</b> <mark>Служил в составе подразделения</mark> — модератор проверяет формулировку на признаки номера части. Под обстрелом вынес раненого командира с открытого участка, за что представлен к награде — подтверждено извещением о гибели и записью региональной книги памяти. <mark>Награда — со слов семьи, без документа</mark>, отмечена соответствующей пометкой.</p>
+            <p class="more">…и ещё 640 знаков текста ниже, прокрутка страницы.</p>
+          </div>
+          <div class="photo-strip">
+            <div class="ph">портрет</div><div class="ph">из жизни</div><div class="ph">из жизни</div><div class="ph">из жизни</div><div class="ph">из жизни</div><div class="ph">из жизни</div><div class="ph">из жизни</div><div class="ph">из жизни</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Чек-лист (МС-6, разд. 2)</h2>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Автор прошёл вход одним из разрешённых способов</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Отмечен флажок «в тексте нет частей, дислокации, потерь, действующих военных»</span></label>
+            <label class="check-item fail"><input type="checkbox"><span>В тексте нет номеров частей, координат, потерь, оценок командования<small>Подсвечено автоматически: «служил в составе подразделения» — уточнить у автора, не подразумевается ли номер</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Факты подвига подтверждены документом (извещение, книга памяти)</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Есть согласие наследника на обработку данных и публикацию</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Согласие на фото получено от пережившей супруги</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Семья видела историю до публикации и согласовала</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>На фото нет техники, позиций и лиц живых сослуживцев без согласия</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Документ о родстве и согласие семьи</h2>
+          <div class="doc-block">
+            <div class="row"><span>svidetelstvo_o_brake.jpg · проверено 20.09.2026</span><button class="btn ghost" type="button">Открыть документ</button></div>
+            <p class="doc-note">Согласие наследника получено 20.09.2026 через персональную ссылку (сценарий С10).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="card">
+          <h2>Решение редактора</h2>
+          <div class="decision-list">
+            <button class="btn primary" type="button" data-decision="publish">Опубликовать (вторая подпись)</button>
+            <button class="btn ghost" type="button" data-decision="return">Вернуть с причиной</button>
+            <button class="btn danger" type="button" data-decision="reject">Отклонить</button>
+          </div>
+          <div id="tpl-block-many" hidden>
+            <div class="field"><label for="reasonm">Комментарий автору</label><textarea id="reasonm"></textarea></div>
+            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Решение и его причина попадают в журнал модерации без возможности удаления или правки задним числом.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='normal';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelector('.role-switch').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('.role-switch button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    document.getElementById('whoami').textContent=b.dataset.role.toLowerCase();
+  });
+
+  let toastEl;
+  function toast(t){
+    if(!toastEl){ toastEl=document.createElement('div'); toastEl.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:90;max-width:90vw'; document.body.appendChild(toastEl); }
+    toastEl.textContent=t; toastEl.style.display='block';
+    clearTimeout(toast.t); toast.t=setTimeout(()=>toastEl.style.display='none',2600);
+  }
+
+  document.querySelectorAll('[data-log-pii]').forEach(b=>b.addEventListener('click',()=>toast('Открытие зафиксировано в журнале доступа к персональным данным')));
+
+  document.querySelectorAll('[data-decision]').forEach(b=>b.addEventListener('click',()=>{
+    const d=b.dataset.decision;
+    if(d==='publish'){ toast('Опубликовано. Переход в очередь…'); setTimeout(()=>location.href='06-moderator-ochered.html',700); return; }
+    const block = b.closest('.card').querySelector('#tpl-block, #tpl-block-many');
+    if(block){ block.hidden=false; }
+  }));
+  document.querySelectorAll('[data-tpl]').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#tpl-list button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    document.getElementById('reason').value=b.dataset.tpl;
+  }));
+  document.querySelectorAll('[data-confirm-decision]').forEach(b=>b.addEventListener('click',()=>{
+    toast('Решение отправлено и записано в журнал'); setTimeout(()=>location.href='06-moderator-ochered.html',700);
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>
