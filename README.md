@@ -2,4 +2,4 @@
 
 Кликабельный прототип мемориального сайта участников СВО. Все люди и истории вымышлены.
 
-Открыть: https://4ern0kniznik.github.io/memorial-svo-prototype/
+Открыть: https://4ern0kniznik.github.io/memorial-svo-prototype/ (сразу главная). Все экраны списком: https://4ern0kniznik.github.io/memorial-svo-prototype/ekrany.html
