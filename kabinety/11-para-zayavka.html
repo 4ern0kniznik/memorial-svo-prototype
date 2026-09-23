@@ -163,8 +163,8 @@ main{padding:28px 0 60px}
         <label for="hero-find">Найдите героя, чей предок это будет <span class="req">*</span></label>
         <input id="hero-find" placeholder="Фамилия и имя героя">
         <div class="hero-result">
-          <button type="button" data-hero>Колесников Сергей Викторович<small>12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</small></button>
-          <button type="button" data-hero>Джанашвили Отари Тенгизович<small>04.11.1990 — 22.05.2023 · Владикавказ, Республика Северная Осетия — Алания</small></button>
+          <button type="button" data-hero>Колесников Сергей Викторович<small>1994–2023 · Наро-Фоминск, Московская область</small></button>
+          <button type="button" data-hero>Джанашвили Отари Тенгизович<small>1990–2023 · Владикавказ, Республика Северная Осетия — Алания</small></button>
         </div>
         <p class="hint">Карточку героя «с нуля» здесь не создать — пара строится только от уже опубликованной страницы. Если героя нет в списке, сначала расскажите о нём отдельно.</p>
       </div>
@@ -325,24 +325,51 @@ main{padding:28px 0 60px}
     <p class="step-label">Шаг <b>4 из 4</b> · Согласия</p>
     <div class="card">
       <h1 style="font-size:22px;margin:0 0 16px">Согласия на публикацию</h1>
-      <div class="check-row"><input type="checkbox" id="c1" checked><label for="c1">Я — наследник(ца) предка (Колесников Иван Фёдорович) и даю согласие на публикацию и обработку его персональных данных (ч. 7 ст. 9 152-ФЗ)</label></div>
+
+      <div class="state-box warn" id="consent-invite-box" style="margin:0 0 18px">
+        <h3>Нужно согласие наследника предка</h3>
+        <p>Вы приходитесь герою женой, а не прямым потомком предка (Колесников Иван Фёдорович) — согласие на публикацию и обработку его персональных данных может дать только наследник по прямой линии (ч. 7 ст. 9 152-ФЗ). Без этого согласия пара не опубликуется, даже если родство подтвердит модератор.</p>
+        <button class="btn primary" type="button" data-invite="potomok">Пригласить потомка предка для согласия</button>
+      </div>
+
       <div class="check-row"><input type="checkbox" id="c2" checked><label for="c2">Данные предка указаны с моих слов и подтверждаются приложенными документами</label></div>
       <div class="notice"><b>Современный указ о награждении героя в паре.</b> Отдельное согласие не требуется — используется то же согласие на публикацию наград героя, которое уже дано при заполнении его карточки. Если такого согласия нет, блок с текстом указа на странице пары просто не появится.</div>
       <div class="notice"><b>Если герой жив.</b> Публикация пары потребует ещё и его собственного согласия — без него страница останется в статусе «Ждём согласия героя», даже если родство подтверждено.</div>
+      <div class="notice"><b>Если предок жив</b> (например, отец героя — ветеран другой войны), согласие на публикацию своих данных даёт он сам, а не наследник — приглашение уйдёт ему лично.
+        <div><button class="btn ghost" type="button" data-invite="predok" style="margin-top:10px">Пригласить предка (если жив)</button></div>
+      </div>
       <div class="nav-buttons">
         <button class="btn ghost" type="button">Назад</button>
-        <button class="btn primary" type="button" data-submit>Отправить на проверку родства</button>
+        <button class="btn primary" type="button" data-submit id="submit-chain" disabled title="Сначала пригласите того, кто даёт согласие за предка">Отправить цепочку на проверку модератору</button>
       </div>
     </div>
   </div>
 
-  <!-- ===== Квитанция после отправки ===== -->
-  <div class="when done" hidden>
+  <!-- ===== Приглашение на согласие (наследник предка или сам предок, если жив) ===== -->
+  <div class="when invite" hidden>
+    <div class="card">
+      <h1 id="invite-title" style="font-size:22px;margin:0 0 6px">Пригласить потомка предка для согласия</h1>
+      <p id="invite-desc" style="color:var(--ink-2);margin:0 0 20px">Отправим ссылку-приглашение наследнику предка по прямой линии — он войдёт по ссылке, увидит данные о предке и подтвердит согласие на публикацию.</p>
+      <div class="field"><label>ФИО <span class="req">*</span></label><input id="invite-fio" value="Колесников Илья Игоревич"></div>
+      <div class="two-col">
+        <div class="field" style="margin-bottom:0"><label>Телефон</label><input value="+7 916 123-45-67"></div>
+        <div class="field" style="margin-bottom:0"><label>Или e-mail</label><input value="ilya.kolesnikov@example.ru"></div>
+      </div>
+      <p style="font-size:13px;color:var(--ink-2);margin-top:6px">Кем приходится предку — уточните при отправке, модератор проверит родство отдельно от цепочки заявки.</p>
+      <div class="nav-buttons">
+        <button class="btn ghost" type="button" data-cancel-invite>Отмена</button>
+        <button class="btn primary" type="button" data-send-invite>Отправить приглашение</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Квитанция после отправки: ждём согласия наследника/предка ===== -->
+  <div class="when zhdem" hidden>
     <div class="ok-wrap">
       <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h1>Заявка отправлена</h1>
-      <p>Модератор проверит цепочку родства звено за звеном и статус предка по документам. Ни карточка предка, ни страница пары не публикуются до решения.</p>
-      <div class="timer">Статус: <b>на проверке родства</b> · подана 23.09.2026</div>
+      <h1>Заявка отправлена, ждём согласия</h1>
+      <p>Модератор проверит цепочку родства звено за звеном и статус предка по документам. Пара не опубликуется, пока <b id="zhdem-who">наследник предка</b> не подтвердит согласие по ссылке из приглашения.</p>
+      <div class="timer">Статус: <b>на проверке родства · ждём согласия</b> · подана 23.09.2026</div>
       <a class="btn primary" href="03-kabinet-avtora.html">В кабинет</a>
     </div>
   </div>
@@ -372,7 +399,34 @@ main{padding:28px 0 60px}
   }));
   document.querySelectorAll('[data-hero]').forEach(b=>b.addEventListener('click',()=>{ state='normal'; document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed', x.dataset.st==='normal')); apply(); }));
   document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{ state='consent'; apply(); }));
-  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{ state='done'; apply(); }));
+
+  let inviteTarget='potomok', inviteSent=false, inviteFio='';
+  document.querySelectorAll('[data-invite]').forEach(b=>b.addEventListener('click',()=>{
+    inviteTarget=b.dataset.invite;
+    const isPredok = inviteTarget==='predok';
+    document.getElementById('invite-title').textContent = isPredok ? 'Пригласить предка для собственного согласия' : 'Пригласить потомка предка для согласия';
+    document.getElementById('invite-desc').textContent = isPredok
+      ? 'Отправим ссылку-приглашение самому предку — если он жив, согласие на публикацию своих данных должен дать он сам, а не наследник.'
+      : 'Отправим ссылку-приглашение наследнику предка по прямой линии — он войдёт по ссылке, увидит данные о предке и подтвердит согласие на публикацию.';
+    const fio = document.getElementById('invite-fio');
+    fio.value = isPredok ? '' : 'Колесников Илья Игоревич';
+    fio.placeholder = isPredok ? 'ФИО предка' : '';
+    state='invite'; apply();
+  }));
+  document.querySelectorAll('[data-cancel-invite]').forEach(b=>b.addEventListener('click',()=>{ state='consent'; apply(); }));
+  document.querySelectorAll('[data-send-invite]').forEach(b=>b.addEventListener('click',()=>{
+    inviteSent=true; inviteFio=document.getElementById('invite-fio').value || (inviteTarget==='predok' ? 'предку' : 'наследнику предка');
+    const box=document.getElementById('consent-invite-box');
+    const who = inviteTarget==='predok' ? 'самого предка' : 'наследника предка';
+    box.innerHTML = '<h3>Приглашение отправлено</h3><p>Ждём согласия '+who+' — '+inviteFio+'. Статус обновится, когда он подтвердит по ссылке.</p>';
+    const submitBtn = document.getElementById('submit-chain');
+    submitBtn.disabled=false; submitBtn.removeAttribute('title');
+    state='consent'; apply();
+  }));
+  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{
+    document.getElementById('zhdem-who').textContent = inviteTarget==='predok' ? 'сам предок' : 'наследник предка';
+    state='zhdem'; apply();
+  }));
   apply();
 })();
 </script>

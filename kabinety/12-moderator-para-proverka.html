@@ -113,6 +113,11 @@ main{padding:24px 0 60px}
 
 .foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
 .back{font-size:13px;color:var(--ink-2);text-decoration:none;display:inline-block;margin:16px 0}
+
+.role-switch{display:flex;gap:4px;background:var(--bg-3);border-radius:20px;padding:3px}
+.role-switch button{background:transparent;border:0;color:var(--ink-2);border-radius:16px;padding:6px 12px;font-size:13px}
+.role-switch button[aria-pressed=true]{background:var(--gold);color:#0B1526}
+.role-note{font-size:13px;color:var(--ink-2);margin:0 0 14px}
 </style>
 </head>
 <body data-state="normal">
@@ -137,8 +142,12 @@ main{padding:24px 0 60px}
 <header class="top">
   <a class="brand" href="../publichnye/01-glavnaya.html">
     <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
-    <span><b>Летопись своих</b><small>Валиахметова Регина · модератор</small></span>
+    <span><b>Летопись своих</b><small>Валиахметова Регина · <span id="whoami">модератор</span></small></span>
   </a>
+  <div class="role-switch" role="group" aria-label="Роль в демо">
+    <button aria-pressed="true" data-role="Модератор">Модератор</button>
+    <button aria-pressed="false" data-role="Редактор">Редактор</button>
+  </div>
   <nav><a href="08-moderator-obrashcheniya.html">Обращения</a><a href="06-moderator-ochered.html">Очередь историй</a><a href="09-zhurnal.html">Журнал</a><a href="01-vhod.html">Выйти</a></nav>
   <span class="demo-tag">демо</span>
 </header>
@@ -252,15 +261,28 @@ main{padding:24px 0 60px}
       <div class="sidebar">
         <div class="card">
           <h2>Решение</h2>
-          <div class="decision-list">
-            <button class="btn primary" type="button" data-decision="publish">Подтвердить родство и опубликовать</button>
-            <button class="btn ghost" type="button" data-decision="return">Вернуть — не хватает документа</button>
-            <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+          <div class="role-note">Показано для роли: <b class="role-label">Модератор</b></div>
+
+          <div class="decision-moderator">
+            <div class="decision-list">
+              <button class="btn primary" type="button" data-decision="confirm">Подтвердить родство</button>
+              <button class="btn ghost" type="button" data-decision="return">Вернуть — не хватает документа</button>
+              <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+            </div>
+            <div id="tpl-block" hidden>
+              <div class="field"><label for="reason">Комментарий заявителю</label><textarea id="reason" placeholder="Например: звено 2 не подтверждается — приложите архивную справку ЗАГС вместо утерянного свидетельства"></textarea></div>
+              <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+            </div>
           </div>
-          <div id="tpl-block" hidden>
-            <div class="field"><label for="reason">Комментарий заявителю</label><textarea id="reason" placeholder="Например: звено 2 не подтверждается — приложите архивную справку ЗАГС вместо утерянного свидетельства"></textarea></div>
-            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+
+          <div class="decision-editor" hidden>
+            <div class="notice info" style="background:var(--ok-bg);color:var(--ok)"><b>Родство подтверждено модератором</b>22.09.2026, по цепочке из 2 звеньев. Публикацию пары — отдельным решением редактора, как любой текст об умершем (МС-6, разд. 5.3).</div>
+            <div class="decision-list">
+              <button class="btn primary" type="button" data-decision="publish">Опубликовать пару</button>
+              <button class="btn ghost" type="button" data-decision="return">Вернуть модератору</button>
+            </div>
           </div>
+
           <p class="doc-note" style="margin-top:14px">Отметка «проверено, кем, когда, по какой цепочке документов» фиксируется в журнале модерации. Копии документов после решения не хранятся.</p>
         </div>
       </div>
@@ -320,14 +342,25 @@ main{padding:24px 0 60px}
       <div class="sidebar">
         <div class="card">
           <h2>Решение</h2>
-          <div class="decision-list">
-            <button class="btn primary" type="button" disabled title="Пока звено 3 не подтверждено — публиковать нельзя">Подтвердить родство и опубликовать</button>
-            <button class="btn ghost" type="button" data-decision="return">Вернуть — уточнить звено 3</button>
-            <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+          <div class="role-note">Показано для роли: <b class="role-label">Модератор</b></div>
+
+          <div class="decision-moderator">
+            <div class="decision-list">
+              <button class="btn primary" type="button" disabled title="Пока звено 3 не подтверждено — родство подтвердить нельзя">Подтвердить родство</button>
+              <button class="btn ghost" type="button" data-decision="return">Вернуть — уточнить звено 3</button>
+              <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+            </div>
+            <div id="tpl-block-many" hidden>
+              <div class="field"><label for="reasonm">Комментарий заявителю</label><textarea id="reasonm" placeholder="Звено 3 (прадед героя) не подтверждается — в справке другое отчество отца. Приложите другой документ или уточните."></textarea></div>
+              <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+            </div>
           </div>
-          <div id="tpl-block-many" hidden>
-            <div class="field"><label for="reasonm">Комментарий заявителю</label><textarea id="reasonm" placeholder="Звено 3 (Джанашвили Ное Отарович) не подтверждается — в справке другое отчество отца. Приложите другой документ или уточните."></textarea></div>
-            <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+
+          <div class="decision-editor" hidden>
+            <div class="notice" style="background:var(--warn-bg);color:var(--warn)"><b>Родство ещё не подтверждено модератором</b>Звено 3 не проходит проверку — публиковать пару рано.</div>
+            <div class="decision-list">
+              <button class="btn primary" type="button" disabled title="Родство не подтверждено модератором">Опубликовать пару</button>
+            </div>
           </div>
         </div>
       </div>
@@ -373,9 +406,20 @@ main{padding:24px 0 60px}
     else { status.textContent='Не подтверждается'; status.className='link-status fail'; card.classList.add('fail'); }
   }));
 
+  document.querySelectorAll('.role-switch').forEach(sw=>sw.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    const isEditor = b.dataset.role==='Редактор';
+    document.querySelectorAll('.role-switch button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    const whoami=document.getElementById('whoami'); if(whoami) whoami.textContent=b.dataset.role.toLowerCase();
+    document.querySelectorAll('.role-label').forEach(l=>l.textContent=b.dataset.role);
+    document.querySelectorAll('.decision-moderator').forEach(el=>el.hidden=isEditor);
+    document.querySelectorAll('.decision-editor').forEach(el=>el.hidden=!isEditor);
+  }));
+
   document.querySelectorAll('[data-decision]').forEach(b=>b.addEventListener('click',()=>{
     const d=b.dataset.decision;
-    if(d==='publish'){ toast('Родство подтверждено, пара опубликована. Переход к очереди…'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
+    if(d==='confirm'){ toast('Родство подтверждено. Пара ждёт публикации редактором.'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
+    if(d==='publish'){ toast('Пара опубликована. Переход к очереди…'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
     const block = b.closest('.card').querySelector('#tpl-block, #tpl-block-many');
     if(block){ block.hidden=false; }
   }));
