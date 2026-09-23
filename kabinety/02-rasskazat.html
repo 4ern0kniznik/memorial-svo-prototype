@@ -165,11 +165,11 @@ main{padding:28px 0 60px}
       <h1 style="font-size:22px;margin:0 0 6px">Что вы хотите сделать</h1>
       <p style="color:var(--ink-2);margin:0 0 16px">Можно рассказать о новом герое или дополнить страницу героя, которая уже опубликована.</p>
       <div class="radio-row" role="radiogroup" aria-label="Что вы хотите сделать" style="margin-bottom:20px">
-        <label class="radio-card"><input type="radio" name="mode" id="mode-new"><span><b>Рассказать о новом герое</b><br><span>Страницы о нём ещё нет на сайте</span></span></label>
-        <label class="radio-card sel"><input type="radio" name="mode" id="mode-add" checked><span><b>Дописать к уже опубликованному герою</b><br><span>Добавить воспоминание к его странице (С19)</span></span></label>
+        <label class="radio-card sel"><input type="radio" name="mode" id="mode-new" checked><span><b>Рассказать о новом герое</b><br><span>Страницы о нём ещё нет на сайте</span></span></label>
+        <label class="radio-card" style="opacity:.6;cursor:not-allowed"><input type="radio" name="mode" id="mode-add" disabled><span><b>Дописать к уже опубликованному герою</b> <span class="badge" style="display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--bg-3);color:var(--ink-2);border:1px solid var(--border-ctrl)">второй выпуск</span><br><span>Добавить воспоминание к его странице (С19) — появится во втором выпуске</span></span></label>
       </div>
 
-      <div class="field hero-search" id="hero-search-block">
+      <div class="field hero-search" id="hero-search-block" hidden>
         <label for="hero-find">Найдите героя, о котором хотите дописать <span class="req">*</span></label>
         <input id="hero-find" placeholder="Фамилия и имя героя" value="Колесников Сергей">
         <div class="hero-result" id="hero-result">

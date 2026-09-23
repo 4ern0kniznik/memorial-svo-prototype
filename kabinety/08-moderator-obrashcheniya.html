@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Обращения и возражения — Летопись своих</title>
+<title>Обращения и неточности — Летопись своих</title>
 <style>
 :root{
   --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
@@ -74,6 +74,8 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .chip.report{background:var(--bg-3);color:var(--ink-2)}
 .chip.overdue{background:var(--error-bg);color:var(--error)}
 .chip.dispute{background:rgba(242,197,114,.14);color:var(--gold)}
+.chip.inexact{background:rgba(143,163,196,.15);color:var(--ink-2)}
+.tabs button[disabled]{opacity:.55;cursor:not-allowed}
 .doc-block{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
 .doc-block .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .doc-note{font-size:12px;color:var(--ink-2);margin-top:6px}
@@ -99,7 +101,7 @@ main{padding-bottom:60px}
 <body data-state="normal">
 
 <div class="proto" role="region" aria-label="Панель прототипа">
-  <b>Макет · МС-17 · 08 Обращения и возражения (С20)</b>
+  <b>Макет · МС-17 · 08 Обращения и неточности (возражения С20 — второй выпуск)</b>
   <div class="grp" id="stateBtns" aria-label="Состояние экрана">
     <button data-st="normal" aria-pressed="true">Норма</button>
     <button data-st="empty" aria-pressed="false">Пусто</button>
@@ -131,7 +133,7 @@ main{padding-bottom:60px}
     <div class="page-head"><div><h1>Обращения и возражения</h1></div></div>
     <div class="state-box">
       <h3>Обращений нет</h3>
-      <p>Здесь появятся запросы на скрытие страниц, просьбы поправить историю, жалобы читателей и возражения «этого не было» с документом (С20).</p>
+      <p>Здесь появятся запросы на скрытие страниц, просьбы поправить историю, жалобы читателей и сообщения о неточности в тексте. Возражения «этого не было» с документом — во втором выпуске.</p>
     </div>
   </div>
 
@@ -153,13 +155,14 @@ main{padding-bottom:60px}
 
   <!-- ===== НОРМА ===== -->
   <div class="when normal" hidden>
-    <div class="page-head"><div><h1>Обращения и возражения</h1><p>4 открытых, из них 1 возражение (С20)</p></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1><p>4 открытых, из них 1 сообщение о неточности</p></div></div>
     <div class="tabs" role="group" aria-label="Фильтр">
       <button aria-pressed="true">Все · 4</button>
       <button aria-pressed="false">Скрыть страницу · 1</button>
       <button aria-pressed="false">Исправить · 1</button>
       <button aria-pressed="false">Жалоба · 1</button>
-      <button aria-pressed="false">Возражения · 1</button>
+      <button aria-pressed="false">Неточность · 1</button>
+      <button disabled title="Возражение с документом и сроком — во втором выпуске">Возражения (второй выпуск)</button>
     </div>
     <div class="list">
       <div class="item">
@@ -167,24 +170,20 @@ main{padding-bottom:60px}
           <div style="flex:1">
             <h3>Колесников Сергей Викторович — фрагмент «Подвиг»</h3>
             <p class="meta">Заявитель: Ковалёв Игорь Семёнович, вошёл через VK ID · 23.09.2026</p>
-            <p class="text">«Оспариваю, что автор служил вместе с героем — по моим данным, они познакомились уже после ранения, а не на службе».</p>
+            <p class="text">«Мне кажется, автор не служил вместе с героем — насколько я знаю, они познакомились уже после ранения».</p>
           </div>
-          <span class="chip dispute">Возражение · срок до 26.09</span>
+          <span class="chip inexact">Неточность</span>
         </div>
         <div class="detail" hidden>
           <div class="grid">
             <div>Оспариваемый факт: <span>совместная служба (ядро истории)</span></div>
-            <div>Срок решения: <span>до 26.09.2026, 3 рабочих дня</span></div>
+            <div>Срок решения: <span>не задан — форма без документа и без срока (первая версия)</span></div>
           </div>
-          <div class="doc-block">
-            <div class="row"><span>vypiska_lichnoe_delo.pdf · документ заявителя</span><button class="btn ghost sm" type="button">Открыть документ</button></div>
-            <p class="doc-note">Сверяется с документом, на котором основан факт (военный билет автора истории с частью и периодом). Обе копии удаляются после решения — дольше срока проверки не хранятся.</p>
-          </div>
+          <p class="doc-note" style="margin:0 0 12px">Документа нет — заявитель прислал только текстовое пояснение. Модератор проверяет
+            сообщение по существу и, если нужно, связывается с автором истории.</p>
           <div class="decision-row">
-            <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
-            <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
-            <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
-            <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+            <button class="btn primary" type="button" data-resolve>Передать автору на уточнение</button>
+            <button class="btn ghost" type="button" data-resolve>Отклонить, неточность не подтвердилась</button>
           </div>
         </div>
       </div>
@@ -251,14 +250,15 @@ main{padding-bottom:60px}
 
   <!-- ===== МНОГО ДАННЫХ ===== -->
   <div class="when many" hidden>
-    <div class="page-head"><div><h1>Обращения и возражения</h1><p>17 открытых, 4 просрочены, 3 возражения (С20)</p></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1><p>17 открытых, 4 просрочены, 3 сообщения о неточности</p></div></div>
     <div class="tabs" role="group" aria-label="Фильтр">
       <button aria-pressed="true">Все · 17</button>
       <button aria-pressed="false">Скрыть страницу · 6</button>
       <button aria-pressed="false">Исправить · 5</button>
       <button aria-pressed="false">Жалоба · 3</button>
-      <button aria-pressed="false">Возражения · 3</button>
+      <button aria-pressed="false">Неточность · 3</button>
       <button aria-pressed="false">Просрочено · 4</button>
+      <button disabled title="Возражение с документом и сроком — во втором выпуске">Возражения (второй выпуск)</button>
     </div>
     <div class="list">
       <div class="item">
@@ -270,36 +270,32 @@ main{padding-bottom:60px}
       </div>
       <div class="item">
         <div class="row" data-toggle>
-          <div style="flex:1"><h3>Колесников Сергей Викторович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Ковалёв Игорь Семёнович · 23.09.2026</p><p class="text">Оспаривает факт совместной службы автора с героем, документ приложен.</p></div>
-          <span class="chip dispute">Возражение · срок до 26.09</span>
+          <div style="flex:1"><h3>Колесников Сергей Викторович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Ковалёв Игорь Семёнович · 23.09.2026</p><p class="text">Сообщает, что автор не служил вместе с героем — без документа, только текстом.</p></div>
+          <span class="chip inexact">Неточность</span>
         </div>
         <div class="detail" hidden><div class="decision-row">
-          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
-          <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
-          <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
-          <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+          <button class="btn primary" type="button" data-resolve>Передать автору на уточнение</button>
+          <button class="btn ghost" type="button" data-resolve>Отклонить, неточность не подтвердилась</button>
         </div></div>
       </div>
       <div class="item">
         <div class="row" data-toggle>
-          <div style="flex:1"><h3>Джанашвили Отари Тенгизович — воспоминание Заура Д.</h3><p class="meta">Заявитель: Бестаева Лариса Тамазовна · 20.09.2026</p><p class="text">Возражение просрочено: заявитель не приложил документ повторно после запроса — 3 рабочих дня истекли.</p></div>
-          <span class="chip overdue">Возражение · просрочено</span>
+          <div style="flex:1"><h3>Джанашвили Отари Тенгизович — воспоминание Заура Д.</h3><p class="meta">Заявитель: Бестаева Лариса Тамазовна · 20.09.2026</p><p class="text">Сообщение о неточности лежит без ответа 9 дней — срок системой не задан, но давно пора рассмотреть.</p></div>
+          <span class="chip overdue">Неточность · давно без ответа</span>
         </div>
         <div class="detail" hidden><div class="decision-row">
-          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
-          <button class="btn danger" type="button" data-resolve>Ограничить подачу возражений заявителю</button>
+          <button class="btn primary" type="button" data-resolve>Передать автору на уточнение</button>
+          <button class="btn ghost" type="button" data-resolve>Отклонить, неточность не подтвердилась</button>
         </div></div>
       </div>
       <div class="item">
         <div class="row" data-toggle>
-          <div style="flex:1"><h3>Юрченко Владислав Романович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Панкратов Олег Иванович · 21.09.2026</p><p class="text">Оспаривает награду: «медаль не подтверждена, документа не видел».</p></div>
-          <span class="chip dispute">Возражение · срок до 24.09</span>
+          <div style="flex:1"><h3>Юрченко Владислав Романович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Панкратов Олег Иванович · 21.09.2026</p><p class="text">Сообщает: «медаль не подтверждена, документа не видел» — без документа, только текстом.</p></div>
+          <span class="chip inexact">Неточность</span>
         </div>
         <div class="detail" hidden><div class="decision-row">
-          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
-          <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
-          <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
-          <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+          <button class="btn primary" type="button" data-resolve>Передать автору на уточнение</button>
+          <button class="btn ghost" type="button" data-resolve>Отклонить, неточность не подтвердилась</button>
         </div></div>
       </div>
       <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Сердюков Константин Викторович</h3><p class="meta">Скрыть · 23.09.2026</p><p class="text">«Прошу временно скрыть страницу — не согласовывали с семьёй фото».</p></div><span class="chip hide">Срок до 26.09</span></div><div class="detail" hidden></div></div>
@@ -314,7 +310,7 @@ main{padding-bottom:60px}
 </div>
 </main>
 
-<footer class="foot"><div class="wrap" style="padding:0">Обращения семьи решает редактор. Спор наследников остаётся скрытым до согласия сторон или решения суда. Возражения «этого не было» (С20) разбирает модератор или редактор — срок 3 рабочих дня, решение и оба документа фиксируются в журнале модерации.</div></footer>
+<footer class="foot"><div class="wrap" style="padding:0">Обращения семьи решает редактор. Спор наследников остаётся скрытым до согласия сторон или решения суда. Сообщения о неточности (первая версия) — без документа и без зафиксированного в системе срока, решение фиксируется в журнале модерации. Возражение «этого не было» с документом и сроком 3 рабочих дня (С20) — во втором выпуске.</div></footer>
 </div>
 
 <script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Возражение с документом (второй выпуск) — Летопись своих</title>
+<title>Сообщить о неточности — Летопись своих</title>
 <style>
 :root{
   --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
@@ -34,7 +34,7 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .frame{margin:0 auto;max-width:100%;background:var(--bg)}
 .frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
 
-.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
 .top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
 .brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
@@ -60,25 +60,25 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .field input,.field select{min-height:48px}
 .field textarea{min-height:120px;resize:vertical;font-family:inherit;line-height:1.5}
 .field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+.field .err-msg{font-size:13px;color:var(--error);margin-top:6px}
+.field.has-err input,.field.has-err textarea{border-color:var(--error)}
 
 .frag-card{background:var(--bg-3);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 20px}
 .frag-card p{margin:0 0 6px}
 .frag-card .who{color:var(--ink-2);font-size:14px}
-
-.upload-zone{border:1px dashed var(--border-ctrl);border-radius:12px;padding:20px;text-align:center;color:var(--ink-2);cursor:pointer}
-.upload-zone:hover{border-color:var(--gold)}
-.doc-note{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);margin:10px 0 0}
 
 .state-box{border-radius:14px;padding:18px;margin:0 0 20px}
 .state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 6px;font-size:16px}
 .state-box.warn{background:var(--warn-bg)} .state-box.warn h3{color:var(--warn);margin:0 0 6px;font-size:16px}
 .state-box p{margin:0;color:var(--ink-2)}
 
+.prev-item{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 8px;font-size:13px;color:var(--ink-2)}
+.prev-item b{color:var(--ink);font-weight:600}
+
 .ok-wrap{max-width:520px;margin:40px auto;padding:0 20px;text-align:center}
 .ok-wrap svg{margin-bottom:16px}
 .ok-wrap h1{font-size:clamp(22px,4vw,26px);margin:0 0 12px}
 .ok-wrap p{color:var(--ink-2);margin:0 0 22px}
-.ok-wrap .timer{display:inline-block;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:15px;margin:0 0 22px}
 
 .sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
@@ -91,19 +91,21 @@ main{padding:28px 0 60px}
 <body data-state="empty">
 
 <div class="proto" role="region" aria-label="Панель прототипа">
-  <b>Макет · МС-17 · 10 Возражение с документом (С20) · второй выпуск</b>
+  <b>Макет · МС-17 · 10а Сообщить о неточности (первая версия)</b>
   <div class="grp" id="stateBtns" aria-label="Состояние экрана">
     <button data-st="empty" aria-pressed="true">Пусто</button>
-    <button data-st="normal" aria-pressed="false">Норма</button>
     <button data-st="loading" aria-pressed="false">Загрузка</button>
     <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="normal" aria-pressed="false">Норма</button>
     <button data-st="many" aria-pressed="false">Много данных</button>
   </div>
   <div class="grp" aria-label="Ширина">
     <button data-w="360" aria-pressed="false">360</button>
     <button data-w="full" aria-pressed="true">Десктоп</button>
   </div>
-  <span class="note">Пусто — форма не заполнена. Норма — после отправки, статус с таймером. Ошибка — отправка без документа. Много данных — заявитель уже подавал возражения по этому факту.</span>
+  <span class="note">Пусто — форма не заполнена. Загрузка — отправляем. Ошибка — не указана причина.
+    Норма — после отправки, без срока и без документа. Много данных — уже отправляли сообщение об
+    этом же фрагменте раньше.</span>
 </div>
 
 <div class="frame" id="frame">
@@ -113,19 +115,11 @@ main{padding:28px 0 60px}
     <span><b>Летопись своих</b><small>Ковалёв Игорь · читатель, вошёл через VK ID</small></span>
   </a>
   <nav><a href="../publichnye/03-geroy.html">К странице героя</a></nav>
-  <span class="demo-tag" style="background:var(--bg-3);color:var(--ink-2);border:1px solid var(--border-ctrl)">второй выпуск</span>
   <span class="demo-tag">демо</span>
 </header>
 
 <main>
 <div class="wrap">
-
-  <div class="state-box warn" style="margin:20px 0" role="note">
-    <h3>Этот экран — второй выпуск</h3>
-    <p>Полноценное возражение с документом и сроком 3 рабочих дня войдёт во второй выпуск. В первой версии
-      вместо него — простая форма <a href="10a-netochnost.html" style="color:var(--gold)">«Сообщить о неточности»</a>:
-      без документа, срок в системе не задан, обращение уходит модератору в общую очередь.</p>
-  </div>
 
   <!-- ===== ПУСТО: форма не заполнена ===== -->
   <div class="when empty">
@@ -135,7 +129,8 @@ main{padding:28px 0 60px}
     </div>
     <div class="card">
       <h1 style="font-size:22px;margin:0 0 6px">Сообщить о неточности</h1>
-      <p style="color:var(--ink-2);margin:0 0 20px">Доступно только вошедшим пользователям. Оспариваемый фрагмент останется опубликованным на время проверки — модератор решит в течение 3 рабочих дней.</p>
+      <p style="color:var(--ink-2);margin:0 0 20px">Доступно только вошедшим пользователям. Фрагмент останется опубликованным —
+        сообщение уйдёт модератору в общую очередь обращений, срок ответа в системе пока не задан.</p>
 
       <div class="field">
         <label for="what">Что именно неверно <span class="req">*</span></label>
@@ -149,46 +144,12 @@ main{padding:28px 0 60px}
       </div>
 
       <div class="field">
-        <label>Документ, подтверждающий возражение <span class="req">*</span></label>
-        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
-        <div class="doc-note">Без документа форма не отправится — заявление без подтверждения не рассматривается. Документ и документ, на который опирается оспариваемый факт, модератор сверяет и удаляет после решения — копии дольше срока проверки не хранятся.</div>
+        <label for="expl">Поясните, в чём неточность <span class="req">*</span></label>
+        <textarea id="expl" placeholder="Например: мы служили в разных подразделениях, познакомились уже после ранения"></textarea>
+        <p class="hint">Документ прикладывать не нужно — модератор рассмотрит сообщение по существу и,
+          если потребуется, свяжется с автором истории.</p>
       </div>
 
-      <div class="field">
-        <label for="expl">Поясните возражение <span class="req">*</span></label>
-        <textarea id="expl" placeholder="Например: мы служили в разных подразделениях, познакомились уже после ранения — в приложенной выписке из личного дела видно, что в указанный период я служил в другой части"></textarea>
-      </div>
-
-      <div class="nav-buttons" style="display:flex;justify-content:flex-end">
-        <button class="btn primary" type="button" data-submit>Отправить</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== ОШИБКА: отправка без документа ===== -->
-  <div class="when error" hidden>
-    <div class="frag-card">
-      <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
-      <p class="who">Рассказал(а): Андрей Л., сослуживец, уволен со службы</p>
-    </div>
-    <div class="card">
-      <h1 style="font-size:22px;margin:0 0 16px">Сообщить о неточности</h1>
-      <div class="field">
-        <label for="what2">Что именно неверно <span class="req">*</span></label>
-        <select id="what2"><option selected>Факт совместной службы автора с героем</option></select>
-      </div>
-      <div class="field">
-        <label>Документ, подтверждающий возражение <span class="req">*</span></label>
-        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
-      </div>
-      <div class="state-box err" role="alert">
-        <h3>Без документа отправить нельзя</h3>
-        <p>Приложите документ, подтверждающий возражение — без него мы не сможем его рассмотреть.</p>
-      </div>
-      <div class="field">
-        <label for="expl2">Поясните возражение <span class="req">*</span></label>
-        <textarea id="expl2">Мы служили в разных подразделениях, познакомились уже после ранения.</textarea>
-      </div>
       <div class="nav-buttons" style="display:flex;justify-content:flex-end">
         <button class="btn primary" type="button" data-submit>Отправить</button>
       </div>
@@ -200,25 +161,50 @@ main{padding:28px 0 60px}
     <div class="card">
       <div class="sk" style="height:24px;width:60%;margin-bottom:18px"></div>
       <div class="sk" style="height:48px;margin-bottom:14px"></div>
-      <div class="sk" style="height:90px;margin-bottom:14px"></div>
       <div class="sk" style="height:120px;margin-bottom:18px"></div>
       <button class="btn primary wide" disabled>Отправляем…</button>
     </div>
   </div>
 
-  <!-- ===== НОРМА: после отправки, статус с таймером ===== -->
+  <!-- ===== ОШИБКА: не указана причина ===== -->
+  <div class="when error" hidden>
+    <div class="frag-card">
+      <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
+      <p class="who">Рассказал(а): Андрей Л., сослуживец, уволен со службы</p>
+    </div>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Сообщить о неточности</h1>
+      <div class="field">
+        <label for="what2">Что именно неверно <span class="req">*</span></label>
+        <select id="what2"><option>Выберите вариант</option></select>
+      </div>
+      <div class="state-box err" role="alert">
+        <h3>Не выбрано, что именно неверно</h3>
+        <p>Выберите вариант из списка — без этого мы не сможем передать сообщение модератору.</p>
+      </div>
+      <div class="field">
+        <label for="expl2">Поясните, в чём неточность <span class="req">*</span></label>
+        <textarea id="expl2">Мы служили в разных подразделениях, познакомились уже после ранения.</textarea>
+      </div>
+      <div class="nav-buttons" style="display:flex;justify-content:flex-end">
+        <button class="btn primary" type="button" data-submit>Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: после отправки, без срока и без документа ===== -->
   <div class="when normal" hidden>
     <div class="ok-wrap">
       <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h1>Возражение принято</h1>
-      <p>Рассмотрим в течение 3 рабочих дней. Фрагмент «Подвиг» на странице героя Колесников Сергей Викторович пока остаётся опубликованным — мы сверим ваш документ с документом, на основании которого он опубликован.</p>
-      <div class="timer">Статус: <b>на рассмотрении</b> · подано 23.09.2026 · решение до 26.09.2026</div>
-      <p style="color:var(--ink-2);font-size:14px;margin:0 0 22px">О решении придёт уведомление — без пересказа деталей, которые нельзя публиковать повторно.</p>
+      <h1>Сообщение отправлено</h1>
+      <p>Мы передали его модератору в общую очередь обращений. Фрагмент «Подвиг» на странице героя
+        Колесников Сергей Викторович пока остаётся опубликованным. Срок ответа в системе не задан —
+        уведомление придёт, когда модератор примет решение.</p>
       <a class="btn primary" href="../publichnye/03-geroy.html">К странице героя</a>
     </div>
   </div>
 
-  <!-- ===== МНОГО ДАННЫХ: уже подавали возражения по этому факту ===== -->
+  <!-- ===== МНОГО ДАННЫХ: уже отправляли сообщение об этом фрагменте ===== -->
   <div class="when many" hidden>
     <div class="frag-card">
       <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
@@ -227,20 +213,18 @@ main{padding:28px 0 60px}
     <div class="card">
       <h1 style="font-size:22px;margin:0 0 16px">Сообщить о неточности</h1>
       <div class="state-box warn">
-        <h3>Вы уже подавали такое возражение</h3>
-        <p>17.09.2026 вы оспаривали этот же факт с теми же доводами, модератор его отклонил (документ не опроверг исходный факт). Новое возражение примем, только если добавите новый документ или новый довод — иначе, по правилам модерации, повторные необоснованные возражения могут временно ограничить подачу новых.</p>
+        <h3>Вы уже сообщали о неточности в этом фрагменте</h3>
+        <p>Ваши прежние сообщения по этому фрагменту:</p>
       </div>
-      <div class="field">
+      <div class="prev-item">17.09.2026 · <b>Факт совместной службы автора с героем</b> — на рассмотрении у модератора</div>
+      <div class="prev-item">02.09.2026 · <b>Факт подвига или награды</b> — рассмотрено, модератор оставил текст без изменений</div>
+      <div class="field" style="margin-top:16px">
         <label for="what3">Что именно неверно <span class="req">*</span></label>
         <select id="what3"><option selected>Факт совместной службы автора с героем</option></select>
       </div>
       <div class="field">
-        <label>Новый документ, подтверждающий возражение <span class="req">*</span></label>
-        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
-      </div>
-      <div class="field">
-        <label for="expl3">Что изменилось с прошлого раза <span class="req">*</span></label>
-        <textarea id="expl3" placeholder="Укажите новый документ или новый довод"></textarea>
+        <label for="expl3">Поясните, в чём неточность <span class="req">*</span></label>
+        <textarea id="expl3" placeholder="Можно уточнить прежнее сообщение или добавить новый довод"></textarea>
       </div>
       <div class="nav-buttons" style="display:flex;justify-content:flex-end">
         <button class="btn primary" type="button" data-submit>Отправить</button>
@@ -251,7 +235,9 @@ main{padding:28px 0 60px}
 </div>
 </main>
 
-<footer class="foot"><div class="wrap" style="padding:0">Решение и оба документа фиксируются в журнале модерации. Систематические необоснованные возражения без новых доводов — основание временно ограничить подачу новых с этой учётной записи.</div></footer>
+<footer class="foot"><div class="wrap" style="padding:0">Сообщение о неточности уходит модератору в общую очередь обращений — без документа и без
+  зафиксированного в системе срока ответа. Возражение с документом и сроком 3 рабочих дня — во втором
+  выпуске (см. <a href="10-vozrazhenie.html" style="color:var(--gold)">10-vozrazhenie.html</a>).</div></footer>
 </div>
 
 <script>
