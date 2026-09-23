@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Народная книга памяти — прототип</title>
+<title>Герои вокруг нас — прототип</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
 :root{
@@ -100,6 +100,10 @@ p{margin:0 0 12px}
 .item{display:flex;gap:12px;text-decoration:none;color:inherit}
 .ph{flex:0 0 64px;height:80px;border-radius:8px;background:var(--bg-sunk);display:flex;align-items:center;justify-content:center;color:var(--text-2)}
 .item h3{overflow-wrap:anywhere}
+.gallery{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+@container (min-width:768px){ .gallery{grid-template-columns:repeat(4,1fr)} }
+.gallery figure{margin:0} .ph-g{height:auto;aspect-ratio:4/3;flex:none}
+.gallery figcaption{font-size:14px;color:var(--text-2);margin-top:4px}
 
 /* Скелет */
 .sk{background:linear-gradient(90deg,var(--bg-sunk),var(--bg-soft),var(--bg-sunk));background-size:200% 100%;animation:sk 1.2s linear infinite;border-radius:8px}
@@ -185,14 +189,14 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
 <header class="site-h">
   <a class="logo" href="#home">
     <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#E0B25C"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#F3EFE6"/></svg>
-    <span>Народная книга памяти<small>участники СВО и связь поколений</small></span>
+    <span>Герои вокруг нас<small>истории участников СВО и связь поколений</small></span>
   </a>
   <nav class="nav" aria-label="Разделы">
     <a href="#map">Карта историй</a><a href="#story">Рассказать</a><a href="#support">Поддержка семьям</a><a href="#dynasty">Связь поколений</a><a href="#ancestor">Найти предка</a>
   </nav>
   <button class="burger" aria-expanded="false" aria-controls="mnav" aria-label="Меню">☰</button>
   <nav class="mnav" id="mnav" aria-label="Разделы">
-    <a href="#map">Карта историй</a><a href="#story">Рассказать о товарище</a><a href="#support">Поддержка семьям</a><a href="#dynasty">Связь поколений</a><a href="#ancestor">Найти предка</a>
+    <a href="#map">Карта историй</a><a href="#story">Рассказать о герое</a><a href="#support">Поддержка семьям</a><a href="#dynasty">Связь поколений</a><a href="#ancestor">Найти предка</a>
   </nav>
 </header>
 
@@ -201,10 +205,11 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
 <!-- ===== ГЛАВНАЯ ===== -->
 <section class="screen" id="s-home" data-states="normal">
   <div class="hero">
-    <h1>Истории участников СВО, которые рассказали их сослуживцы</h1>
-    <p class="lead">Каждый автор входит через Госуслуги и подтверждает свою личность. Каждую историю проверяет модератор до публикации. Так на карте остаётся только то, за что поручились живые люди.</p>
+    <p class="small muted" style="margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase">Герои — вокруг нас</p>
+    <h1>Какими они были в жизни и что совершили</h1>
+    <p class="lead">Истории участников СВО рассказывают те, кто знал их лично: сослуживцы, уже уволенные со службы, и родные. Фотографии из жизни, рассказ о человеке и описание подвига. Каждую историю проверяет модератор до публикации.</p>
     <div class="row" style="margin-top:20px">
-      <a class="btn primary" href="#story">Рассказать о товарище</a>
+      <a class="btn primary" href="#story">Рассказать о герое</a>
       <a class="btn" href="#map">Открыть карту историй</a>
     </div>
     <div class="stats" aria-label="Показатели, демо">
@@ -219,15 +224,15 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
     <a class="card topic" href="#support"><h3>Поддержка семьям</h3><p class="muted">Меры поддержки по шагам: путёвка в лагерь ребёнку, выплаты, учёба, льготы. Только официальные источники.</p></a>
     <a class="card topic" href="#dynasty"><h3>Связь поколений</h3><p class="muted">Прадед воевал в Великую Отечественную, правнук — участник СВО. Семейные линии защитников.</p></a>
     <a class="card topic" href="#ancestor"><h3>Найти предка</h3><p class="muted">Знаете только имя прадеда? Подскажем, где искать в открытых архивах.</p></a>
-    <a class="card topic" href="#hero"><h3>Пример карточки героя</h3><p class="muted">Как выглядит страница человека: факты, истории сослуживцев, семья.</p></a>
-    <div class="card soft"><h3>Как мы проверяем</h3><p class="muted">Автор подтверждён через Госуслуги · история прошла модерацию · семья погибшего может попросить снять публикацию.</p></div>
+    <a class="card topic" href="#hero"><h3>Пример страницы героя</h3><p class="muted">Каким он был, фотографии из жизни, подвиг и воспоминания тех, кто был рядом.</p></a>
+    <div class="card soft"><h3>Как мы проверяем</h3><p class="muted">ФИО автора подтверждены при входе · статус сослуживца проверен модератором по документам · история прошла модерацию · семья может попросить снять страницу.</p></div>
   </div>
 </section>
 
 <!-- ===== КАРТА ===== -->
 <section class="screen" id="s-map" data-states="normal empty loading error many">
   <h1>Карта историй</h1>
-  <p class="lead">Точки — места памяти: родной город героя. Место события указано в истории с точностью до региона.</p>
+  <p class="lead">Истории со всей России. Точки — места памяти: родной город героя. Место события указано в истории с точностью до региона.</p>
   <div class="filters" role="search">
     <label class="sr" for="q" style="position:absolute;left:-9999px">Поиск по ФИО или городу</label>
     <input id="q" type="search" placeholder="ФИО или город">
@@ -263,8 +268,8 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
   <div class="when empty">
     <div class="card soft state-box">
       <h3>По этому запросу историй пока нет</h3>
-      <p class="muted">Возможно, о человеке ещё никто не рассказал. Если вы служили вместе — ваша история может стать первой.</p>
-      <div class="row"><a class="btn primary" href="#story">Рассказать о товарище</a><button class="btn" type="button" data-reset>Сбросить поиск</button></div>
+      <p class="muted">Возможно, о человеке ещё никто не рассказал. Если вы знали его лично — ваша история может стать первой.</p>
+      <div class="row"><a class="btn primary" href="#story">Рассказать о герое</a><button class="btn" type="button" data-reset>Сбросить поиск</button></div>
     </div>
   </div>
 
@@ -303,14 +308,27 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
         <a class="btn" href="#dynasty">Связь поколений</a>
       </div>
 
-      <h2>Истории сослуживцев</h2>
+      <h2>Каким он был</h2>
+      <p>Вырос в Наро-Фоминске, окончил колледж по специальности «автомеханик», десять лет чинил машины в мастерской на Московской улице. Женат, двое детей — Маша и Тёма. Высокий, светловолосый, всегда с улыбкой. По выходным возил сына на хоккей, летом с друзьями сплавлялся по Протве.</p>
+      <p class="small muted">Рассказала Колесникова Анна Сергеевна, жена · <span class="demo">демо</span></p>
+
+      <h2>Фотографии из жизни</h2>
+      <div class="gallery">
+        <figure><div class="ph ph-g">фото</div><figcaption>Выпускной, 2012</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>С сыном на катке</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>Мастерская, 2019</figcaption></figure>
+        <figure><div class="ph ph-g">фото</div><figcaption>Сплав по Протве</figcaption></figure>
+      </div>
+      <p class="small muted">Фото публикуются с согласия семьи.</p>
+
+      <h2>Подвиг</h2>
       <article class="story">
         <p>«Мы с Серёгой были в одном расчёте с весны 2023-го. Когда колонну накрыло, он вытаскивал раненых к укрытию, пока не вынес последнего. Троих ребят, которые сегодня живы, он спас сам.»</p>
-        <div class="author">Андрей Л., сослуживец <span class="badge">✓ личность подтверждена через Госуслуги</span> <span class="badge">✓ подтвердил ещё 1 сослуживец</span></div>
+        <div class="author">Андрей Л., сослуживец, уволен со службы <span class="badge">✓ ФИО подтверждены при входе</span> <span class="badge">✓ статус проверен модератором</span></div>
       </article>
       <article class="story many-only">
         <p>«Длинная история на несколько экранов — проверяем, что текст читается и не ломает вёрстку. Сервисслужбаобеспеченияподразделенийбезпробелов — так выглядит длинное слово без пробелов, и оно переносится.»</p>
-        <div class="author">Михаил Т., сослуживец <span class="badge wait">подтверждение ждёт модератора</span></div>
+        <div class="author">Михаил Т., сослуживец <span class="badge wait">проверка ждёт модератора</span></div>
       </article>
 
       <h2>От семьи</h2>
@@ -322,7 +340,7 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
   <div class="when error">
     <div class="state-box err" role="alert">
       <h3>Страница скрыта по просьбе семьи</h3>
-      <p>Родственники попросили не показывать эту страницу. Если вы сослуживец и хотите передать семье воспоминания — напишите модератору, он свяжется с ними.</p>
+      <p>Родственники попросили не показывать эту страницу. Если вы знали его и хотите передать семье воспоминания — напишите модератору, он свяжется с ними.</p>
       <div class="row"><a class="btn primary" href="#map">К карте историй</a><a class="btn" href="#story">Написать модератору</a></div>
     </div>
   </div>
@@ -330,15 +348,15 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
 
 <!-- ===== РАССКАЗАТЬ ===== -->
 <section class="screen" id="s-story" data-states="normal loading error">
-  <h1>Рассказать о товарище</h1>
-  <p class="lead">Истории публикуют только от подтверждённых авторов. Модератор проверяет каждую до публикации — обычно за 3 рабочих дня.</p>
+  <h1>Рассказать о герое</h1>
+  <p class="lead">Расскажите, каким он был в жизни и что совершил. Писать могут родные, друзья и сослуживцы, уже уволенные с военной службы. Модератор проверяет каждую историю до публикации — обычно за 3 рабочих дня.</p>
   <ol class="steps" aria-label="Шаги">
-    <li class="done">1. Вход</li><li class="cur" aria-current="step">2. О ком</li><li>3. История</li><li>4. Отправка</li>
+    <li class="done">1. Вход</li><li class="cur" aria-current="step">2. О ком</li><li>3. Жизнь и подвиг</li><li>4. Фото</li><li>5. Отправка</li>
   </ol>
 
   <div class="when normal loading form">
     <div class="card soft" style="margin-bottom:24px">
-      <p style="margin:0"><b>Шаг 1 пройден:</b> вы вошли через Госуслуги как <b>Лаптев Андрей Петрович</b>. Имя на сайте покажем сокращённо: «Андрей Л.» — можно изменить в настройках.</p>
+      <p style="margin:0"><b>Шаг 1 пройден:</b> вы вошли через Сбер ID как <b>Лаптев Андрей Петрович</b>. Имя на сайте покажем сокращённо: «Андрей Л.» — можно изменить в настройках.</p>
     </div>
     <form onsubmit="return false">
       <fieldset style="border:0;padding:0;margin:0">
@@ -353,36 +371,46 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
           <div class="f"><label for="st">Что с ним сейчас</label><select id="st"><option>Погиб</option><option>Пропал без вести</option><option>Жив, награждён</option><option>Жив</option></select></div>
         </div>
         <div class="f"><label for="city">Родной город</label><input id="city" value="Наро-Фоминск"><div class="hint">Эта точка появится на карте</div></div>
-        <div class="f"><label for="rel">Кем он вам приходится</label><select id="rel"><option>Сослуживец</option><option>Командир</option><option>Подчинённый</option><option>Родственник</option></select></div>
+        <div class="f"><label for="rel">Кем вы ему приходитесь</label><select id="rel"><option>Сослуживец (уже не служит)</option><option>Родственник</option><option>Друг</option><option>Одноклассник, однокурсник</option><option>Коллега по работе</option></select></div>
+        <div class="f"><label for="doc">Документ об увольнении с военной службы <span class="muted">(для сослуживцев)</span></label><input id="doc" type="file" accept="image/*,.pdf"><div class="hint">Его увидит только модератор. После проверки файл удаляется, на сайте не публикуется.</div></div>
       </fieldset>
 
-      <div class="f" id="f-text"><label for="txt">История</label>
+      <div class="f"><label for="life">Каким он был</label>
+        <textarea id="life" placeholder="Где вырос, кем работал, семья, увлечения, как выглядел, каким его запомнили"></textarea>
+      </div>
+      <div class="f" id="f-text"><label for="txt">Подвиг</label>
         <textarea id="txt" placeholder="Что произошло, когда, что он сделал. Пишите так, как рассказали бы семье."></textarea>
         <div class="hint">Место события — только регион. Не указывайте номер части, позывные, координаты и имена живых бойцов без их согласия: такие истории модератор вернёт на доработку.</div>
         <div class="errt">Напишите хотя бы несколько предложений — от 300 знаков.</div>
       </div>
 
+      <div class="f"><label for="ph">Фотографии из жизни <span class="muted">(до 10)</span></label><input id="ph" type="file" accept="image/*" multiple><div class="hint">Фото погибшего публикуем только с согласия семьи — мы спросим её сами.</div></div>
+      <div class="chk"><input type="checkbox" id="c0"><label for="c0">Я не прохожу военную службу сейчас</label></div>
       <div class="chk"><input type="checkbox" id="c1"><label for="c1">Подтверждаю, что лично знал этого человека и всё написанное — правда</label></div>
       <div class="chk" id="c2w"><input type="checkbox" id="c2"><label for="c2">Согласен на обработку персональных данных по <a href="#home">правилам сайта</a> (152-ФЗ)</label></div>
       <p class="small muted">Если человек погиб, мы сообщим семье о новой истории и покажем её им до публикации.</p>
       <button class="btn primary block" type="button" id="send">Отправить на проверку</button>
-      <p class="small muted" style="margin-top:8px">Отправить можно без фото — семья добавит его позже.</p>
+      <p class="small muted" style="margin-top:8px">Отправить можно без фото — семья добавит их позже.</p>
     </form>
   </div>
   <div class="when error form">
     <div class="state-box err" role="alert" style="margin-bottom:16px">
       <h3>История не отправлена</h3>
-      <p>Не заполнено поле «История» и не отмечено согласие на обработку данных. Черновик сохранён — ничего не потеряется.</p>
+      <p>Не заполнено поле «Подвиг» и не отмечено согласие на обработку данных. Черновик сохранён — ничего не потеряется.</p>
     </div>
-    <div class="f bad"><label for="txt2">История</label><textarea id="txt2">Служили вместе.</textarea><div class="errt">Напишите хотя бы несколько предложений — от 300 знаков.</div></div>
+    <div class="f bad"><label for="txt2">Подвиг</label><textarea id="txt2">Служили вместе.</textarea><div class="errt">Напишите хотя бы несколько предложений — от 300 знаков.</div></div>
     <div class="chk"><input type="checkbox" id="c3" aria-invalid="true"><label for="c3" style="color:var(--error)">Согласен на обработку персональных данных (152-ФЗ) — обязательно</label></div>
     <button class="btn primary block" type="button">Отправить на проверку</button>
   </div>
   <div class="card soft" style="margin-top:32px;max-width:720px">
     <h3>Как выглядит первый шаг — вход</h3>
-    <p class="muted">Автор историй подтверждает личность только через Госуслуги: так мы знаем, что пишет реальный человек. Читать сайт можно без входа.</p>
-    <button class="btn esia block" type="button" data-toast="Здесь будет переход на Госуслуги (ЕСИА)">Войти через Госуслуги</button>
-    <p class="small muted" style="margin-top:8px">Нет учётной записи на Госуслугах? <a href="https://www.gosuslugi.ru/" target="_blank" rel="noopener">Как её получить</a></p>
+    <p class="muted">Автор входит одним из российских способов — так мы знаем его настоящие ФИО. Читать сайт можно без входа.</p>
+    <div class="grid c3">
+      <button class="btn" type="button" data-toast="Здесь будет вход по коду из СМС">По номеру телефона</button>
+      <button class="btn" type="button" data-toast="Здесь будет переход в Сбер ID">Сбер ID</button>
+      <button class="btn" type="button" data-toast="Здесь будет переход в VK ID">VK ID</button>
+    </div>
+    <p class="small muted" style="margin-top:8px">Код не приходит? Проверьте номер или войдите через Сбер ID или VK ID.</p>
   </div>
 </section>
 
@@ -391,8 +419,8 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
   <div class="card soft state-box" style="max-width:720px">
     <span class="badge">✓ Отправлено</span>
     <h1 style="margin-top:12px">Спасибо. История у модератора</h1>
-    <p>Обычно проверка занимает до 3 рабочих дней. Если нужны уточнения — напишем на почту из Госуслуг. После публикации на странице появится отметка «личность автора подтверждена».</p>
-    <div class="row"><a class="btn primary" href="#map">К карте историй</a><a class="btn" href="#story">Рассказать ещё об одном</a></div>
+    <p>Обычно проверка занимает до 3 рабочих дней. Если нужны уточнения — позвоним или напишем. Если человек погиб, сначала покажем историю и фото семье. После публикации на странице появится отметка «статус автора проверен».</p>
+    <div class="row"><a class="btn primary" href="#map">К карте историй</a><a class="btn" href="#story">Рассказать ещё об одном герое</a></div>
   </div>
 </section>
 
@@ -507,7 +535,7 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
     <div class="gen"><div class="line"><span class="dot"></span></div>
       <div class="card"><p class="small muted" style="margin:0">Внук · участник СВО</p><h3><a href="#hero">Колесников Сергей Викторович, 1994–2023</a></h3><p class="muted small">2 истории сослуживцев</p></div></div>
   </div>
-  <div class="row" style="margin-top:16px"><a class="btn primary" href="#ancestor">Найти своего предка</a><a class="btn" href="#story">Рассказать о товарище</a></div>
+  <div class="row" style="margin-top:16px"><a class="btn primary" href="#ancestor">Найти своего предка</a><a class="btn" href="#story">Рассказать о герое</a></div>
 </section>
 
 <!-- ===== НАЙТИ ПРЕДКА ===== -->
@@ -534,7 +562,7 @@ ol.howto>li::before{content:counter(h);position:absolute;left:0;top:0;width:32px
 </main>
 
 <footer class="foot">
-  <p>Народная книга памяти · прототип от 23.09.2026 · все данные на страницах вымышлены.</p>
+  <p>Герои вокруг нас · прототип от 23.09.2026 · все данные на страницах вымышлены.</p>
   <p>Персональные данные хранятся на серверах в России. Семья погибшего может в любой момент попросить скрыть страницу.</p>
 </footer>
 </div>
