@@ -100,6 +100,16 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 
 .doc-note{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);margin:10px 0 0}
 
+.hero-search{position:relative}
+.hero-result{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:8px}
+.hero-result button{width:100%;text-align:left;background:var(--bg-3);border:0;border-bottom:1px solid var(--line);padding:12px 14px;color:var(--ink);cursor:pointer}
+.hero-result button:last-child{border-bottom:0}
+.hero-result button:hover{background:#152645}
+.hero-result small{display:block;color:var(--ink-2);margin-top:2px}
+.hero-picked{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-3);border:1px solid var(--gold);border-radius:12px;padding:12px 14px;margin-top:8px}
+.hero-picked b{font-size:15px}
+.hero-picked span{color:var(--ink-2);font-size:13px}
+
 .sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
 @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
 @media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
@@ -152,8 +162,27 @@ main{padding:28px 0 60px}
     <div class="steps" aria-hidden="true"><div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div></div>
     <p class="step-label">Шаг <b>1 из 6</b> · Кто вы</p>
     <div class="card">
-      <h1 style="font-size:22px;margin:0 0 6px">Расскажите, кто вы автору</h1>
-      <p style="color:var(--ink-2);margin:0 0 20px">Это первый шаг. Дальше — о герое, каким он был, о подвиге, фото и документах. Черновик сохраняется автоматически на каждом шаге, вернуться можно в любой момент.</p>
+      <h1 style="font-size:22px;margin:0 0 6px">Что вы хотите сделать</h1>
+      <p style="color:var(--ink-2);margin:0 0 16px">Можно рассказать о новом герое или дополнить страницу героя, которая уже опубликована.</p>
+      <div class="radio-row" role="radiogroup" aria-label="Что вы хотите сделать" style="margin-bottom:20px">
+        <label class="radio-card"><input type="radio" name="mode" id="mode-new"><span><b>Рассказать о новом герое</b><br><span>Страницы о нём ещё нет на сайте</span></span></label>
+        <label class="radio-card sel"><input type="radio" name="mode" id="mode-add" checked><span><b>Дописать к уже опубликованному герою</b><br><span>Добавить воспоминание к его странице (С19)</span></span></label>
+      </div>
+
+      <div class="field hero-search" id="hero-search-block">
+        <label for="hero-find">Найдите героя, о котором хотите дописать <span class="req">*</span></label>
+        <input id="hero-find" placeholder="Фамилия и имя героя" value="Колесников Сергей">
+        <div class="hero-result" id="hero-result">
+          <button type="button" data-hero="Колесников Сергей Викторович">Колесников Сергей Викторович<small>12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</small></button>
+        </div>
+        <div class="hero-picked" id="hero-picked" hidden>
+          <div><b>Колесников Сергей Викторович</b><br><span>На его странице уже есть 1 воспоминание сослуживца — дополнение всё равно можно отправить</span></div>
+          <button class="btn ghost" type="button" style="min-height:34px;padding:0 10px;font-size:12px" id="hero-change">Изменить</button>
+        </div>
+        <p class="hint">Форма короче обычной: ФИО, дату рождения, родной город и статус героя повторно
+          заполнять не нужно — они уже указаны на его странице.</p>
+      </div>
+
       <div class="field">
         <label for="who-select">Кем вы приходитесь герою <span class="req">*</span></label>
         <select id="who-select">
@@ -162,7 +191,7 @@ main{padding:28px 0 60px}
           <option>Брат / сестра</option>
           <option>Дядя / тётя</option>
           <option>Друг</option>
-          <option selected>Сослуживец (уволен со службы)</option>
+          <option selected>Сослуживец</option>
           <option>Другой родственник</option>
         </select>
         <p class="hint">«Отец/мать», «сын/дочь», «брат/сестра», «дядя/тётя» и «другой родственник» —
@@ -174,6 +203,16 @@ main{padding:28px 0 60px}
         <label for="who-other-input">Уточните степень родства</label>
         <input id="who-other-input" placeholder="например, двоюродный брат">
       </div>
+
+      <div class="check-row" id="served-together-row">
+        <input type="checkbox" id="served-together" checked>
+        <label for="served-together">Мы служили вместе с героем, а не просто были знакомы (С18)</label>
+      </div>
+      <p class="hint" id="served-together-hint" style="margin:-8px 0 14px">Если отметите — на следующем шаге
+        попросим документ, подтверждающий совместную службу, его сверит модератор. Если подтвердить
+        документом нельзя — не отмечайте, воспоминание опубликуется с отметкой «знал лично», без
+        утверждения о совместной службе.</p>
+
       <div class="check-row">
         <input type="checkbox" id="e-not-serving">
         <label for="e-not-serving">Я не являюсь военнослужащим, не призван на военные сборы и не нахожусь в добровольческом формировании</label>
@@ -329,6 +368,17 @@ main{padding:28px 0 60px}
       <div class="upload-zone" role="button" tabindex="0">Прикрепить запись в военном билете или справку</div>
       <div class="doc-note">Документ видит только модератор, после проверки он удаляется — копия в базе не хранится.</div>
     </div>
+
+    <div class="field" id="c18-block">
+      <label>Документ о совместной службе с героем <span class="req">*</span></label>
+      <div class="upload-zone" role="button" tabindex="0">Прикрепить запись в военном билете с частью и периодом, выписку из личного дела или совместное фото с пояснением</div>
+      <div class="doc-note">Показывается, потому что на шаге 1 отмечено «служили вместе с героем» (С18). Название
+        части и подразделения, которое видно в документе, видит только модератор — на странице героя,
+        в вашем личном кабинете и в ответах сайта его не будет. Модератор сверит документ с документом
+        о герое, который предоставила семья. Если подтвердить не получится, воспоминание всё равно
+        опубликуется — как «знал лично», без отметки о совместной службе.</div>
+    </div>
+
     <div class="check-row"><input type="checkbox" id="c1"><label for="c1">Я не являюсь военнослужащим, не призван на военные сборы и не нахожусь в добровольческом формировании</label></div>
     <div class="check-row"><input type="checkbox" id="c2"><label for="c2">В тексте нет номеров частей, дислокации, сведений о потерях и упоминаний действующих военнослужащих по имени</label></div>
     <div class="check-row"><input type="checkbox" id="c3"><label for="c3">Согласен(на) на обработку моих персональных данных как автора истории</label></div>
@@ -372,9 +422,33 @@ main{padding:28px 0 60px}
     location.href='03-kabinet-avtora.html';
   }));
   const whoSelect = document.getElementById('who-select'), whoOther = document.getElementById('who-other');
-  if(whoSelect && whoOther){
-    whoSelect.addEventListener('change', ()=>{ whoOther.hidden = whoSelect.value !== 'Другой родственник'; });
+  const servedRow = document.getElementById('served-together-row'), servedHint = document.getElementById('served-together-hint');
+  function syncWho(){
+    if(!whoSelect) return;
+    whoOther.hidden = whoSelect.value !== 'Другой родственник';
+    const isColleague = whoSelect.value === 'Сослуживец';
+    if(servedRow){ servedRow.hidden = !isColleague; servedHint.hidden = !isColleague; }
+    const c18 = document.getElementById('c18-block');
+    const served = document.getElementById('served-together');
+    if(c18){ c18.hidden = !(isColleague && served && served.checked); }
   }
+  if(whoSelect){ whoSelect.addEventListener('change', syncWho); syncWho(); }
+  const servedCheck = document.getElementById('served-together');
+  if(servedCheck){ servedCheck.addEventListener('change', syncWho); }
+
+  const modeNew = document.getElementById('mode-new'), modeAdd = document.getElementById('mode-add');
+  const heroBlock = document.getElementById('hero-search-block');
+  function syncMode(){
+    document.querySelectorAll('input[name=mode]').forEach(r=>r.closest('.radio-card').classList.toggle('sel', r.checked));
+    if(heroBlock) heroBlock.hidden = modeNew && modeNew.checked;
+  }
+  if(modeNew && modeAdd){ modeNew.addEventListener('change', syncMode); modeAdd.addEventListener('change', syncMode); syncMode(); }
+  document.querySelectorAll('#hero-result [data-hero]').forEach(b=>b.addEventListener('click',()=>{
+    document.getElementById('hero-result').hidden = true;
+    document.getElementById('hero-picked').hidden = false;
+  }));
+  const heroChange = document.getElementById('hero-change');
+  if(heroChange){ heroChange.addEventListener('click', ()=>{ document.getElementById('hero-picked').hidden = true; document.getElementById('hero-result').hidden = false; }); }
   apply();
 })();
 </script>

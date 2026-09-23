@@ -125,6 +125,10 @@ main{padding:24px 0 60px}
 .point-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-left:8px}
 .point-status.wait{background:var(--warn-bg);color:var(--warn)}
 .point-status.ok{background:var(--ok-bg);color:var(--ok)}
+.point-status.knew{background:var(--bg-3);color:var(--ink-2)}
+.svc-card{border:1px solid var(--border-ctrl)}
+.svc-decision{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.svc-decision .btn{font-size:13px;min-height:40px}
 .foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
 .back{font-size:13px;color:var(--ink-2);text-decoration:none;display:inline-block;margin:16px 0}
 </style>
@@ -144,7 +148,7 @@ main{padding:24px 0 60px}
     <button data-w="360" aria-pressed="false">360</button>
     <button data-w="full" aria-pressed="true">Десктоп</button>
   </div>
-  <span class="note">Норма — сослуживец, живой герой. Много данных — погибший, эскалация, длинный текст, документ.</span>
+  <span class="note">Норма — сослуживец, живой герой, проверка совместной службы (С18). Много данных — погибший, эскалация, длинный текст, документ.</span>
 </div>
 
 <div class="frame" id="frame">
@@ -246,6 +250,29 @@ main{padding:24px 0 60px}
             </div>
             <p class="doc-note">Открытие фиксируется в журнале. Файл будет удалён автоматически после решения по истории — копия не хранится.</p>
           </div>
+        </div>
+
+        <div class="card svc-card" id="svc-card">
+          <h2>Совместная служба с героем (С18) <span class="point-status wait" id="svc-status">Ждёт решения</span></h2>
+          <p style="color:var(--ink-2);margin:0 0 12px;font-size:14px">Автор отметил «служили вместе с героем» и приложил отдельный документ. Название части и подразделения, которое видно в документе, не публикуется — его видите только вы.</p>
+          <div class="doc-block" style="margin-bottom:14px">
+            <div class="row">
+              <span>foto_podrazdelenie_2023.jpg · загружен 22.09.2026</span>
+              <button class="btn ghost" type="button" data-log-pii>Открыть документ</button>
+            </div>
+            <p class="doc-note">Совместное фото с пояснением автора: «слева я, справа — Владислав, весна 2023,
+              третий взвод». Название части и номер подразделения на публичной странице не появятся.</p>
+          </div>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Часть и период в документе автора совпадают с документом о герое, который предоставила семья<small>Военный билет героя — та же часть, тот же период службы</small></span></label>
+          </div>
+          <div class="svc-decision" role="group" aria-label="Решение по совместной службе">
+            <button class="btn primary" type="button" data-svc="confirmed">Подтверждено — совместная служба</button>
+            <button class="btn ghost" type="button" data-svc="knew">Не подтверждается — оставить «знал лично»</button>
+          </div>
+          <p class="doc-note" style="margin-top:10px">Если подтвердить документами нельзя, история или
+            воспоминание не отклоняются целиком — публикуются без отметки о совместной службе,
+            остальные факты проверяются по обычному чек-листу.</p>
         </div>
 
         <div class="card point-card">
@@ -428,6 +455,16 @@ main{padding:24px 0 60px}
     toast(msgs[b.dataset.point] || 'Решение по точке записано в журнал');
     const status = b.closest('.point-card').querySelector('.point-status');
     if(status){ status.textContent = b.dataset.point==='deny' ? 'Регион текстом' : (b.dataset.point==='defer' ? 'Одобрена с задержкой' : 'Точка одобрена'); status.className = 'point-status ' + (b.dataset.point==='deny' ? 'wait' : 'ok'); }
+  }));
+
+  document.querySelectorAll('[data-svc]').forEach(b=>b.addEventListener('click',()=>{
+    const msgs = {confirmed:'Совместная служба подтверждена и записана в журнал модерации — на публикации появится отметка «служил вместе, подтверждено модератором»', knew:'Совместная служба не подтверждена — публикуется как «знал лично», без отметки о службе'};
+    toast(msgs[b.dataset.svc] || 'Решение записано в журнал');
+    const status = document.getElementById('svc-status');
+    if(status){
+      status.textContent = b.dataset.svc==='confirmed' ? 'Подтверждено' : 'Знал лично';
+      status.className = 'point-status ' + (b.dataset.svc==='confirmed' ? 'ok' : 'knew');
+    }
   }));
 
   document.querySelectorAll('[data-decision]').forEach(b=>b.addEventListener('click',()=>{

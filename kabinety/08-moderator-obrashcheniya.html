@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Обращения семей — Летопись своих</title>
+<title>Обращения и возражения — Летопись своих</title>
 <style>
 :root{
   --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
@@ -49,6 +49,7 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .btn.ghost{border-color:var(--line);color:var(--ink)}
 .btn.sm{min-height:34px;padding:0 12px;font-size:13px}
 .btn.danger{border-color:var(--error);color:var(--error)}
+.btn.warnbtn{border-color:var(--warn);color:var(--warn)}
 @media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} }
 .btn:active{transform:scale(.97)}
 @media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none} }
@@ -72,6 +73,10 @@ h1,h2,h3{font-family:var(--font-h);margin:0}
 .chip.fix{background:rgba(242,197,114,.12);color:var(--gold)}
 .chip.report{background:var(--bg-3);color:var(--ink-2)}
 .chip.overdue{background:var(--error-bg);color:var(--error)}
+.chip.dispute{background:rgba(242,197,114,.14);color:var(--gold)}
+.doc-block{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+.doc-block .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.doc-note{font-size:12px;color:var(--ink-2);margin-top:6px}
 .detail{border-top:1px solid var(--line);padding:16px;background:var(--bg-3)}
 .detail .grid{display:grid;gap:8px;font-size:14px;margin:0 0 14px}
 .detail .grid div span{color:var(--ink-2)}
@@ -94,7 +99,7 @@ main{padding-bottom:60px}
 <body data-state="normal">
 
 <div class="proto" role="region" aria-label="Панель прототипа">
-  <b>Макет · МС-17 · 08 Обращения семей</b>
+  <b>Макет · МС-17 · 08 Обращения и возражения (С20)</b>
   <div class="grp" id="stateBtns" aria-label="Состояние экрана">
     <button data-st="normal" aria-pressed="true">Норма</button>
     <button data-st="empty" aria-pressed="false">Пусто</button>
@@ -123,22 +128,22 @@ main{padding-bottom:60px}
 
   <!-- ===== ПУСТО ===== -->
   <div class="when empty">
-    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1></div></div>
     <div class="state-box">
       <h3>Обращений нет</h3>
-      <p>Здесь появятся запросы на скрытие страниц, просьбы поправить историю и жалобы читателей.</p>
+      <p>Здесь появятся запросы на скрытие страниц, просьбы поправить историю, жалобы читателей и возражения «этого не было» с документом (С20).</p>
     </div>
   </div>
 
   <!-- ===== ЗАГРУЗКА ===== -->
   <div class="when loading" hidden aria-busy="true">
-    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1></div></div>
     <div class="sk-item"><div class="sk" style="height:18px;width:50%;margin-bottom:8px"></div><div class="sk" style="height:12px;width:30%"></div></div>
   </div>
 
   <!-- ===== ОШИБКА ===== -->
   <div class="when error" hidden>
-    <div class="page-head"><div><h1>Обращения семей</h1></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1></div></div>
     <div class="state-box err" role="alert">
       <h3>Не удалось загрузить обращения</h3>
       <p>Нет связи с сервером. Попробуйте обновить страницу.</p>
@@ -148,14 +153,41 @@ main{padding-bottom:60px}
 
   <!-- ===== НОРМА ===== -->
   <div class="when normal" hidden>
-    <div class="page-head"><div><h1>Обращения семей</h1><p>3 открытых обращения</p></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1><p>4 открытых, из них 1 возражение (С20)</p></div></div>
     <div class="tabs" role="group" aria-label="Фильтр">
-      <button aria-pressed="true">Все · 3</button>
+      <button aria-pressed="true">Все · 4</button>
       <button aria-pressed="false">Скрыть страницу · 1</button>
       <button aria-pressed="false">Исправить · 1</button>
       <button aria-pressed="false">Жалоба · 1</button>
+      <button aria-pressed="false">Возражения · 1</button>
     </div>
     <div class="list">
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1">
+            <h3>Колесников Сергей Викторович — фрагмент «Подвиг»</h3>
+            <p class="meta">Заявитель: Ковалёв Игорь Семёнович, вошёл через VK ID · 23.09.2026</p>
+            <p class="text">«Оспариваю, что автор служил вместе с героем — по моим данным, они познакомились уже после ранения, а не на службе».</p>
+          </div>
+          <span class="chip dispute">Возражение · срок до 26.09</span>
+        </div>
+        <div class="detail" hidden>
+          <div class="grid">
+            <div>Оспариваемый факт: <span>совместная служба (ядро истории)</span></div>
+            <div>Срок решения: <span>до 26.09.2026, 3 рабочих дня</span></div>
+          </div>
+          <div class="doc-block">
+            <div class="row"><span>vypiska_lichnoe_delo.pdf · документ заявителя</span><button class="btn ghost sm" type="button">Открыть документ</button></div>
+            <p class="doc-note">Сверяется с документом, на котором основан факт (военный билет автора истории с частью и периодом). Обе копии удаляются после решения — дольше срока проверки не хранятся.</p>
+          </div>
+          <div class="decision-row">
+            <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
+            <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
+            <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
+            <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+          </div>
+        </div>
+      </div>
       <div class="item">
         <div class="row" data-toggle>
           <div style="flex:1">
@@ -219,12 +251,13 @@ main{padding-bottom:60px}
 
   <!-- ===== МНОГО ДАННЫХ ===== -->
   <div class="when many" hidden>
-    <div class="page-head"><div><h1>Обращения семей</h1><p>14 открытых обращений, 4 просрочены</p></div></div>
+    <div class="page-head"><div><h1>Обращения и возражения</h1><p>17 открытых, 4 просрочены, 3 возражения (С20)</p></div></div>
     <div class="tabs" role="group" aria-label="Фильтр">
-      <button aria-pressed="true">Все · 14</button>
+      <button aria-pressed="true">Все · 17</button>
       <button aria-pressed="false">Скрыть страницу · 6</button>
       <button aria-pressed="false">Исправить · 5</button>
       <button aria-pressed="false">Жалоба · 3</button>
+      <button aria-pressed="false">Возражения · 3</button>
       <button aria-pressed="false">Просрочено · 4</button>
     </div>
     <div class="list">
@@ -234,6 +267,40 @@ main{padding-bottom:60px}
           <span class="chip overdue">Спор · просрочено</span>
         </div>
         <div class="detail" hidden><div class="decision-row"><button class="btn primary" type="button" data-resolve>Держать скрытой до решения суда</button></div></div>
+      </div>
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1"><h3>Колесников Сергей Викторович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Ковалёв Игорь Семёнович · 23.09.2026</p><p class="text">Оспаривает факт совместной службы автора с героем, документ приложен.</p></div>
+          <span class="chip dispute">Возражение · срок до 26.09</span>
+        </div>
+        <div class="detail" hidden><div class="decision-row">
+          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
+          <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
+          <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
+          <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+        </div></div>
+      </div>
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1"><h3>Джанашвили Отари Тенгизович — воспоминание Заура Д.</h3><p class="meta">Заявитель: Бестаева Лариса Тамазовна · 20.09.2026</p><p class="text">Возражение просрочено: заявитель не приложил документ повторно после запроса — 3 рабочих дня истекли.</p></div>
+          <span class="chip overdue">Возражение · просрочено</span>
+        </div>
+        <div class="detail" hidden><div class="decision-row">
+          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
+          <button class="btn danger" type="button" data-resolve>Ограничить подачу возражений заявителю</button>
+        </div></div>
+      </div>
+      <div class="item">
+        <div class="row" data-toggle>
+          <div style="flex:1"><h3>Юрченко Владислав Романович — фрагмент «Подвиг»</h3><p class="meta">Заявитель: Панкратов Олег Иванович · 21.09.2026</p><p class="text">Оспаривает награду: «медаль не подтверждена, документа не видел».</p></div>
+          <span class="chip dispute">Возражение · срок до 24.09</span>
+        </div>
+        <div class="detail" hidden><div class="decision-row">
+          <button class="btn primary" type="button" data-resolve>Оставить как есть</button>
+          <button class="btn ghost" type="button" data-resolve>Исправить с согласия автора</button>
+          <button class="btn warnbtn" type="button" data-resolve>Скрыть до доп. проверки</button>
+          <button class="btn danger" type="button" data-resolve>Снять фрагмент целиком</button>
+        </div></div>
       </div>
       <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Сердюков Константин Викторович</h3><p class="meta">Скрыть · 23.09.2026</p><p class="text">«Прошу временно скрыть страницу — не согласовывали с семьёй фото».</p></div><span class="chip hide">Срок до 26.09</span></div><div class="detail" hidden></div></div>
       <div class="item"><div class="row" data-toggle><div style="flex:1"><h3>Прокопьев-Задорожный Валентин Геннадьевич</h3><p class="meta">Исправить · 22.09.2026</p><p class="text">«Уточните, пожалуйста, название населённого пункта».</p></div><span class="chip fix">Исправить</span></div><div class="detail" hidden></div></div>
@@ -247,7 +314,7 @@ main{padding-bottom:60px}
 </div>
 </main>
 
-<footer class="foot"><div class="wrap" style="padding:0">Обращения семьи решает редактор. Спор наследников остаётся скрытым до согласия сторон или решения суда.</div></footer>
+<footer class="foot"><div class="wrap" style="padding:0">Обращения семьи решает редактор. Спор наследников остаётся скрытым до согласия сторон или решения суда. Возражения «этого не было» (С20) разбирает модератор или редактор — срок 3 рабочих дня, решение и оба документа фиксируются в журнале модерации.</div></footer>
 </div>
 
 <script>

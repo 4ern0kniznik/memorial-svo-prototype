@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сообщить о неточности — Летопись своих</title>
+<style>
+:root{
+  --bg:#060B18; --bg-2:#0B1526; --bg-3:#0F1D33;
+  --ink:#EAF1FF; --ink-2:#8FA3C4;
+  --gold:#F2C572; --gold-d:#C98E33;
+  --line:#1B2740; --border-ctrl:#55689A;
+  --ok:#6FD3A0; --ok-bg:#12301F;
+  --error:#F28B82; --error-bg:#2A1414;
+  --warn:#FFE0A3; --warn-bg:#332405;
+  --font-h:'Montserrat','Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-b:'Golos Text','PT Sans',Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:16px/1.55 var(--font-b);background:var(--bg);color:var(--ink)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button,input,select,textarea{font:inherit}
+h1,h2,h3{font-family:var(--font-h);margin:0}
+
+.proto{position:sticky;top:0;z-index:80;background:#000;color:#eee;font-size:13px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.proto b{color:#fff}
+.proto .grp{display:flex;gap:4px;flex-wrap:wrap}
+.proto button{background:#2a2a2a;color:#eee;border:1px solid #555;border-radius:6px;padding:5px 10px;min-height:32px;cursor:pointer}
+.proto button[aria-pressed=true]{background:#eee;color:#111}
+.proto .note{color:#aaa;flex-basis:100%;min-width:0}
+
+.frame{margin:0 auto;max-width:100%;background:var(--bg)}
+.frame.m360{max-width:360px;box-shadow:0 0 0 1px #333}
+
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+.top{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.brand b{font-family:var(--font-h);font-weight:700;font-size:18px;display:block}
+.brand small{color:var(--ink-2);font-size:12px}
+.top nav{margin-left:auto;display:flex;gap:14px;font-size:14px}
+.top nav a{color:var(--ink-2);text-decoration:none}
+.demo-tag{flex:none;background:var(--gold);color:#0B1526;font-weight:700;font-size:12px;padding:4px 10px;border-radius:20px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-weight:600;text-decoration:none;font-size:16px;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#0B1526}
+.btn.ghost{border-color:var(--line);color:var(--ink)}
+.btn.wide{width:100%}
+@media (hover:hover) and (pointer:fine){ .btn:hover{transform:translateY(-1px)} .btn.primary:hover{box-shadow:0 6px 20px rgba(242,197,114,.25)} }
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:default;transform:none;box-shadow:none}
+@media (prefers-reduced-motion:reduce){ .btn{transition:none} .btn:hover,.btn:active{transform:none;box-shadow:none} }
+
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px}
+.field{margin:0 0 18px}
+.field label{display:block;font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.field .req{color:var(--gold)}
+.field input,.field select,.field textarea{width:100%;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:12px 14px;font-size:16px}
+.field input,.field select{min-height:48px}
+.field textarea{min-height:120px;resize:vertical;font-family:inherit;line-height:1.5}
+.field .hint{font-size:13px;color:var(--ink-2);margin-top:6px}
+
+.frag-card{background:var(--bg-3);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 20px}
+.frag-card p{margin:0 0 6px}
+.frag-card .who{color:var(--ink-2);font-size:14px}
+
+.upload-zone{border:1px dashed var(--border-ctrl);border-radius:12px;padding:20px;text-align:center;color:var(--ink-2);cursor:pointer}
+.upload-zone:hover{border-color:var(--gold)}
+.doc-note{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--ink-2);margin:10px 0 0}
+
+.state-box{border-radius:14px;padding:18px;margin:0 0 20px}
+.state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error);margin:0 0 6px;font-size:16px}
+.state-box.warn{background:var(--warn-bg)} .state-box.warn h3{color:var(--warn);margin:0 0 6px;font-size:16px}
+.state-box p{margin:0;color:var(--ink-2)}
+
+.ok-wrap{max-width:520px;margin:40px auto;padding:0 20px;text-align:center}
+.ok-wrap svg{margin-bottom:16px}
+.ok-wrap h1{font-size:clamp(22px,4vw,26px);margin:0 0 12px}
+.ok-wrap p{color:var(--ink-2);margin:0 0 22px}
+.ok-wrap .timer{display:inline-block;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:15px;margin:0 0 22px}
+
+.sk{background:linear-gradient(90deg,var(--bg-3) 25%,#152645 37%,var(--bg-3) 63%);background-size:400% 100%;border-radius:10px;animation:shimmer 1.6s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){ .sk{animation:none;background:var(--bg-3);opacity:.7} }
+
+.foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
+main{padding:28px 0 60px}
+</style>
+</head>
+<body data-state="empty">
+
+<div class="proto" role="region" aria-label="Панель прототипа">
+  <b>Макет · МС-17 · 10 Сообщить о неточности (С20)</b>
+  <div class="grp" id="stateBtns" aria-label="Состояние экрана">
+    <button data-st="empty" aria-pressed="true">Пусто</button>
+    <button data-st="normal" aria-pressed="false">Норма</button>
+    <button data-st="loading" aria-pressed="false">Загрузка</button>
+    <button data-st="error" aria-pressed="false">Ошибка</button>
+    <button data-st="many" aria-pressed="false">Много данных</button>
+  </div>
+  <div class="grp" aria-label="Ширина">
+    <button data-w="360" aria-pressed="false">360</button>
+    <button data-w="full" aria-pressed="true">Десктоп</button>
+  </div>
+  <span class="note">Пусто — форма не заполнена. Норма — после отправки, статус с таймером. Ошибка — отправка без документа. Много данных — заявитель уже подавал возражения по этому факту.</span>
+</div>
+
+<div class="frame" id="frame">
+<header class="top">
+  <a class="brand" href="../publichnye/01-glavnaya.html">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3c3 5 3 8 0 11-3-3-3-6 0-11z" fill="#F2C572"/><rect x="11" y="15" width="10" height="14" rx="1" fill="#EAF1FF"/></svg>
+    <span><b>Летопись своих</b><small>Ковалёв Игорь · читатель, вошёл через VK ID</small></span>
+  </a>
+  <nav><a href="../publichnye/03-geroy.html">К странице героя</a></nav>
+  <span class="demo-tag">демо</span>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ===== ПУСТО: форма не заполнена ===== -->
+  <div class="when empty">
+    <div class="frag-card">
+      <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
+      <p class="who">Рассказал(а): Андрей Л., сослуживец, уволен со службы</p>
+    </div>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 6px">Сообщить о неточности</h1>
+      <p style="color:var(--ink-2);margin:0 0 20px">Доступно только вошедшим пользователям. Оспариваемый фрагмент останется опубликованным на время проверки — модератор решит в течение 3 рабочих дней.</p>
+
+      <div class="field">
+        <label for="what">Что именно неверно <span class="req">*</span></label>
+        <select id="what">
+          <option>Выберите вариант</option>
+          <option>Факт совместной службы автора с героем</option>
+          <option>Факт подвига или награды</option>
+          <option>Факт родства с героем</option>
+          <option>Другое утверждение в тексте</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Документ, подтверждающий возражение <span class="req">*</span></label>
+        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
+        <div class="doc-note">Без документа форма не отправится — заявление без подтверждения не рассматривается. Документ и документ, на который опирается оспариваемый факт, модератор сверяет и удаляет после решения — копии дольше срока проверки не хранятся.</div>
+      </div>
+
+      <div class="field">
+        <label for="expl">Поясните возражение <span class="req">*</span></label>
+        <textarea id="expl" placeholder="Например: мы служили в разных подразделениях, познакомились уже после ранения — в приложенной выписке из личного дела видно, что в указанный период я служил в другой части"></textarea>
+      </div>
+
+      <div class="nav-buttons" style="display:flex;justify-content:flex-end">
+        <button class="btn primary" type="button" data-submit>Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ОШИБКА: отправка без документа ===== -->
+  <div class="when error" hidden>
+    <div class="frag-card">
+      <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
+      <p class="who">Рассказал(а): Андрей Л., сослуживец, уволен со службы</p>
+    </div>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Сообщить о неточности</h1>
+      <div class="field">
+        <label for="what2">Что именно неверно <span class="req">*</span></label>
+        <select id="what2"><option selected>Факт совместной службы автора с героем</option></select>
+      </div>
+      <div class="field">
+        <label>Документ, подтверждающий возражение <span class="req">*</span></label>
+        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
+      </div>
+      <div class="state-box err" role="alert">
+        <h3>Без документа отправить нельзя</h3>
+        <p>Приложите документ, подтверждающий возражение — без него мы не сможем его рассмотреть.</p>
+      </div>
+      <div class="field">
+        <label for="expl2">Поясните возражение <span class="req">*</span></label>
+        <textarea id="expl2">Мы служили в разных подразделениях, познакомились уже после ранения.</textarea>
+      </div>
+      <div class="nav-buttons" style="display:flex;justify-content:flex-end">
+        <button class="btn primary" type="button" data-submit>Отправить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ЗАГРУЗКА ===== -->
+  <div class="when loading" hidden aria-busy="true">
+    <div class="card">
+      <div class="sk" style="height:24px;width:60%;margin-bottom:18px"></div>
+      <div class="sk" style="height:48px;margin-bottom:14px"></div>
+      <div class="sk" style="height:90px;margin-bottom:14px"></div>
+      <div class="sk" style="height:120px;margin-bottom:18px"></div>
+      <button class="btn primary wide" disabled>Отправляем…</button>
+    </div>
+  </div>
+
+  <!-- ===== НОРМА: после отправки, статус с таймером ===== -->
+  <div class="when normal" hidden>
+    <div class="ok-wrap">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#6FD3A0" stroke-width="1.6"/><path d="M7 12.5l3 3 7-7" stroke="#6FD3A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Возражение принято</h1>
+      <p>Рассмотрим в течение 3 рабочих дней. Фрагмент «Подвиг» на странице героя Колесников Сергей Викторович пока остаётся опубликованным — мы сверим ваш документ с документом, на основании которого он опубликован.</p>
+      <div class="timer">Статус: <b>на рассмотрении</b> · подано 23.09.2026 · решение до 26.09.2026</div>
+      <p style="color:var(--ink-2);font-size:14px;margin:0 0 22px">О решении придёт уведомление — без пересказа деталей, которые нельзя публиковать повторно.</p>
+      <a class="btn primary" href="../publichnye/03-geroy.html">К странице героя</a>
+    </div>
+  </div>
+
+  <!-- ===== МНОГО ДАННЫХ: уже подавали возражения по этому факту ===== -->
+  <div class="when many" hidden>
+    <div class="frag-card">
+      <p><b>Оспариваемый фрагмент:</b> «Подвиг» — история героя Колесников Сергей Викторович</p>
+      <p class="who">Рассказал(а): Андрей Л., сослуживец, уволен со службы</p>
+    </div>
+    <div class="card">
+      <h1 style="font-size:22px;margin:0 0 16px">Сообщить о неточности</h1>
+      <div class="state-box warn">
+        <h3>Вы уже подавали такое возражение</h3>
+        <p>17.09.2026 вы оспаривали этот же факт с теми же доводами, модератор его отклонил (документ не опроверг исходный факт). Новое возражение примем, только если добавите новый документ или новый довод — иначе, по правилам модерации, повторные необоснованные возражения могут временно ограничить подачу новых.</p>
+      </div>
+      <div class="field">
+        <label for="what3">Что именно неверно <span class="req">*</span></label>
+        <select id="what3"><option selected>Факт совместной службы автора с героем</option></select>
+      </div>
+      <div class="field">
+        <label>Новый документ, подтверждающий возражение <span class="req">*</span></label>
+        <div class="upload-zone" role="button" tabindex="0">Прикрепить документ (фото или PDF)</div>
+      </div>
+      <div class="field">
+        <label for="expl3">Что изменилось с прошлого раза <span class="req">*</span></label>
+        <textarea id="expl3" placeholder="Укажите новый документ или новый довод"></textarea>
+      </div>
+      <div class="nav-buttons" style="display:flex;justify-content:flex-end">
+        <button class="btn primary" type="button" data-submit>Отправить</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer class="foot"><div class="wrap" style="padding:0">Решение и оба документа фиксируются в журнале модерации. Систематические необоснованные возражения без новых доводов — основание временно ограничить подачу новых с этой учётной записи.</div></footer>
+</div>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame');
+  let state='empty';
+  function apply(){
+    document.querySelectorAll('main .wrap > .when').forEach(el=>{ el.hidden = !el.classList.contains(state); });
+  }
+  document.getElementById('stateBtns').addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    state=b.dataset.st;
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    apply();
+  });
+  document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+    frame.classList.toggle('m360',b.dataset.w==='360');
+    document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{
+    state='normal';
+    document.querySelectorAll('#stateBtns button').forEach(x=>x.setAttribute('aria-pressed', x.dataset.st==='normal'));
+    apply();
+  }));
+  apply();
+})();
+</script>
+</body>
+</html>

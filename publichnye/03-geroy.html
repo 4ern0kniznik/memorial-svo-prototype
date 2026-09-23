@@ -90,6 +90,15 @@ h2.sec{font-size:21px;margin:32px 0 12px}
 
 .empty-note{color:var(--ink-2);font-size:14px;padding:14px 16px;background:var(--bg-2);border:1px dashed var(--line);border-radius:12px}
 
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 10px;border-radius:20px;margin-left:6px;white-space:nowrap}
+.badge.confirmed{background:var(--ok-bg);color:var(--ok)}
+.badge.knew{background:var(--bg-3);color:var(--ink-2);border:1px solid var(--line)}
+.badge.relative{background:rgba(242,197,114,.12);color:var(--gold)}
+.frag-foot{display:flex;justify-content:flex-end;margin-top:8px}
+.dispute-link{font-size:13px;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;padding:4px 2px}
+.dispute-link:hover{color:var(--ink)}
+.addmore-note{color:var(--ink-2);font-size:13px;margin:10px 0 0}
+
 .sk{background:var(--bg-3);border-radius:8px;position:relative;overflow:hidden}
 .sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(234,241,255,.06),transparent)}
 @media (prefers-reduced-motion:no-preference){ .sk::after{animation:shine 1.6s ease-in-out infinite} }
@@ -175,15 +184,17 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
             <p class="cap">На карточке — обе точки героя. На общей «Карте героев» подпись подвига только ФИО, населённый пункт и год — без названия части.</p>
           </div>
           <div class="row">
-            <a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a>
+            <a class="btn primary" href="../kabinety/01-vhod.html">Дописать о нём</a>
             <a class="btn" href="08-svyaz-pokoleniy.html">Связь поколений</a>
           </div>
+          <p class="addmore-note">На странице уже есть воспоминание сослуживца — дополнение всё равно можно отправить, если знаете о герое что-то ещё.</p>
 
           <h2 class="sec">Каким он был</h2>
           <p>Вырос в Наро-Фоминске, окончил колледж по специальности «автомеханик», десять лет чинил машины
             в мастерской на Московской улице. Женат, двое детей — Маша и Тёма. Высокий, светловолосый,
             всегда с улыбкой. По выходным возил сына на хоккей, летом с друзьями сплавлялся по Протве.</p>
-          <p class="author">Рассказала Колесникова Анна Сергеевна, жена</p>
+          <p class="author">Рассказала Колесникова Анна Сергеевна, жена <span class="badge relative">родственник</span></p>
+          <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
 
           <h2 class="sec">Фотографии из жизни</h2>
           <div class="gallery">
@@ -198,7 +209,8 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <article class="story">
             <p>«Мы с Серёгой были в одном расчёте с весны 2023-го. Когда колонну накрыло, он вытаскивал
               раненых к укрытию, пока не вынес последнего. Троих ребят, которые сегодня живы, он спас сам.»</p>
-            <p class="author">Андрей Л., сослуживец, уволен со службы <span style="color:var(--ok)">✓ статус проверен</span></p>
+            <p class="author">Андрей Л., сослуживец, уволен со службы <span class="badge confirmed">служил вместе, подтверждено модератором</span></p>
+            <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
           </article>
 
           <h2 class="sec">От семьи</h2>
@@ -207,7 +219,8 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <h2 class="sec">Воспоминания других авторов</h2>
           <div class="memory">
             <p>«Серёга всегда первым бежал помогать, если у кого-то из наших глохла машина по дороге на точку.»</p>
-            <p class="author">Дмитрий К., сослуживец</p>
+            <p class="author">Дмитрий К., сослуживец <span class="badge knew">знал лично</span></p>
+            <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
           </div>
         </div>
       </div>
@@ -236,12 +249,13 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
             <dt>Награды</dt><dd>Медаль «За отвагу» — документ на проверке</dd>
           </dl>
           <div class="row">
-            <a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a>
+            <a class="btn primary" href="../kabinety/01-vhod.html">Дописать о нём</a>
           </div>
           <h2 class="sec">Каким он был</h2>
           <p>Учился в железнодорожном техникуме, играл на гитаре в школьной группе. После контузии
             восстанавливается дома, вернулся к любимому делу — ремонту мотоциклов.</p>
-          <p class="author">Рассказал Ершов Андрей Павлович, отец</p>
+          <p class="author">Рассказал Ершов Андрей Павлович, отец <span class="badge relative">родственник</span></p>
+          <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
           <h2 class="sec">Фотографии из жизни</h2>
           <p class="empty-note">Семья пока не добавила фотографий — автор может дополнить историю
             в личном кабинете позже.</p>
@@ -315,11 +329,13 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
             <p class="cap">У этого героя родной город и место подвига совпадают — на общей карте это одна точка,
               на карточке всё равно показаны оба факта.</p>
           </div>
-          <div class="row"><a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a></div>
+          <div class="row"><a class="btn primary" href="../kabinety/01-vhod.html">Дописать о нём</a></div>
+          <p class="addmore-note">На странице уже 3 воспоминания других авторов — новое всё равно можно отправить.</p>
           <h2 class="sec">Каким он был</h2>
           <p>Работал инструктором в секции вольной борьбы, воспитал двух чемпионов района. Готовил
             осетинские пироги по субботам для всей команды, был человеком, к которому шли за советом.</p>
-          <p class="author">Рассказала Джанашвили Мадина Ахсаровна, мать</p>
+          <p class="author">Рассказала Джанашвили Мадина Ахсаровна, мать <span class="badge relative">родственник</span></p>
+          <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
           <h2 class="sec">Фотографии из жизни</h2>
           <div class="gallery">
             <figure style="margin:0"><div class="gph"><svg viewBox="0 0 100 75"><rect width="100" height="75" fill="#0F1D33"/><circle cx="50" cy="30" r="14" fill="#1B2740"/></svg></div><figcaption class="gcap">На соревнованиях, 2015</figcaption></figure>
@@ -333,12 +349,13 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <article class="story">
             <p>«Отари вытащил из-под обстрела двоих раненых сослуживцев, хотя сам был контужен. Мы
               обязаны ему жизнью.»</p>
-            <p class="author">Георгий М., сослуживец, уволен со службы <span style="color:var(--ok)">✓ статус проверен</span></p>
+            <p class="author">Георгий М., сослуживец, уволен со службы <span class="badge confirmed">служил вместе, подтверждено модератором</span></p>
+            <div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div>
           </article>
           <h2 class="sec">Воспоминания других авторов</h2>
-          <div class="memory"><p>«Он тренировал моего сына два года — терпеливый, никогда не кричал.»</p><p class="author">Алан Т., отец ученика</p></div>
-          <div class="memory"><p>«На свадьбе моего брата Отари танцевал до утра, всех смешил.»</p><p class="author">Заур Д., друг семьи</p></div>
-          <div class="memory"><p>«Помню, как он подвозил соседей на своей старой «Ниве» без разговоров о деньгах.»</p><p class="author">Марина С., соседка</p></div>
+          <div class="memory"><p>«Он тренировал моего сына два года — терпеливый, никогда не кричал.»</p><p class="author">Алан Т., отец ученика <span class="badge knew">знал лично</span></p><div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div></div>
+          <div class="memory"><p>«На свадьбе моего брата Отари танцевал до утра, всех смешил.»</p><p class="author">Заур Д., друг семьи <span class="badge knew">знал лично</span></p><div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div></div>
+          <div class="memory"><p>«Помню, как он подвозил соседей на своей старой «Ниве» без разговоров о деньгах.»</p><p class="author">Марина С., соседка <span class="badge knew">знал лично</span></p><div class="frag-foot"><a class="dispute-link" href="../kabinety/10-vozrazhenie.html">Сообщить о неточности</a></div></div>
         </div>
       </div>
     </div>
