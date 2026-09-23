@@ -62,9 +62,16 @@ h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
 .portrait .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(6,11,24,.7);color:var(--ink-2);font-size:12px;padding:8px 10px}
 .name{font-weight:700;font-size:clamp(24px,4.6vw,32px);line-height:1.14;margin:0 0 6px}
 .years{color:var(--ink-2);margin:0 0 18px}
-.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:0 0 22px;padding:16px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:0 0 16px;padding:16px;background:var(--bg-2);border:1px solid var(--line);border-radius:12px}
 .facts dt{color:var(--ink-2)} .facts dd{margin:0;overflow-wrap:anywhere}
 .row{display:flex;gap:14px;flex-wrap:wrap}
+
+.minimap{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 22px}
+.minimap svg{width:100%;height:auto;display:block}
+.minimap .cap{font-size:13px;color:var(--ink-2);margin:10px 0 0}
+.minimap .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:8px}
+.minimap .legend span{display:inline-flex;align-items:center;gap:6px}
+.minimap .legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
 
 h2.sec{font-size:21px;margin:32px 0 12px}
 .story{position:relative;padding:18px 20px;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;font-size:17px}
@@ -120,8 +127,10 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       <span><b>Летопись своих</b><small>народные истории участников СВО</small></span>
     </a>
     <nav aria-label="Разделы">
-      <a href="01-glavnaya.html">Главная</a>
-      <a href="02-karta-i-poisk.html" class="cur">Карта</a>
+      <a href="02-karta-i-poisk.html" class="cur">Карта героев</a>
+      <a href="../kabinety/01-vhod.html">Рассказать о герое</a>
+      <a href="07-nayti-predka.html">Найти предка</a>
+      <a href="08-svyaz-pokoleniy.html">Связь поколений</a>
       <a href="04-podderzhka.html">Поддержка семей</a>
       <a href="../kabinety/01-vhod.html">Войти</a>
     </nav>
@@ -131,7 +140,7 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
   <section class="state on" data-state="norma">
     <div style="position:relative">
       <canvas class="starfield" id="stars-g" aria-hidden="true"></canvas>
-      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <a class="hback" href="02-karta-i-poisk.html">← К карте героев</a>
       <div class="person">
         <div>
           <div class="portrait">
@@ -148,9 +157,23 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <h1 class="name">Колесников Сергей Викторович</h1>
           <p class="years">12.03.1994 — 17.08.2023 · Наро-Фоминск, Московская область</p>
           <dl class="facts">
-            <dt>Где был подвиг</dt><dd>Регион указан в истории; точные координаты не публикуются</dd>
+            <dt>Где был подвиг</dt><dd>Наро-Фоминск, 2023 · точка одобрена модератором (М-8), событие старше 12 месяцев</dd>
             <dt>Награды</dt><dd>Орден Мужества (посмертно) — со слов семьи, документ у модератора</dd>
           </dl>
+          <div class="minimap">
+            <svg viewBox="0 0 400 160" role="img" aria-label="Мини-карта: родной город и место подвига героя, с линией между ними">
+              <rect width="400" height="160" fill="#0F1D33" rx="10"/>
+              <line x1="90" y1="70" x2="290" y2="95" stroke="#55689A" stroke-width="1.5" stroke-dasharray="3 4"/>
+              <g><circle cx="90" cy="70" r="7" fill="#6FD3A0"/><circle cx="90" cy="70" r="12" fill="#6FD3A0" opacity=".22"/></g>
+              <text x="70" y="52" font-size="12" fill="#EAF1FF">Наро-Фоминск</text>
+              <text x="70" y="88" font-size="11" fill="#8FA3C4">место памяти</text>
+              <g><circle cx="290" cy="95" r="7" fill="#F2C572"/><circle cx="290" cy="95" r="12" fill="#F2C572" opacity=".22"/></g>
+              <text x="245" y="118" font-size="12" fill="#EAF1FF">Наро-Фоминск, 2023</text>
+              <text x="245" y="134" font-size="11" fill="#8FA3C4">место подвига</text>
+            </svg>
+            <div class="legend"><span><i style="background:#6FD3A0"></i>Родной город</span><span><i style="background:#F2C572"></i>Где был подвиг</span></div>
+            <p class="cap">На карточке — обе точки героя. На общей «Карте героев» подпись подвига только ФИО, населённый пункт и год — без названия части.</p>
+          </div>
           <div class="row">
             <a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a>
             <a class="btn" href="08-svyaz-pokoleniy.html">Связь поколений</a>
@@ -194,7 +217,7 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
   <!-- ===== ПУСТО (нет фото из жизни — просто нет блока, не ошибка) ===== -->
   <section class="state" data-state="pusto">
     <div style="position:relative">
-      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <a class="hback" href="02-karta-i-poisk.html">← К карте героев</a>
       <div class="person">
         <div>
           <div class="portrait">
@@ -209,6 +232,7 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <h1 class="name">Ершов Павел Андреевич</h1>
           <p class="years">1999 · Апрелевка, Московская область · жив, награждён</p>
           <dl class="facts">
+            <dt>Где был подвиг</dt><dd>Донецкая Народная Республика — регион указан текстом, без точки на карте: населённый пункт закрыт в справочнике для точек подвига (МС-3, п. 1.3.2)</dd>
             <dt>Награды</dt><dd>Медаль «За отвагу» — документ на проверке</dd>
           </dl>
           <div class="row">
@@ -229,7 +253,7 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
   <!-- ===== ЗАГРУЗКА ===== -->
   <section class="state" data-state="zagruzka">
     <div style="position:relative">
-      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <a class="hback" href="02-karta-i-poisk.html">← К карте героев</a>
       <div class="person">
         <div><div class="portrait sk"></div></div>
         <div>
@@ -250,14 +274,14 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       <p>Семья героя попросила временно убрать страницу из открытого доступа. Текст истории и фотографии
         сейчас недоступны. Это не ошибка и не удаление — решение принимает родственник, страница может
         вернуться позже.</p>
-      <a class="btn primary" href="02-karta-i-poisk.html">К карте историй</a>
+      <a class="btn primary" href="02-karta-i-poisk.html">К карте героев</a>
     </div>
   </section>
 
   <!-- ===== МНОГО ДАННЫХ ===== -->
   <section class="state" data-state="mnogo">
     <div style="position:relative">
-      <a class="hback" href="02-karta-i-poisk.html">← К карте историй</a>
+      <a class="hback" href="02-karta-i-poisk.html">← К карте героев</a>
       <div class="person">
         <div>
           <div class="portrait">
@@ -273,9 +297,24 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <h1 class="name">Джанашвили Отари Тенгизович</h1>
           <p class="years">04.11.1990 — 22.05.2023 · Владикавказ, Республика Северная Осетия — Алания</p>
           <dl class="facts">
-            <dt>Где был подвиг</dt><dd>Регион указан в истории; точные координаты не публикуются</dd>
+            <dt>Где был подвиг</dt><dd>Владикавказ, 2023 · точка одобрена модератором (М-8), событие старше 12 месяцев</dd>
             <dt>Награды</dt><dd>Орден Мужества (посмертно); медаль «За отвагу» — со слов семьи</dd>
           </dl>
+          <div class="minimap">
+            <svg viewBox="0 0 400 160" role="img" aria-label="Мини-карта: родной город и место подвига героя, с линией между ними">
+              <rect width="400" height="160" fill="#0F1D33" rx="10"/>
+              <line x1="80" y1="60" x2="300" y2="100" stroke="#55689A" stroke-width="1.5" stroke-dasharray="3 4"/>
+              <g><circle cx="80" cy="60" r="7" fill="#6FD3A0"/><circle cx="80" cy="60" r="12" fill="#6FD3A0" opacity=".22"/></g>
+              <text x="55" y="42" font-size="12" fill="#EAF1FF">Владикавказ</text>
+              <text x="55" y="78" font-size="11" fill="#8FA3C4">место памяти</text>
+              <g><circle cx="300" cy="100" r="7" fill="#F2C572"/><circle cx="300" cy="100" r="12" fill="#F2C572" opacity=".22"/></g>
+              <text x="250" y="122" font-size="12" fill="#EAF1FF">Владикавказ, 2023</text>
+              <text x="250" y="138" font-size="11" fill="#8FA3C4">место подвига</text>
+            </svg>
+            <div class="legend"><span><i style="background:#6FD3A0"></i>Родной город</span><span><i style="background:#F2C572"></i>Где был подвиг</span></div>
+            <p class="cap">У этого героя родной город и место подвига совпадают — на общей карте это одна точка,
+              на карточке всё равно показаны оба факта.</p>
+          </div>
           <div class="row"><a class="btn primary" href="../kabinety/01-vhod.html">Добавить воспоминание</a></div>
           <h2 class="sec">Каким он был</h2>
           <p>Работал инструктором в секции вольной борьбы, воспитал двух чемпионов района. Готовил

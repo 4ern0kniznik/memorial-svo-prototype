@@ -117,6 +117,14 @@ main{padding:24px 0 60px}
 .notice{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 18px}
 .notice.esc{background:rgba(242,197,114,.1);color:var(--gold)}
 .notice b{display:block;margin-bottom:2px}
+
+.point-card{border:1px solid var(--border-ctrl)}
+.point-card h2{color:var(--ink)}
+.point-decision{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.point-decision .btn{font-size:13px;min-height:40px}
+.point-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-left:8px}
+.point-status.wait{background:var(--warn-bg);color:var(--warn)}
+.point-status.ok{background:var(--ok-bg);color:var(--ok)}
 .foot{padding:24px 20px 40px;color:var(--ink-2);font-size:13px;border-top:1px solid var(--line);margin-top:8px}
 .back{font-size:13px;color:var(--ink-2);text-decoration:none;display:inline-block;margin:16px 0}
 </style>
@@ -239,6 +247,25 @@ main{padding:24px 0 60px}
             <p class="doc-note">Открытие фиксируется в журнале. Файл будет удалён автоматически после решения по истории — копия не хранится.</p>
           </div>
         </div>
+
+        <div class="card point-card">
+          <h2>Точка места подвига (М-8) <span class="point-status wait">Ждёт решения</span></h2>
+          <p style="color:var(--ink-2);margin:0 0 12px;font-size:14px">Решение по точке — отдельно от решения по истории: историю можно опубликовать и без точки на карте.</p>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Населённый пункт выбран из справочника и открыт для точек подвига<small>Курск — открыт</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Источник называет этот пункт<small>Наградной лист, тип источника зафиксирован, файл не публикуется</small></span></label>
+            <label class="check-item fail"><input type="checkbox"><span>С даты события прошло 12 месяцев<small>Событие — март 2025, ещё не прошло. Можно одобрить точку только с отложенным показом</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Герой жив — есть его отдельное согласие на точку, и прошло 12 месяцев после увольнения</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Единственная точка подвига у героя, остальные эпизоды — текстом с регионом</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Рядом нет части, подразделения, позиций, маршрута и признаков живых сослуживцев</span></label>
+          </div>
+          <div class="point-decision" role="group" aria-label="Решение по точке подвига">
+            <button class="btn primary" type="button" data-point="approve" disabled title="Пока не прошли 12 месяцев — доступно только «Одобрить с отложенным показом»">Одобрить точку</button>
+            <button class="btn ghost" type="button" data-point="defer">Одобрить с отложенным показом</button>
+            <button class="btn ghost" type="button" data-point="deny">Не одобрять — регион текстом</button>
+          </div>
+          <p class="doc-note" style="margin-top:10px">Решение по точке пишется в журнал модерации отдельной записью: кто, когда, источник, итог (М-6).</p>
+        </div>
       </div>
 
       <div class="sidebar">
@@ -321,6 +348,24 @@ main{padding:24px 0 60px}
             <p class="doc-note">Согласие наследника получено 20.09.2026 через персональную ссылку (сценарий С10).</p>
           </div>
         </div>
+
+        <div class="card point-card">
+          <h2>Точка места подвига (М-8) <span class="point-status ok">Точка одобрена</span></h2>
+          <p style="color:var(--ink-2);margin:0 0 12px;font-size:14px">Решение по точке — отдельно от решения по истории.</p>
+          <div class="checklist">
+            <label class="check-item"><input type="checkbox" checked><span>Населённый пункт выбран из справочника и открыт для точек подвига<small>Северо-Курильск — открыт</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Источник называет этот пункт<small>Извещение о гибели и запись региональной книги памяти</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>С даты события прошло 12 месяцев<small>Событие — май 2023, прошло больше года</small></span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Герой погиб</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Единственная точка подвига у героя</span></label>
+            <label class="check-item"><input type="checkbox" checked><span>Рядом нет части, подразделения, позиций и маршрута<small>Формулировка «служил в составе подразделения» уточняется отдельно, к точке не относится</small></span></label>
+          </div>
+          <div class="point-decision" role="group" aria-label="Решение по точке подвига">
+            <button class="btn primary" type="button" data-point="approve">Точка одобрена — показывать сразу</button>
+            <button class="btn ghost" type="button" data-point="deny">Отозвать — регион текстом</button>
+          </div>
+          <p class="doc-note" style="margin-top:10px">Решение по точке — в журнале модерации отдельной записью (М-6): кто, когда, источник, итог.</p>
+        </div>
       </div>
 
       <div class="sidebar">
@@ -377,6 +422,13 @@ main{padding:24px 0 60px}
   }
 
   document.querySelectorAll('[data-log-pii]').forEach(b=>b.addEventListener('click',()=>toast('Открытие зафиксировано в журнале доступа к персональным данным')));
+
+  document.querySelectorAll('[data-point]').forEach(b=>b.addEventListener('click',()=>{
+    const msgs = {approve:'Точка одобрена и записана в журнал модерации', defer:'Точка одобрена с отложенным показом — появится на карте автоматически через 12 месяцев', deny:'Точка не одобрена — на карточке останется регион текстом'};
+    toast(msgs[b.dataset.point] || 'Решение по точке записано в журнал');
+    const status = b.closest('.point-card').querySelector('.point-status');
+    if(status){ status.textContent = b.dataset.point==='deny' ? 'Регион текстом' : (b.dataset.point==='defer' ? 'Одобрена с задержкой' : 'Точка одобрена'); status.className = 'point-status ' + (b.dataset.point==='deny' ? 'wait' : 'ok'); }
+  }));
 
   document.querySelectorAll('[data-decision]').forEach(b=>b.addEventListener('click',()=>{
     const d=b.dataset.decision;

@@ -60,6 +60,11 @@ h1,h2,h3{font-family:var(--font-h);overflow-wrap:anywhere;margin:0}
 .field input,.field select{background:var(--bg-2);border:1px solid var(--border-ctrl);color:var(--ink);border-radius:8px;padding:0 12px;min-height:44px;font-size:16px}
 .field.grow{flex:1;min-width:200px}
 .hint{font-size:13px;color:var(--ink-2);margin:6px 0 16px}
+.hint.warn{color:var(--warn)}
+.eratabs{max-width:1160px;margin:0 auto 14px;display:flex;gap:8px}
+.eratabs button{border:1px solid var(--border-ctrl);background:transparent;color:var(--ink);border-radius:20px;padding:9px 18px;min-height:44px;font-size:14px}
+.eratabs button[aria-pressed=true]{border-color:var(--gold);color:var(--gold);background:rgba(242,197,114,.08)}
+.era-note{max-width:1160px;margin:0 auto 6px;font-size:13px;color:var(--ink-2)}
 
 .mapsec{padding:16px 20px 56px}
 .mapwrap{max-width:1160px;margin:0 auto;display:grid;gap:20px;grid-template-columns:1fr}
@@ -124,35 +129,49 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       <span><b>Летопись своих</b><small>народные истории участников СВО</small></span>
     </a>
     <nav aria-label="Разделы">
-      <a href="01-glavnaya.html">Главная</a>
-      <a href="02-karta-i-poisk.html" class="cur">Карта</a>
-      <a href="04-podderzhka.html">Поддержка семей</a>
+      <a href="02-karta-i-poisk.html" class="cur">Карта героев</a>
+      <a href="../kabinety/01-vhod.html">Рассказать о герое</a>
       <a href="07-nayti-predka.html">Найти предка</a>
       <a href="08-svyaz-pokoleniy.html">Связь поколений</a>
+      <a href="04-podderzhka.html">Поддержка семей</a>
       <a href="../kabinety/01-vhod.html">Войти</a>
     </nav>
   </header>
 
   <div class="searchbar">
+    <div class="eratabs" role="group" aria-label="Период">
+      <button type="button" id="era-svo" aria-pressed="true">СВО</button>
+      <button type="button" id="era-vov" aria-pressed="false">Великая Отечественная война</button>
+    </div>
     <form class="searchbar-in" onsubmit="return false">
       <div class="field grow">
-        <label for="q">ФИО, город или регион</label>
-        <input id="q" type="text" placeholder="например, Наро-Фоминск" value="Наро-Фоминск">
+        <label for="q">ФИО героя</label>
+        <input id="q" type="text" placeholder="например, Колесников Сергей" value="Колесников">
       </div>
-      <div class="field">
-        <label for="reg">Регион</label>
+      <div class="field grow">
+        <label for="reg">Откуда родом</label>
         <select id="reg">
-          <option>Все регионы</option>
-          <option selected>Московская область</option>
+          <option>Не важно</option>
+          <option selected>Московская область, Наро-Фоминск</option>
           <option>Республика Дагестан</option>
           <option>Волгоградская область</option>
           <option>Республика Северная Осетия — Алания</option>
         </select>
       </div>
+      <div class="field grow">
+        <label for="feat">Где был подвиг</label>
+        <select id="feat">
+          <option selected>Не важно</option>
+          <option>Донецкая Народная Республика, Авдеевка</option>
+          <option>Волгоградская область, Сталинград (ВОВ)</option>
+        </select>
+      </div>
       <button class="btn primary" type="submit">Найти</button>
     </form>
-    <p class="hint">Введите не менее 2 символов. Карта показывает родной город героя, а не место события —
-      точных координат подвига мы не публикуем.</p>
+    <p class="hint">Введите не менее 2 символов в ФИО или выберите место из справочника.</p>
+    <p class="hint warn" id="feat-hint">Для СВО поиск только по месту подвига не работает — добавьте
+      фамилию героя или укажите, откуда он родом. Это правило гостайны о потерях (МС-3, п. 1.3.4), не
+      ошибка формы.</p>
   </div>
 
   <!-- ===== НОРМА: найдено 2 истории по «Наро-Фоминск» ===== -->
@@ -277,6 +296,15 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
   document.querySelectorAll('[data-go="hero"]').forEach(function(el){
     el.addEventListener('click', function(){ location.href='03-geroy.html'; });
   });
+  var eraSvo = document.getElementById('era-svo'), eraVov = document.getElementById('era-vov'),
+      featHint = document.getElementById('feat-hint');
+  function setEra(isVov){
+    eraSvo.setAttribute('aria-pressed', String(!isVov));
+    eraVov.setAttribute('aria-pressed', String(isVov));
+    featHint.style.display = isVov ? 'none' : 'block';
+  }
+  eraSvo.addEventListener('click', function(){ setEra(false); });
+  eraVov.addEventListener('click', function(){ setEra(true); });
 })();
 </script>
 </body>

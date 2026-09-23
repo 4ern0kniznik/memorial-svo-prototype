@@ -155,11 +155,24 @@ main{padding:28px 0 60px}
       <h1 style="font-size:22px;margin:0 0 6px">Расскажите, кто вы автору</h1>
       <p style="color:var(--ink-2);margin:0 0 20px">Это первый шаг. Дальше — о герое, каким он был, о подвиге, фото и документах. Черновик сохраняется автоматически на каждом шаге, вернуться можно в любой момент.</p>
       <div class="field">
-        <label>Кем вы приходитесь герою <span class="req">*</span></label>
-        <div class="radio-row" role="radiogroup">
-          <label class="radio-card sel"><input type="radio" name="who" checked><span><b>Сослуживец</b><span>Служили вместе, сейчас уволен(а)</span></span></label>
-          <label class="radio-card"><input type="radio" name="who"><span><b>Родственник</b><span>Родня героя, любая степень</span></span></label>
-        </div>
+        <label for="who-select">Кем вы приходитесь герою <span class="req">*</span></label>
+        <select id="who-select">
+          <option>Отец / мать</option>
+          <option>Сын / дочь</option>
+          <option>Брат / сестра</option>
+          <option>Дядя / тётя</option>
+          <option>Друг</option>
+          <option selected>Сослуживец (уволен со службы)</option>
+          <option>Другой родственник</option>
+        </select>
+        <p class="hint">«Отец/мать», «сын/дочь», «брат/сестра», «дядя/тётя» и «другой родственник» —
+          дальше проверяем документ о родстве. «Сослуживец» — документ об увольнении. «Друг» —
+          проверяем как источник фактов истории (наградной лист, извещение, книга памяти), без
+          отдельной проверки личности «дружбы».</p>
+      </div>
+      <div class="field" id="who-other" hidden>
+        <label for="who-other-input">Уточните степень родства</label>
+        <input id="who-other-input" placeholder="например, двоюродный брат">
       </div>
       <div class="check-row">
         <input type="checkbox" id="e-not-serving">
@@ -226,15 +239,24 @@ main{padding:28px 0 60px}
         <p class="hint">Без номеров частей, точных координат и дат боя — только регион и месяц/год.</p>
       </div>
 
-      <div class="two-col">
-        <div class="field">
-          <label for="ereg">Регион события</label>
-          <select id="ereg"><option>Луганская Народная Республика</option><option>Запорожская область</option><option>Донецкая Народная Республика</option></select>
-        </div>
-        <div class="field">
-          <label for="emonth">Месяц и год</label>
-          <input id="emonth" value="Март 2023">
-        </div>
+      <div class="field">
+        <label for="epoint">Где был подвиг</label>
+        <select id="epoint">
+          <option>Не указывать точку — только регион в тексте истории</option>
+          <option selected>Донецкая Народная Республика, Авдеевка</option>
+          <option>Запорожская область, Работино</option>
+          <option>Луганская Народная Республика — пункт закрыт для точек подвига</option>
+        </select>
+        <p class="hint">Выбор из справочника, свободный ввод и координаты недоступны. Без номеров
+          частей и позиций — только населённый пункт. Точка на карте появится после проверки
+          модератором и не раньше чем через 12 месяцев после события; если пункт закрыт в справочнике
+          или его там нет — место подвига останется в истории регионом, без точки на карте. Если
+          подвигов несколько, точку ставим только для одного, остальные — текстом.</p>
+      </div>
+      <div class="field">
+        <label for="emonth">Месяц и год</label>
+        <input id="emonth" value="Март 2023">
+        <p class="hint">Год обязателен, месяц — по желанию.</p>
       </div>
 
       <div class="field">
@@ -349,6 +371,10 @@ main{padding:28px 0 60px}
   document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
     location.href='03-kabinet-avtora.html';
   }));
+  const whoSelect = document.getElementById('who-select'), whoOther = document.getElementById('who-other');
+  if(whoSelect && whoOther){
+    whoSelect.addEventListener('change', ()=>{ whoOther.hidden = whoSelect.value !== 'Другой родственник'; });
+  }
   apply();
 })();
 </script>

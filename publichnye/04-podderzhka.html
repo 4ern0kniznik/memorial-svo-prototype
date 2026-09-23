@@ -130,8 +130,10 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       <span><b>Летопись своих</b><small>народные истории участников СВО</small></span>
     </a>
     <nav aria-label="Разделы">
-      <a href="01-glavnaya.html">Главная</a>
-      <a href="02-karta-i-poisk.html">Карта</a>
+      <a href="02-karta-i-poisk.html">Карта героев</a>
+      <a href="../kabinety/01-vhod.html">Рассказать о герое</a>
+      <a href="07-nayti-predka.html">Найти предка</a>
+      <a href="08-svyaz-pokoleniy.html">Связь поколений</a>
       <a href="04-podderzhka.html" class="cur">Поддержка семей</a>
       <a href="../kabinety/01-vhod.html">Войти</a>
     </nav>
@@ -144,41 +146,41 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       регионов подскажем нужный фильтр на Госуслугах.</p>
   </div></div>
 
-  <div class="steps"><div class="steps-in">
-    <div class="step">
-      <h2>Шаг 1 · Кто вы</h2>
-      <div class="chips" role="group" aria-label="Кто вы">
-        <button class="chip" type="button">Участник СВО или ветеран</button>
-        <button class="chip" type="button">Ранен или инвалидность</button>
-        <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
-        <button class="chip" type="button">Семья пропавшего без вести</button>
-        <button class="chip" type="button">Родитель ребёнка участника</button>
-        <button class="chip" type="button">Показать всё</button>
-      </div>
-    </div>
-    <div class="step" style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end">
-      <div>
-        <h2>Шаг 2 · Регион</h2>
-        <select class="select" aria-label="Регион">
-          <option selected>Москва</option>
-          <option>Московская область</option>
-          <option>Другой регион</option>
-        </select>
-      </div>
-      <div style="flex:1;min-width:200px">
-        <h2>Шаг 3 · Что нужно</h2>
-        <select class="select" aria-label="Рубрика" style="width:100%">
-          <option>Все рубрики</option>
-          <option selected>Деньги: выплаты и пенсии</option>
-          <option>Похороны и память</option>
-          <option>Юрист и защита прав</option>
-        </select>
-      </div>
-    </div>
-  </div></div>
-
   <!-- ===== НОРМА ===== -->
   <section class="state on" data-state="norma">
+    <div class="steps"><div class="steps-in">
+      <div class="step">
+        <h2>Шаг 1 · Кто вы</h2>
+        <div class="chips" role="group" aria-label="Кто вы">
+          <button class="chip" type="button">Участник СВО или ветеран</button>
+          <button class="chip" type="button">Ранение или инвалидность</button>
+          <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
+        </div>
+        <div class="chips" role="group" aria-label="Семья погибшего — вы кто" style="margin-top:10px">
+          <button class="chip" type="button">Родитель</button>
+          <button class="chip" type="button" aria-pressed="true">Ребёнок</button>
+        </div>
+      </div>
+      <div class="step" style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+          <h2>Шаг 2 · Регион</h2>
+          <select class="select" aria-label="Регион">
+            <option selected>Москва</option>
+            <option>Московская область</option>
+            <option>Другой регион</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <h2>Шаг 3 · Что нужно</h2>
+          <select class="select" aria-label="Рубрика" style="width:100%">
+            <option>Все рубрики</option>
+            <option selected>Деньги: выплаты и пенсии</option>
+            <option>Похороны и память</option>
+            <option>Юрист и защита прав</option>
+          </select>
+        </div>
+      </div>
+    </div></div>
     <div class="section"><div class="section-in">
       <div class="starter">
         <a href="06-pervye-30-dney.html"><b>С чего начать: первые 30 дней</b><span>Порядок действий для семьи погибшего, шаг за шагом</span></a>
@@ -222,21 +224,44 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
     </div></div>
   </section>
 
-  <!-- ===== ПУСТО ===== -->
+  <!-- ===== ПУСТО: выбор «кто вы» ещё не сделан (С4) ===== -->
   <section class="state" data-state="pusto">
+    <div class="steps"><div class="steps-in">
+      <div class="step">
+        <h2>Шаг 1 · Кто вы</h2>
+        <div class="chips" role="group" aria-label="Кто вы">
+          <button class="chip" type="button">Участник СВО или ветеран</button>
+          <button class="chip" type="button">Ранение или инвалидность</button>
+          <button class="chip" type="button">Семья погибшего</button>
+        </div>
+      </div>
+    </div></div>
     <div class="section"><div class="section-in">
       <div class="empty-box">
-        <h3>Для этого региона пока нет материалов</h3>
-        <p>Мы ещё не подготовили региональные карточки по рубрике «Здоровье: реабилитация» для
-          Республики Алтай. Посмотрите общероссийские меры этой рубрики — часть из них подходит
-          в любом регионе.</p>
-        <a class="btn primary small" href="04-podderzhka.html">Показать общероссийские меры</a>
+        <h3>Выберите, кто вы, чтобы увидеть меры поддержки</h3>
+        <p>Меры для участника СВО, для семьи погибшего и для раненого — разные. Отметьте один
+          вариант выше, тогда откроются шаги «Регион» и «Что нужно» и появятся подходящие карточки.
+          Кнопки «Показать всё» в разделе нет специально — без выбора роли список был бы бесполезным.</p>
       </div>
     </div></div>
   </section>
 
   <!-- ===== ЗАГРУЗКА ===== -->
   <section class="state" data-state="zagruzka">
+    <div class="steps"><div class="steps-in">
+      <div class="step">
+        <h2>Шаг 1 · Кто вы</h2>
+        <div class="chips" role="group" aria-label="Кто вы">
+          <button class="chip" type="button">Участник СВО или ветеран</button>
+          <button class="chip" type="button">Ранение или инвалидность</button>
+          <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
+        </div>
+        <div class="chips" role="group" aria-label="Семья погибшего — вы кто" style="margin-top:10px">
+          <button class="chip" type="button">Родитель</button>
+          <button class="chip" type="button" aria-pressed="true">Ребёнок</button>
+        </div>
+      </div>
+    </div></div>
     <div class="section"><div class="section-in">
       <h2>Ищем меры поддержки…</h2>
       <div class="cards">
@@ -247,6 +272,20 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
 
   <!-- ===== ОШИБКА ===== -->
   <section class="state" data-state="oshibka">
+    <div class="steps"><div class="steps-in">
+      <div class="step">
+        <h2>Шаг 1 · Кто вы</h2>
+        <div class="chips" role="group" aria-label="Кто вы">
+          <button class="chip" type="button">Участник СВО или ветеран</button>
+          <button class="chip" type="button">Ранение или инвалидность</button>
+          <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
+        </div>
+        <div class="chips" role="group" aria-label="Семья погибшего — вы кто" style="margin-top:10px">
+          <button class="chip" type="button">Родитель</button>
+          <button class="chip" type="button" aria-pressed="true">Ребёнок</button>
+        </div>
+      </div>
+    </div></div>
     <div class="section"><div class="section-in">
       <div class="err-box">
         <h3>Не получилось загрузить меры поддержки</h3>
@@ -259,6 +298,30 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
 
   <!-- ===== МНОГО ДАННЫХ (все рубрики) ===== -->
   <section class="state" data-state="mnogo">
+    <div class="steps"><div class="steps-in">
+      <div class="step">
+        <h2>Шаг 1 · Кто вы</h2>
+        <div class="chips" role="group" aria-label="Кто вы">
+          <button class="chip" type="button">Участник СВО или ветеран</button>
+          <button class="chip" type="button">Ранение или инвалидность</button>
+          <button class="chip" type="button" aria-pressed="true">Семья погибшего</button>
+        </div>
+        <div class="chips" role="group" aria-label="Семья погибшего — вы кто" style="margin-top:10px">
+          <button class="chip" type="button" aria-pressed="true">Родитель</button>
+          <button class="chip" type="button">Ребёнок</button>
+        </div>
+      </div>
+      <div class="step" style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+          <h2>Шаг 2 · Регион</h2>
+          <select class="select" aria-label="Регион"><option selected>Москва</option></select>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <h2>Шаг 3 · Что нужно</h2>
+          <select class="select" aria-label="Рубрика" style="width:100%"><option selected>Все рубрики</option></select>
+        </div>
+      </div>
+    </div></div>
     <div class="section"><div class="section-in">
       <h2>Все рубрики · Семья погибшего · Москва</h2>
       <p class="sub">13 рубрик, 54 карточки — список прокручивается.</p>
@@ -297,10 +360,12 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       document.querySelectorAll('.proto [data-w]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
     });
   });
-  document.querySelectorAll('.chips .chip').forEach(function(b){
-    b.addEventListener('click', function(){
-      document.querySelectorAll('.chips .chip').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
-      b.setAttribute('aria-pressed','true');
+  document.querySelectorAll('.chips').forEach(function(group){
+    group.querySelectorAll('.chip').forEach(function(b){
+      b.addEventListener('click', function(){
+        group.querySelectorAll('.chip').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+        b.setAttribute('aria-pressed','true');
+      });
     });
   });
 })();

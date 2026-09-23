@@ -137,11 +137,11 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       <span><b>Летопись своих</b><small>народные истории участников СВО</small></span>
     </a>
     <nav aria-label="Разделы">
-      <a href="01-glavnaya.html" class="cur">Главная</a>
-      <a href="02-karta-i-poisk.html">Карта</a>
-      <a href="04-podderzhka.html">Поддержка семей</a>
+      <a href="02-karta-i-poisk.html">Карта героев</a>
+      <a href="../kabinety/01-vhod.html">Рассказать о герое</a>
       <a href="07-nayti-predka.html">Найти предка</a>
       <a href="08-svyaz-pokoleniy.html">Связь поколений</a>
+      <a href="04-podderzhka.html">Поддержка семей</a>
       <a href="../kabinety/01-vhod.html">Войти</a>
     </nav>
   </header>
@@ -154,15 +154,16 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
         <p class="eyebrow">Народный архив историй</p>
         <h1>Каждый огонёк на этой карте — история одного человека</h1>
         <p class="lead">Истории участников СВО рассказывают те, кто знал их лично: сослуживцы и родные.
-          Точка на карте — родной город героя. Каждую историю проверяет модератор до публикации.</p>
+          На карте — родной город героя и, если одобрено, место подвига. Каждую историю проверяет
+          модератор до публикации.</p>
         <form class="search" action="02-karta-i-poisk.html" method="get">
-          <label class="visually-hidden" for="q-home" style="position:absolute;left:-9999px">Поиск по ФИО, городу или региону</label>
-          <input id="q-home" name="q" type="text" placeholder="ФИО, город или регион — например, Наро-Фоминск">
+          <label class="visually-hidden" for="q-home" style="position:absolute;left:-9999px">Поиск по ФИО, откуда родом или где был подвиг</label>
+          <input id="q-home" name="q" type="text" placeholder="ФИО, откуда родом или где был подвиг — например, Наро-Фоминск">
           <button type="submit">Найти</button>
         </form>
         <div class="row" style="margin-bottom:26px">
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
-          <a class="btn" href="02-karta-i-poisk.html">Найти историю на карте</a>
+          <a class="btn" href="02-karta-i-poisk.html">Карта героев</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге (про папу, брата, сына, друга)</a>
         </div>
         <div class="stats" aria-label="Показатели, демо">
           <div class="stat"><b>3</b><span>демо-истории в макете</span></div>
@@ -193,6 +194,18 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
       </div>
     </div>
 
+    <div class="constline">
+      <div class="constline-in">
+        <h2 style="font-size:clamp(20px,4vw,28px);margin-bottom:10px">Связь поколений</h2>
+        <p>На странице героя огонёк может соединиться с историей предка — участника Великой Отечественной,
+          если семья подтвердила родство. Раздел «Связь поколений» пока витрина — материалы собираются.</p>
+        <div class="row" style="justify-content:center;margin-top:16px">
+          <a class="btn" href="08-svyaz-pokoleniy.html">Узнать о разделе</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Поддержка семей — второй план продукта (решение Алексея, 23.09.2026), поэтому секция ниже -->
     <div class="section">
       <div class="section-in">
         <div class="support-card">
@@ -201,17 +214,6 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
             <p>Выплаты, льготы, санатории и юридическая помощь — по регионам, с датой последней проверки.</p>
           </div>
           <a class="btn primary" href="04-podderzhka.html">Открыть раздел поддержки</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="constline">
-      <div class="constline-in">
-        <h2 style="font-size:clamp(20px,4vw,28px);margin-bottom:10px">Связь поколений</h2>
-        <p>На странице героя огонёк может соединиться с историей предка — участника Великой Отечественной,
-          если семья подтвердила родство. Раздел «Связь поколений» пока витрина — материалы собираются.</p>
-        <div class="row" style="justify-content:center;margin-top:16px">
-          <a class="btn" href="08-svyaz-pokoleniy.html">Узнать о разделе</a>
         </div>
       </div>
     </div>
@@ -226,8 +228,8 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
         <p class="lead">Истории участников СВО рассказывают те, кто знал их лично: сослуживцы и родные.
           Каждую историю проверяет модератор до публикации.</p>
         <div class="row" style="margin-bottom:26px">
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
-          <a class="btn" href="04-podderzhka.html">Поддержка семей</a>
+          <a class="btn" href="02-karta-i-poisk.html">Карта героев</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге (про папу, брата, сына, друга)</a>
         </div>
       </div>
     </div>
@@ -237,7 +239,7 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
           <h3>Сайт только что запущен — историй пока нет</h3>
           <p>Будьте первым, кто расскажет о своём сослуживце или родном герое. Модератор проверит
             историю и опубликует её на карте.</p>
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге</a>
         </div>
       </div>
     </div>
@@ -250,8 +252,8 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
         <p class="eyebrow">Народный архив историй</p>
         <h1>Каждый огонёк на этой карте — история одного человека</h1>
         <div class="row" style="margin-bottom:26px">
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
-          <a class="btn" href="02-karta-i-poisk.html">Найти историю на карте</a>
+          <a class="btn" href="02-karta-i-poisk.html">Карта героев</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге (про папу, брата, сына, друга)</a>
         </div>
       </div>
     </div>
@@ -274,8 +276,8 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
         <p class="eyebrow">Народный архив историй</p>
         <h1>Каждый огонёк на этой карте — история одного человека</h1>
         <div class="row" style="margin-bottom:26px">
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
-          <a class="btn" href="02-karta-i-poisk.html">Найти историю на карте</a>
+          <a class="btn" href="02-karta-i-poisk.html">Карта героев</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге (про папу, брата, сына, друга)</a>
         </div>
       </div>
     </div>
@@ -298,12 +300,12 @@ footer{padding:22px 20px;font-size:13px;color:var(--ink-2);text-align:center}
         <p class="eyebrow">Народный архив историй</p>
         <h1>Каждый огонёк на этой карте — история одного человека</h1>
         <form class="search" action="02-karta-i-poisk.html" method="get">
-          <input type="text" placeholder="ФИО, город или регион" aria-label="Поиск по ФИО, городу или региону">
+          <input type="text" placeholder="ФИО, откуда родом или где был подвиг" aria-label="Поиск по ФИО, откуда родом или где был подвиг">
           <button type="submit">Найти</button>
         </form>
         <div class="row" style="margin-bottom:26px">
-          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о герое</a>
-          <a class="btn" href="02-karta-i-poisk.html">Найти историю на карте</a>
+          <a class="btn" href="02-karta-i-poisk.html">Карта героев</a>
+          <a class="btn primary" href="../kabinety/01-vhod.html">Рассказать о подвиге (про папу, брата, сына, друга)</a>
         </div>
         <div class="stats" aria-label="Показатели, демо">
           <div class="stat"><b>128</b><span>демо-историй в макете «много данных»</span></div>
