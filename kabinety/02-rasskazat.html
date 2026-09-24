@@ -151,7 +151,7 @@ main{padding:28px 0 60px}
 <main>
 <div class="wrap">
 
-  <div class="state-box warn" style="margin-bottom:20px">
+  <div class="state-box warn" id="vk-warn" style="margin-bottom:20px">
     <h3>Вы вошли через VK ID — личность подтвердит модератор</h3>
     <p>Написать и отправить историю можно сразу. Перед публикацией модератор подтвердит вашу личность
       по видеозвонку — ссылку на звонок мы покажем только в личном кабинете. В личные сообщения не
@@ -398,6 +398,30 @@ main{padding:28px 0 60px}
     </div>
   </div>
 
+  <!-- ===== ОТПРАВЛЕНО: квитанция после шага 6, показывается вместо шагов, не отдельным файлом ===== -->
+  <div class="card when normal" id="sent-screen" hidden style="margin-top:24px;text-align:center">
+    <div style="width:56px;height:56px;border-radius:50%;background:var(--ok-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12.5l5 5L20 7" stroke="#6FD3A0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1 style="font-size:22px;margin:0 0 8px">Отправлено</h1>
+    <p style="color:var(--ink-2);margin:0 0 20px">История о герое «Сердюков Константин Викторович» передана модератору.</p>
+
+    <div style="background:var(--bg-3);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:left;margin:0 0 20px">
+      <p style="margin:0 0 10px"><span style="display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--ok-bg);color:var(--ok)">На проверке</span></p>
+      <p style="margin:0 0 8px"><b>Что дальше.</b> Модератор проверяет истории по очереди — обычно это занимает до
+        3 рабочих дней. Если потребуется что-то уточнить, статус изменится на «Возвращена с комментарием»,
+        и мы это покажем в личном кабинете.</p>
+      <p style="margin:0">Герой в этой истории отмечен как погибший — перед публикацией её дополнительно
+        согласует семья: мы сначала покажем текст и фото семье и опубликуем только после её согласия
+        (это может занять больше 3 дней — статус в кабинете тогда будет «Ждём согласия семьи»).</p>
+    </div>
+
+    <div class="nav-buttons" style="justify-content:center">
+      <a class="btn ghost" href="02-rasskazat.html">Рассказать ещё</a>
+      <a class="btn primary" href="03-kabinet-avtora.html">В кабинет</a>
+    </div>
+  </div>
+
 </div>
 </main>
 
@@ -426,7 +450,11 @@ main{padding:28px 0 60px}
     document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed',x===b));
   }));
   document.querySelectorAll('[data-submit]').forEach(b=>b.addEventListener('click',()=>{
-    location.href='03-kabinet-avtora.html';
+    document.querySelectorAll('main > .wrap > .steps, main > .wrap > .step-label').forEach(el=>el.hidden=true);
+    document.getElementById('vk-warn').hidden = true;
+    document.getElementById('step6').hidden = true;
+    document.getElementById('sent-screen').hidden = false;
+    window.scrollTo({top:0,behavior:'smooth'});
   }));
   document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{
     location.href='03-kabinet-avtora.html';
