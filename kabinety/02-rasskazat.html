@@ -151,6 +151,13 @@ main{padding:28px 0 60px}
 <main>
 <div class="wrap">
 
+  <div class="state-box warn" style="margin-bottom:20px">
+    <h3>Вы вошли через VK ID — личность подтвердит модератор</h3>
+    <p>Написать и отправить историю можно сразу. Перед публикацией модератор подтвердит вашу личность
+      по видеозвонку — ссылку на звонок мы покажем только в личном кабинете. В личные сообщения не
+      пишем и никогда не просим показать серию и номер паспорта, код из СМС или банковскую карту.</p>
+  </div>
+
   <div class="steps" aria-hidden="true">
     <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div>
     <div class="step-dot cur"></div><div class="step-dot"></div><div class="step-dot"></div>
@@ -186,6 +193,7 @@ main{padding:28px 0 60px}
       <div class="field">
         <label for="who-select">Кем вы приходитесь герою <span class="req">*</span></label>
         <select id="who-select">
+          <option>Муж / жена</option>
           <option>Отец / мать</option>
           <option>Сын / дочь</option>
           <option>Брат / сестра</option>
@@ -369,6 +377,8 @@ main{padding:28px 0 60px}
       <div class="doc-note">Документ видит только модератор, после проверки он удаляется — копия в базе не хранится.</div>
     </div>
 
+    <div class="check-row" id="video-call-row"><input type="checkbox" id="by-video"><label for="by-video">Покажу документ модератору на видеозвонке — вместо загрузки файла</label></div>
+
     <div class="field" id="c18-block">
       <label>Документ о совместной службе с героем <span class="req">*</span></label>
       <div class="upload-zone" role="button" tabindex="0">Прикрепить запись в военном билете с частью и периодом, выписку из личного дела или совместное фото с пояснением</div>
@@ -431,6 +441,8 @@ main{padding:28px 0 60px}
     const c18 = document.getElementById('c18-block');
     const served = document.getElementById('served-together');
     if(c18){ c18.hidden = !(isColleague && served && served.checked); }
+    const videoRow = document.getElementById('video-call-row');
+    if(videoRow){ videoRow.hidden = !isColleague; }
   }
   if(whoSelect){ whoSelect.addEventListener('change', syncWho); syncWho(); }
   const servedCheck = document.getElementById('served-together');
