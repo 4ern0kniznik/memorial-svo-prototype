@@ -97,6 +97,8 @@ main{padding:24px 0 60px}
 .field{margin:12px 0}
 .field label{display:block;font-size:13px;color:var(--ink-2);margin:0 0 6px}
 .field textarea{width:100%;min-height:90px;border-radius:10px;border:1px solid var(--border-ctrl);background:var(--bg-3);color:var(--ink);padding:10px 12px;font-size:15px;resize:vertical;font-family:inherit}
+.field textarea.invalid{border-color:var(--error)}
+.field-error{color:var(--error);font-size:13px;margin:6px 0 0}
 
 .state-box{border-radius:14px;padding:28px;text-align:center}
 .state-box.err{background:var(--error-bg)} .state-box.err h3{color:var(--error)}
@@ -266,12 +268,20 @@ main{padding:24px 0 60px}
           <div class="decision-moderator">
             <div class="decision-list">
               <button class="btn primary" type="button" data-decision="confirm">Подтвердить родство</button>
-              <button class="btn ghost" type="button" data-decision="return">Вернуть — не хватает документа</button>
-              <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+              <button class="btn ghost" type="button" data-decision="return" data-open="tpl-return">Вернуть — не хватает документа</button>
+              <button class="btn danger" type="button" data-decision="reject" data-open="tpl-reject">Отклонить — родство не подтверждено</button>
             </div>
-            <div id="tpl-block" hidden>
-              <div class="field"><label for="reason">Комментарий заявителю</label><textarea id="reason" placeholder="Например: звено 2 не подтверждается — приложите архивную справку ЗАГС вместо утерянного свидетельства"></textarea></div>
-              <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+            <div id="tpl-return" class="tpl-panel" hidden>
+              <div class="field">
+                <label for="reason">Комментарий заявителю, обязательно</label>
+                <textarea id="reason" required placeholder="Например: звено 2 не подтверждается — приложите архивную справку ЗАГС вместо утерянного свидетельства"></textarea>
+                <p class="field-error" data-field-error hidden>Опишите, какое звено поправить или какого документа не хватает — без этого заявитель не поймёт, что чинить</p>
+              </div>
+              <button class="btn primary" type="button" data-confirm-decision data-requires-comment data-comment-for="reason">Отправить решение</button>
+            </div>
+            <div id="tpl-reject" class="tpl-panel" hidden>
+              <p class="doc-note" style="margin:0 0 12px">Комментарий заявителю не отправляется — причина «родство не подтверждено» фиксируется только в журнале модерации.</p>
+              <button class="btn danger" type="button" data-confirm-decision>Отклонить пару</button>
             </div>
           </div>
 
@@ -347,12 +357,20 @@ main{padding:24px 0 60px}
           <div class="decision-moderator">
             <div class="decision-list">
               <button class="btn primary" type="button" disabled title="Пока звено 3 не подтверждено — родство подтвердить нельзя">Подтвердить родство</button>
-              <button class="btn ghost" type="button" data-decision="return">Вернуть — уточнить звено 3</button>
-              <button class="btn danger" type="button" data-decision="reject">Отклонить — родство не подтверждено</button>
+              <button class="btn ghost" type="button" data-decision="return" data-open="tpl-return-many">Вернуть — уточнить звено 3</button>
+              <button class="btn danger" type="button" data-decision="reject" data-open="tpl-reject-many">Отклонить — родство не подтверждено</button>
             </div>
-            <div id="tpl-block-many" hidden>
-              <div class="field"><label for="reasonm">Комментарий заявителю</label><textarea id="reasonm" placeholder="Звено 3 (прадед героя) не подтверждается — в справке другое отчество отца. Приложите другой документ или уточните."></textarea></div>
-              <button class="btn primary" type="button" data-confirm-decision>Отправить решение</button>
+            <div id="tpl-return-many" class="tpl-panel" hidden>
+              <div class="field">
+                <label for="reasonm">Комментарий заявителю, обязательно</label>
+                <textarea id="reasonm" required placeholder="Звено 3 (прадед героя) не подтверждается — в справке другое отчество отца. Приложите другой документ или уточните."></textarea>
+                <p class="field-error" data-field-error hidden>Опишите, какое звено поправить или какого документа не хватает — без этого заявитель не поймёт, что чинить</p>
+              </div>
+              <button class="btn primary" type="button" data-confirm-decision data-requires-comment data-comment-for="reasonm">Отправить решение</button>
+            </div>
+            <div id="tpl-reject-many" class="tpl-panel" hidden>
+              <p class="doc-note" style="margin:0 0 12px">Комментарий заявителю не отправляется — причина «родство не подтверждено» фиксируется только в журнале модерации.</p>
+              <button class="btn danger" type="button" data-confirm-decision>Отклонить пару</button>
             </div>
           </div>
 
@@ -420,10 +438,22 @@ main{padding:24px 0 60px}
     const d=b.dataset.decision;
     if(d==='confirm'){ toast('Родство подтверждено. Пара ждёт публикации редактором.'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
     if(d==='publish'){ toast('Пара опубликована. Переход к очереди…'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700); return; }
-    const block = b.closest('.card').querySelector('#tpl-block, #tpl-block-many');
-    if(block){ block.hidden=false; }
+    const card = b.closest('.card');
+    card.querySelectorAll('.tpl-panel').forEach(p=>p.hidden=true);
+    const block = b.dataset.open && document.getElementById(b.dataset.open);
+    if(block){ block.hidden=false; const ta=block.querySelector('textarea'); if(ta) ta.focus(); }
   }));
   document.querySelectorAll('[data-confirm-decision]').forEach(b=>b.addEventListener('click',()=>{
+    if(b.hasAttribute('data-requires-comment')){
+      const ta=document.getElementById(b.dataset.commentFor);
+      const err=b.closest('.tpl-panel').querySelector('[data-field-error]');
+      if(!ta.value.trim()){
+        ta.classList.add('invalid'); if(err) err.hidden=false;
+        ta.focus();
+        return;
+      }
+      ta.classList.remove('invalid'); if(err) err.hidden=true;
+    }
     toast('Решение отправлено и записано в журнал модерации'); setTimeout(()=>location.href='08-moderator-obrashcheniya.html',700);
   }));
   apply();
